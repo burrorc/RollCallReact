@@ -51,6 +51,7 @@
       }
     </style>
     <title>React App</title>
+    
   </head>
   <body>
     <div id="root"></div>
@@ -59,7 +60,11 @@
       <div class="modal-dialog">
         <div class="modal-content p-3">
           <form action="/examples/actions/confirmation.php" method="post">
+            <button id="closeme" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
             <h2>Sign Up</h2>
+            
             <p>Please fill in this form to create an account!</p>
             <hr />
 
@@ -146,6 +151,7 @@
               href="#"
               data-toggle="modal"
               data-target="#modal-login"
+              onclick="switchModal(0)"
               >Login here</a
             >
           </div>
@@ -157,8 +163,11 @@
       <div class="modal-dialog">
         <div class="modal-content p-3">
           <form action="/examples/actions/confirmation.php" method="post">
-            <h2>Sign Up</h2>
-            <p>Please fill in this form to create an account!</p>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h2>Login</h2>
+            <p>Please fill in this form to login!</p>
             <hr />
 
             <div class="form-group">
@@ -221,30 +230,17 @@
               href="#"
               data-toggle="modal"
               data-target="#modal-signup"
+              onclick="switchModal(1)"
               >Signup here</a
             >
           </div>
         </div>
       </div>
     </div>
-
-    <!-- <div id="modal-signup" class="modal fade" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <h4>Sign up</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span><br />
-        <form id="signup-form">
-          <div class="input-field">
-            <input type="email" id="signup-email" required />
-            <label for="signup-email">Email address</label>
-          </div>
-          <div class="input-field">
-            <input type="password" id="signup-password" required />
-            <label for="signup-password">Choose password</label>
-          </div>
-          <button class="btn yellow darken-2 z-depth-0">Sign up</button>
-        </form>
-      </div>
-    </div> -->
+    <script>
+      function switchModal(num){
+        document.getElementsByClassName("close")[num].click();
+      }
+    </script>
   </body>
 </html>

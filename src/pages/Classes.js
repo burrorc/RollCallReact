@@ -1,53 +1,52 @@
 import React from "react";
-import classes from "../Arrays";
-import StudentList from "../components/StudentList";
+import classes from "../Classes";
+import ClassesList from "../components/ClassesList";
 
-const studentDisplay = classes[1][1].students.map((student) => (
-  <StudentList firstName={student.firstName} lastName={student.lastName} />
+const classesDisplay = classes.map((subject) => (
+  <ClassesList title={subject} key={subject.index} />
 ));
 
 // function Classes() {
 //   return (
-//     <div className="container">
-//       <div className='row'>
-//       <div className="col-lg-3 border mt-3" style={{ width: "25vw" }}>
-//       <h5 className="text-center mt-2">{classes[1][0].subject}</h5>
-//       <ol>{studentDisplay}</ol>
-//     </div>
-//     </div>
-//     </div>
-//   );
-// }
-
+//     <div className='container'>
+//   <div className='row justify-content-around'>
+//   { classesDisplay }
+//   </div>
+//   </div>
+//   )
+//   }
 class Classes extends React.Component {
-  constructor(props) {
-    super(props);
-
+  constructor() {
+    super();
     this.state = { classes };
   }
-
   render() {
-    const classDisplay = this.state.classes.map(function (item) {
-      const students = item[1].students.map((student) => (
-        <StudentList
-          firstName={student.firstName}
-          lastName={student.lastName}
-        />
-      ));
-      return (
-        <div className="col-lg-3 border mt-3 " style={{ width: "35vw" }}>
-          <h3 className="text-center mt-2">{item[0].subject}</h3>
-          <ol className='mx-auto list-group'>{students}</ol>
-          </div>
-      );
-    });
+    const newClass = document.getElementById("newClass");
+    const addClass = function () {
+      classes.push(newClass.value);
+      newClass.value = "";
+    };
     return (
-      <div className='container'>
-    <div className='row justify-content-around'>
-    { classDisplay }
-    </div>
-    </div>
-    )
+      <div className="container">
+        <div className="row">
+          <div className="col-6">
+            <form style={{ display: "flex" }}>
+              <input
+                type="text"
+                className="form-control"
+                name="className"
+                placeholder="Add a class here"
+                id="newClass"
+              />
+              <button onClick={addClass} className="btn btn-primary">
+                Add Class
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className="row justify-content-around">{classesDisplay}</div>
+      </div>
+    );
   }
 }
 

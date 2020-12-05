@@ -2,7 +2,7 @@
 // subject.push([{clase:'Science'},{students:[]}])
 // subject[0][1].students.push({firstName:"John",lastName:"Jacobs"})
 
-const classes = [
+const students = [
     [{subject: "10 Bible Values W"},
     
     {students:[
@@ -151,7 +151,7 @@ const classes = [
 ]
 ]
 
-export default classes
+export default students
 
 // let subject = []
 // subject.push([{clase:'Science'},{students:[]}])

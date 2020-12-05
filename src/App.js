@@ -1,11 +1,11 @@
 import React from "react"
-import Navbar from './components/Navbar'
+import Navbar2 from './components/Navbar2'
 import Footer from './components/Footer'
 
 function App(){
     return(
         <div>
-            <Navbar />
+            <Navbar2 />
             <div style={{height: '50px'}}></div>
             <Footer />
         </div>
