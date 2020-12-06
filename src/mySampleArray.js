@@ -1,4 +1,4 @@
-export const mySampleArray = [
+const mySampleArray = [
   {
     subject: "Science",
     students: [
@@ -16,3 +16,5 @@ export const mySampleArray = [
       ],
   }
 ];
+
+export default mySampleArray
