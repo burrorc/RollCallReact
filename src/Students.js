@@ -153,6 +153,9 @@ const students = [
 
 export default students
 
+export let myArray = students
+
+
 // let subject = []
 // subject.push([{clase:'Science'},{students:[]}])
 // subject[0][1].students.push({firstName:"John",lastName:"Jacobs"})

@@ -19,7 +19,7 @@ import StudentList from "../components/StudentList";
 //   );
 // }
 
-class Students extends React.Component {
+class Students2 extends React.Component {
   constructor(props) {
     super(props);
 
@@ -27,29 +27,27 @@ class Students extends React.Component {
   }
 
   render() {
-    const classDisplay = this.state.students.map(function (item) {
-      const students = item[1].students.map((student) => (
-        <StudentList
-          firstName={student.firstName}
-          lastName={student.lastName}
-        />
-      ));
-      return (
-        <div className="col-lg-4 border mt-3 " style={{ width: "35vw" }}>
-          <h3 className="text-center mt-2">{item[0].subject}<button>Edit</button></h3>
-          
-          <ol className='mx-auto list-group'>{students}</ol>
-          </div>
-      );
-    });
+    const classDisplay2 = this.state.students[0][1].students.map((student) => (
+      <StudentList
+        firstName={student.firstName}
+        lastName={student.lastName}
+      />
+    ));
     return (
       <div className='container'>
     <div className='row justify-content-around'>
-    { classDisplay }
+    <div className="col-lg-4 border mt-3 " style={{ width: "35vw" }}>
+          <h3 className="text-center mt-2">{this.state.students[0][this.props.id].subject}<button>Edit</button></h3>
+         
+          <ol className='mx-auto list-group'>
+            {classDisplay2}
+          </ol>
+          </div>
+    
     </div>
     </div>
     )
   }
 }
 
-export default Students;
+export default Students2;
