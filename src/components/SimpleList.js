@@ -1,11 +1,28 @@
 import React from "react";
-import ItemText from "./ItemText";
 
 function SimpleList(props) {
   return (
-    <li>
+    <li id={'sa'+props.item}>
           
-          <ItemText text={props.lastName + ", " + props.firstName} />
+          <input 
+                type="checkbox" 
+                checked={props.student.present} 
+                className={'present'}
+                onChange={(e) => props.handleChange(e.target.className, props.studentIndex)}
+            />
+            <input 
+                type="checkbox" 
+                checked={props.student.late}
+                className={'late'}  
+                onChange={(e) => props.handleChange(e.target.className, props.studentIndex)}
+            />
+            <input 
+                type="checkbox" 
+                checked={props.student.camera}
+                className={'camera'}  
+                onChange={(e) => props.handleChange(e.target.className, props.studentIndex)}
+            />
+            {props.student.lastName + ", " + props.student.firstName}
         
     </li>
   );

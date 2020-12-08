@@ -1,11 +1,10 @@
 import React from 'react'
-import ItemText from './ItemText'
 
 function ClassButtons(props){
     return(
         
-        <div className="col" key={props.item} style={{ width: "50vw" }}>
-        <h3 className="text-center my-0"><ItemText text={props.text}/></h3>
+        <div className="col" key={props.classIndex} style={{ width: "50vw" }}>
+        <h3 className="text-center my-0">{props.text}</h3>
         </div>
     )
 }
