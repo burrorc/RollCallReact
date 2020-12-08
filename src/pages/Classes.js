@@ -2,37 +2,55 @@ import React from "react";
 import mySampleArray from '../mySampleArray.js'
 import ClassButtons from '../components/ClassButtons'
 import ReactModal from 'react-modal'
+import SimpleList from '../components/SimpleList'
 
 class Classes extends React.Component {
   constructor(props){
     super(props)
-    this.state = { mySampleArray, showModal: false };
+    this.state = { 
+      sampleArray: mySampleArray, 
+      showModal: false, 
+      classSelection:0};
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.selectClass = this.selectClass.bind(this)
   }
   
   handleOpenModal () {
-    this.setState({ showModal: true });
+    this.setState({ showModal: true});
   }
   
   handleCloseModal () {
     this.setState({ showModal: false });
   }
-  
+
+  selectClass(item){
+    console.log(item);
+  }
+
   render() {
-    const displayButtons = mySampleArray.map((subject)=>(
-      <button className='my-3' onClick={this.handleOpenModal} style={{ height: "100px" }}>
-        <ClassButtons text={subject.subject} />
+    const displayButtons = this.state.sampleArray.map((subject, index)=>(
+      <button key={index} className='my-3' onClick={this.handleOpenModal} style={{ height: "100px" }}>
+        <ClassButtons item={index} text={subject.subject} />
       </button>
-      
-    ));
+    
+    ))
+    const displayStudents = this.state.sampleArray[0].students.map((student, index)=>(
+      <SimpleList key={index} lastName={student.lastName} firstName={student.firstName}/>
+    ))
+    
     return(
       <div className="container">
         <div>
         <ReactModal 
            isOpen={this.state.showModal}
-           contentLabel="Minimal Modal Example"
+           
         >
+          
+          <ol>
+          {displayStudents}
+          </ol>
+          
 <button onClick={this.handleCloseModal}>Close Modal</button>
         
 
@@ -53,7 +71,7 @@ class Classes extends React.Component {
   }
 }
 
-
+ReactModal.setAppElement('body')
 export default Classes
 // import React from "react";
 // import classes from "../Classes";

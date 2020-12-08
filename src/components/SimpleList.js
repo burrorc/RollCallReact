@@ -1,12 +1,14 @@
-import React from 'react'
-import ItemText from 'ItemText'
+import React from "react";
+import ItemText from "./ItemText";
 
-function SimpleList(){
-    return (
-        <div>
-            
-        </div>
-    )
+function SimpleList(props) {
+  return (
+    <li>
+          
+          <ItemText text={props.lastName + ", " + props.firstName} />
+        
+    </li>
+  );
 }
 
-export default SimpleList
+export default SimpleList;
