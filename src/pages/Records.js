@@ -21,13 +21,15 @@ class Records extends React.Component {
     this.handleClassSelection = this.handleClassSelection.bind(this);
   }
   handleChange(boxName, studentIndex) {
+    if(window.confirm("Are you sure you want to edit this record?")){
     this.setState((prevState) => {
       const updatedArray = prevState.myArray.map((day, index) => {
-        if (day.index !== prevState.dateSelection) {
+        if (index !== prevState.dateSelection) {
           return day;
         } else {
+          
           day.attendance.map((subject, index) => {
-            if (subject.index !== prevState.classSelection) {
+            if (index !== prevState.classSelection) {
               return subject;
             }else{
              subject.students.map((student, index)=>{
@@ -59,7 +61,7 @@ class Records extends React.Component {
       };  
     });
   }
-
+}
   handleDateSelection(date) {
     this.setState({
       dateSelection: date - 1,
@@ -126,17 +128,17 @@ class Records extends React.Component {
               type="checkbox"
               checked={student.late}
               className={"late"}
-              // onChange={(e) =>
-              //   props.handleChange(e.target.className, props.studentIndex)
-              // }
+              onChange={(e) =>
+                this.handleChange(e.target.className, index)
+              }
             />
             <input
               type="checkbox"
               checked={student.camera}
               className={"camera"}
-              // onChange={(e) =>
-              //   props.handleChange(e.target.className, props.studentIndex)
-              // }
+              onChange={(e) =>
+                this.handleChange(e.target.className, index)
+              }
             />
             {student.lastName + ", " + student.firstName}
           </li>
