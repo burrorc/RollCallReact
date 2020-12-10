@@ -11,70 +11,10 @@ class Classes extends React.Component {
       sampleArray: mySampleArray,
       showModal: false,
       classSelection: 0,
-      toggleP: false,
-      toggleC: false,
     };
-    this.togglePresent = this.togglePresent.bind(this);
-    this.toggleCamera = this.toggleCamera.bind(this)
     this.handleChange = this.handleChange.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
-    
-  }
-
-  toggleCamera(){
-    this.setState((prevState) => {
-      const newToggle = !prevState.toggleC
-      const updatedSampleArray2 = prevState.sampleArray.map((item) => {
-        if (item.students === undefined) {
-          return item;
-        } else 
-        {
-          item.students.map((student) => {
-            if(student.camera === newToggle){
-              return student
-            }else{
-            student.camera = newToggle
-            return student;
-            }
-          });
-          return item;
-        }
-      });
-      console.log(updatedSampleArray2)
-      return {
-        ...prevState,sampleArray: updatedSampleArray2,toggleC:newToggle
-      };
-    });
-  }
-
-  togglePresent(){
-    
-    
-    console.log(this.state.toggleP)
-
-    this.setState((prevState) => {
-      const newToggle = !prevState.toggleP
-      const updatedSampleArray2 = prevState.sampleArray.map((item) => {
-        if (item.students === undefined) {
-          return item;
-        } else 
-        {
-          item.students.map((student) => {
-            if(student.present === newToggle){
-              return student
-            }else{
-            student.present = newToggle
-            return student;
-            }
-          });
-          return item;
-        }
-      });
-      console.log(updatedSampleArray2)
-      return {
-        ...prevState,sampleArray: updatedSampleArray2,toggleP:newToggle
-      };
-    });
+    this.handleToggleAll = this.handleToggleAll.bind(this);
   }
 
   handleOpenModal(item) {
@@ -83,6 +23,23 @@ class Classes extends React.Component {
 
   handleCloseModal() {
     this.setState({ showModal: false, classSelection: 0 });
+  }
+
+  handleToggleAll(){
+    this.setState((prevState)=>{
+      const updatedSampleArray = prevState.sampleArray.map((item) => {
+        if (item.students === undefined) {
+          return item;
+        } else {
+          item.students.map((student) => {
+            student.present = !student.present
+          }
+        }
+        return student;
+      });
+      return item;
+    }
+  });
   }
 
   handleChange(boxName, studentIndex) {
@@ -117,8 +74,8 @@ class Classes extends React.Component {
       };
     });
   }
-  
   render() {
+    
     const displayButtons = this.state.sampleArray.map((subject, index) => (
       <button
         key={index}
@@ -147,25 +104,27 @@ class Classes extends React.Component {
         <h5>You currently have no students listed in this class</h5>
       );
     }
-
+    const displayToggle = <div>
+    <input 
+              type="checkbox" 
+              //checked={} 
+              className={'present'}
+              onChange={()=>this.handleToggleAll}
+          />
+          <ol>{displayStudents}</ol>
+  </div>
     return (
       <div className="container">
         <div>
           <ReactModal isOpen={this.state.showModal}>
-          <input 
-              type="checkbox" 
-              //checked={} 
-              className={'present'}
-              onChange={this.togglePresent}
-          />
-          <input 
-              type="checkbox" 
-              //checked={} 
-              className={'present'}
-              onChange={this.toggleCamera}
-          />
-            <ol>{displayStudents}</ol>
-
+          {/* <input 
+                type="checkbox" 
+                //checked={} 
+                className={'present'}
+                onChange={()=>this.handleToggleAll}
+            />
+            <ol>{displayStudents}</ol> */}
+            {displayToggle}
             <button onClick={this.handleCloseModal}>Close Modal</button>
           </ReactModal>
         </div>

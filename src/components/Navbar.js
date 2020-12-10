@@ -7,7 +7,7 @@ import Dashboard from "../pages/Dashboard";
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isLoggedIn: true };
+    this.state = { isLoggedIn:true };
   }
   render() {
     let displayLinks;

@@ -1,6 +1,7 @@
 import React from "react";
 
 function SimpleList(props) {
+  console.log(props.student.present)
   return (
     <li id={'sa'+props.item}>
           
