@@ -16,42 +16,50 @@ class Records extends React.Component {
       classSelection: undefined,
       dateSelection: undefined,
     };
-    // this.handleChange = this.handleChange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
     this.handleDateSelection = this.handleDateSelection.bind(this);
     this.handleClassSelection = this.handleClassSelection.bind(this);
   }
-  // handleChange(boxName, studentIndex) {
-  //   this.setState((prevState) => {
-  //     const updatedArray = prevState.myArray[this.state.dateSelection].attendance[this.state.classSelection].students.map((item) => {
-  //       if (item.students === undefined) {
-  //         return item;
-  //       } else {
-  //         item.students.map((student, index) => {
-  //           if (index === studentIndex) {
-  //             switch (boxName) {
-  //               case "present":
-  //                 student.present = !student.present;
-  //                 break;
-  //               case "late":
-  //                 student.late = !student.late;
-  //                 break;
-  //               case "camera":
-  //                 student.camera = !student.camera;
-  //                 break;
-  //               default:
-  //             }
-  //           }
-  //           return student;
-  //         });
-  //         return item;
-  //       }
-  //     });
+  handleChange(boxName, studentIndex) {
+    this.setState((prevState) => {
+      const updatedArray = prevState.myArray.map((day, index) => {
+        if (day.index !== prevState.dateSelection) {
+          return day;
+        } else {
+          day.attendance.map((subject, index) => {
+            if (subject.index !== prevState.classSelection) {
+              return subject;
+            }else{
+             subject.students.map((student, index)=>{
+              if (index === studentIndex) {
+                switch (boxName) {
+                  case "present":
+                    student.present = !student.present;
+                    break;
+                  case "late":
+                    student.late = !student.late;
+                    break;
+                  case "camera":
+                    student.camera = !student.camera;
+                    break;
+                  default:
+                }
+              }
+              return student;
+             }) 
+             return subject; 
+            } 
+          })
+          return day;
+        }
+      });
 
-  //     return {
-  //       ...prevState,myArray: updatedArray
-  //     };
-  //   });
-  // }
+      return {
+        myArray: updatedArray,
+      };  
+    });
+  }
+
   handleDateSelection(date) {
     this.setState({
       dateSelection: date - 1,
@@ -110,9 +118,9 @@ class Records extends React.Component {
               type="checkbox"
               checked={student.present}
               className={"present"}
-              // onChange={(e) =>
-              //   this.handleChange(e.target.className, index)
-              // }
+              onChange={(e) =>
+                this.handleChange(e.target.className, index)
+              }
             />
             <input
               type="checkbox"
