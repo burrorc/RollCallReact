@@ -1,9 +1,10 @@
 import React from "react";
 import mySampleArray from "../mySampleArray.js";
 
+
 let recordsArray = [["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
 recordsArray.map((day) => {
-  day.attendance = mySampleArray;
+ day.attendance = mySampleArray
   return day;
 });
 console.log(recordsArray);
@@ -46,7 +47,7 @@ class Records extends React.Component {
   handleChange(boxName, studentIndex) {
     this.setState((prevState) => {
       console.log("date: " + prevState.dateSelection + ", " + prevState.classSelection)
-
+debugger
       const updatedArray = prevState.myArray.map((day, index) => {
         // debugger
         if (index !== prevState.dateSelection) {
@@ -104,7 +105,7 @@ class Records extends React.Component {
   }
   render() {
     const dayList = recordsArray.map((day, index) => (
-      <option key={index} id={"ds" + index} value={index}>
+      <option key={"ds"+index} id={"ds" + index} value={index}>
         {day}
         {console.log(this.state.dateSelection, this.state.classSelection)}
       </option>
@@ -115,7 +116,7 @@ class Records extends React.Component {
     } else {
       classList = this.state.myArray[this.state.dateSelection].attendance.map(
         (day, index) => (
-          <option key={index} id={"cs" + index} value={index}>
+          <option key={"cs"+index} id={"cs" + index} value={index}>
             {day.subject}
             {console.log(this.state.dateSelection, this.state.classSelection)}
           </option>
@@ -139,7 +140,7 @@ class Records extends React.Component {
         displayStudents = this.state.myArray[
           this.state.dateSelection
         ].attendance[this.state.classSelection].students.map((student, index) => (
-          <li>
+          <li key={"li"+index}>
             <input
               type="checkbox"
               checked={student.present}
