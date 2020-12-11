@@ -1,7 +1,7 @@
 import React from "react";
 import mySampleArray from "../mySampleArray.js";
 
-const recordsArray = [["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
+let recordsArray = [["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
 recordsArray.map((day) => {
   day.attendance = mySampleArray;
   return day;
@@ -15,42 +15,67 @@ class Records extends React.Component {
       myArray: recordsArray,
       classSelection: undefined,
       dateSelection: undefined,
+      edit: false
     };
+    this.saveArray = this.saveArray.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleDateSelection = this.handleDateSelection.bind(this);
     this.handleClassSelection = this.handleClassSelection.bind(this);
   }
+  saveArray(){
+    recordsArray = this.state.myArray
+    console.log(recordsArray)
+  }
+  handleEdit(boxName, studentIndex) {
+    if (this.state.edit === true) {
+      console.log(this.state.edit)
+      this.handleChange(boxName, studentIndex)
+    }
+    if (this.state.edit === false) {
+      if (window.confirm("Are you sure you want to edit this record")) {
+        this.setState({
+          edit: true
+        })
+        console.log(this.state.edit)
+        this.handleChange(boxName, studentIndex)
+      }
+    }
+
+  }
   handleChange(boxName, studentIndex) {
-    if(window.confirm("Are you sure you want to edit this record?")){
     this.setState((prevState) => {
+      console.log("date: " + prevState.dateSelection + ", " + prevState.classSelection)
+
       const updatedArray = prevState.myArray.map((day, index) => {
+        // debugger
         if (index !== prevState.dateSelection) {
+          console.log(day)
           return day;
         } else {
-          
           day.attendance.map((subject, index) => {
             if (index !== prevState.classSelection) {
               return subject;
-            }else{
-             subject.students.map((student, index)=>{
-              if (index === studentIndex) {
-                switch (boxName) {
-                  case "present":
-                    student.present = !student.present;
-                    break;
-                  case "late":
-                    student.late = !student.late;
-                    break;
-                  case "camera":
-                    student.camera = !student.camera;
-                    break;
-                  default:
+            } else {
+              subject.students.map((student, index) => {
+                if (index === studentIndex) {
+                  switch (boxName) {
+                    case "present":
+                      student.present = !student.present;
+                      break;
+                    case "late":
+                      student.late = !student.late;
+                      break;
+                    case "camera":
+                      student.camera = !student.camera;
+                      break;
+                    default:
+                  }
                 }
-              }
-              return student;
-             }) 
-             return subject; 
-            } 
+                return student;
+              })
+              return subject;
+            }
           })
           return day;
         }
@@ -58,19 +83,22 @@ class Records extends React.Component {
 
       return {
         myArray: updatedArray,
-      };  
+      };
     });
+    console.log(this.state.myArray)
   }
-}
+
   handleDateSelection(date) {
     this.setState({
       dateSelection: date - 1,
+      edit: false,
     });
     console.log(date - 1);
   }
   handleClassSelection(subject) {
     this.setState({
       classSelection: subject - 1,
+      edit: false,
     });
     console.log(subject - 1);
   }
@@ -78,6 +106,7 @@ class Records extends React.Component {
     const dayList = recordsArray.map((day, index) => (
       <option key={index} id={"ds" + index} value={index}>
         {day}
+        {console.log(this.state.dateSelection, this.state.classSelection)}
       </option>
     ));
     let classList;
@@ -88,17 +117,12 @@ class Records extends React.Component {
         (day, index) => (
           <option key={index} id={"cs" + index} value={index}>
             {day.subject}
+            {console.log(this.state.dateSelection, this.state.classSelection)}
           </option>
         )
       );
     }
-    // const classList = this.state.myArray[
-    //   this.state.dateSelection
-    // ].attendance.map((day, index) => (
-    //   <option key={index} id={"cs" + index}>
-    //     {day.subject}
-    //   </option>
-    // ));
+
     let displayStudents;
     if (this.state.dateSelection === undefined) {
       displayStudents = <span></span>;
@@ -120,28 +144,23 @@ class Records extends React.Component {
               type="checkbox"
               checked={student.present}
               className={"present"}
-              onChange={(e) =>
-                this.handleChange(e.target.className, index)
-              }
+              onChange={(e) => this.handleEdit(e.target.className, index)}
             />
             <input
               type="checkbox"
               checked={student.late}
               className={"late"}
-              onChange={(e) =>
-                this.handleChange(e.target.className, index)
-              }
+              onChange={(e) => this.handleEdit(e.target.className, index)}
             />
             <input
               type="checkbox"
               checked={student.camera}
               className={"camera"}
-              onChange={(e) =>
-                this.handleChange(e.target.className, index)
-              }
+              onChange={(e) => this.handleEdit(e.target.className, index)}
             />
             {student.lastName + ", " + student.firstName}
           </li>
+
         ));
       }
     }
@@ -173,9 +192,6 @@ class Records extends React.Component {
         </div>
       );
     }
-    // const classList = recordsArray.map((subject, index) => (
-    //   <option key={index} id={'cs'+index}>{subject.subject}</option>
-    // ));
 
     return (
       <div className="container">
@@ -193,51 +209,17 @@ class Records extends React.Component {
               <option key='defaultDate' value="none" disabled selected hidden>
                 Choose Date
               </option>
-              {/* {classList} */}
+
               {dayList}
             </select>
           </div>
         </form>
         {displayClass}
-        {/* <form>
-          <div className="form-group">
-            <select
-              className="form-control"
-              id="selClass"
-              onChange={() =>
-                this.handleClassSelection(
-                  document.getElementById("selClass").selectedIndex
-                )
-              }
-            >
-              <option value="none" disabled selected hidden>
-                Choose Class
-              </option>
-              {classList}
-            </select>
-          </div>
-        </form> */}
-        {/* <ol>{displayStudents}</ol> */}
+        <button onClick={()=> this.saveArray()}>Save Array</button>
       </div>
     );
   }
 }
-// function Records() {
-//   return (
-//     <div className="container">
-//       <h2>Form control: select</h2>
-//       <p>The form below contains two dropdown menus (select lists):</p>
-//       <form>
-//         <div className="form-group">
 
-//           <select className="form-control" id="sel1">
-//           <option value="" disabled selected hidden>Choose Class</option>
-//             {classList}
-//           </select>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
 
 export default Records;
