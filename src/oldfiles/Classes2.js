@@ -1,6 +1,6 @@
 import React from "react";
 import mySampleArray from "../mySampleArray.js";
-import ClassButtons from "../components/ClassButtons";
+import ClassButtons from "./ClassButtons";
 import ReactModal from "react-modal";
 import SimpleList from "../components/SimpleList";
 

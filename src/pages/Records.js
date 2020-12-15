@@ -1,6 +1,6 @@
 import React from "react";
 import mySampleArray from "../mySampleArray.js";
-
+import SimpleList from "../components/SimpleList";
 
 let recordsArray = [["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
 recordsArray.map((day) => {
@@ -25,6 +25,9 @@ class Records extends React.Component {
     this.handleClassSelection = this.handleClassSelection.bind(this);
   }
   saveArray(){
+    this.setState({
+      edit: false
+    })
     recordsArray = this.state.myArray
     console.log(recordsArray)
   }
@@ -47,7 +50,7 @@ class Records extends React.Component {
   handleChange(boxName, studentIndex) {
     this.setState((prevState) => {
       console.log("date: " + prevState.dateSelection + ", " + prevState.classSelection)
-debugger
+
       const updatedArray = prevState.myArray.map((day, index) => {
         // debugger
         if (index !== prevState.dateSelection) {
@@ -140,27 +143,33 @@ debugger
         displayStudents = this.state.myArray[
           this.state.dateSelection
         ].attendance[this.state.classSelection].students.map((student, index) => (
-          <li key={"li"+index}>
-            <input
-              type="checkbox"
-              checked={student.present}
-              className={"present"}
-              onChange={(e) => this.handleEdit(e.target.className, index)}
-            />
-            <input
-              type="checkbox"
-              checked={student.late}
-              className={"late"}
-              onChange={(e) => this.handleEdit(e.target.className, index)}
-            />
-            <input
-              type="checkbox"
-              checked={student.camera}
-              className={"camera"}
-              onChange={(e) => this.handleEdit(e.target.className, index)}
-            />
-            {student.lastName + ", " + student.firstName}
-          </li>
+          <SimpleList
+          key={index}
+          studentIndex={index}
+          student={student}
+          handleChange={this.handleEdit}
+        />
+          // <li key={"li"+index}>
+          //   <input
+          //     type="checkbox"
+          //     checked={student.present}
+          //     className={"present"}
+          //     onChange={(e) => this.handleEdit(e.target.className, index)}
+          //   />
+          //   <input
+          //     type="checkbox"
+          //     checked={student.late}
+          //     className={"late"}
+          //     onChange={(e) => this.handleEdit(e.target.className, index)}
+          //   />
+          //   <input
+          //     type="checkbox"
+          //     checked={student.camera}
+          //     className={"camera"}
+          //     onChange={(e) => this.handleEdit(e.target.className, index)}
+          //   />
+          //   {student.lastName + ", " + student.firstName}
+          // </li>
 
         ));
       }

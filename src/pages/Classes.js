@@ -1,6 +1,6 @@
 import React from "react";
 import mySampleArray from "../mySampleArray.js";
-import ClassButtons from "../components/ClassButtons";
+import ClassButtons2 from "../components/ClassButtons2";
 import ReactModal from "react-modal";
 import SimpleList from "../components/SimpleList";
 
@@ -119,16 +119,20 @@ class Classes extends React.Component {
   }
   
   render() {
+    let ToggleButtonP
+    if(this.state.toggleP===false){
+      ToggleButtonP = "All Present"
+    }else{
+      ToggleButtonP= "Clear All"
+    }
+    let ToggleButtonC
+    if(this.state.toggleC===false){
+      ToggleButtonC = "All On"
+    }else{
+      ToggleButtonC= "Clear All"
+    }
     const displayButtons = this.state.sampleArray.map((subject, index) => (
-      <button
-        key={index}
-        id={"ca" + index}
-        className="my-3"
-        onClick={() => this.handleOpenModal(index)}
-        style={{ height: "100px" }}
-      >
-        <ClassButtons classIndex={index} text={subject.subject} />
-      </button>
+      <ClassButtons2 key={index} classIndex={index} text={subject.subject} handleOpenModal={() => this.handleOpenModal(index)}/> 
     ));
     let displayStudents;
     if (this.state.sampleArray[this.state.classSelection].students) {
@@ -152,7 +156,9 @@ class Classes extends React.Component {
       <div className="container">
         <div>
           <ReactModal isOpen={this.state.showModal}>
-          <input 
+            <button style={{width:100}} onClick={this.togglePresent}>{ToggleButtonP}</button>
+            <button style={{width:100}} onClick={this.toggleCamera}>{ToggleButtonC}</button>
+          {/* <input 
               type="checkbox" 
               //checked={} 
               className={'present'}
@@ -161,9 +167,9 @@ class Classes extends React.Component {
           <input 
               type="checkbox" 
               //checked={} 
-              className={'present'}
+              className={'camera'}
               onChange={this.toggleCamera}
-          />
+          /> */}
             <ol>{displayStudents}</ol>
 
             <button onClick={this.handleCloseModal}>Close Modal</button>
@@ -181,81 +187,3 @@ class Classes extends React.Component {
 
 ReactModal.setAppElement("body");
 export default Classes;
-// import React from "react";
-// import classes from "../Classes";
-// import ClassesList from "../components/ClassesList";
-// import ReactModal from "react-modal"
-// import Students2 from "./Students2"
-
-// // function Classes() {
-// //   return (
-// //     <div className='container'>
-// //   <div className='row justify-content-around'>
-// //   { classesDisplay }
-// //   </div>
-// //   </div>
-// //   )
-// //   }
-// class Classes extends React.Component {
-//   constructor() {
-//     super();
-//     this.state = { classes, showModal: false };
-//     this.handleOpenModal = this.handleOpenModal.bind(this);
-//     this.handleCloseModal = this.handleCloseModal.bind(this);
-//   }
-
-//   handleOpenModal () {
-//     this.setState({ showModal: true });
-//   }
-
-//   handleCloseModal () {
-//     this.setState({ showModal: false });
-//   }
-
-//   render() {
-//     const classesDisplay = classes.map((subject) => (
-//       <button className='my-3' onClick={this.handleOpenModal} style={{ height: "100px" }}>
-//         <ClassesList title={subject} key={subject.index} />
-//       </button>
-//     ));
-//     const newClass = document.getElementById("newClass");
-//     const addClass = function () {
-//       classes.push(newClass.value);
-//       newClass.value = "";
-//     };
-//     return (
-//       <div className="container">
-//         <div>
-
-//         <ReactModal
-//            isOpen={this.state.showModal}
-//            contentLabel="Minimal Modal Example"
-//         >
-// <button onClick={this.handleCloseModal}>Close Modal</button>
-//         <Students2 id={0}/>
-
-//         </ReactModal>
-//       </div>
-//         <div className="row">
-//           <div className="col-6">
-//             <form style={{ display: "flex" }}>
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 name="className"
-//                 placeholder="Add a class here"
-//                 id="newClass"
-//               />
-//               <button onClick={addClass} className="btn btn-primary">
-//                 Add Class
-//               </button>
-//             </form>
-//           </div>
-//         </div>
-//         <div className="row justify-content-around">{classesDisplay}</div>
-//       </div>
-//     );
-//   }
-// }
-
-// export default Classes;
