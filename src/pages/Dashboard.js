@@ -25,7 +25,7 @@ class Dashboard extends React.Component {
   editItem() {
     if (this.state.itemEditArray === "classes") {
       let myClasses = [...this.state.myClasses];
-      myClasses[this.state.itemEditId] = document.getElementById(
+      myClasses[this.state.itemEditId].subject = document.getElementById(
         "editThis"
       ).value;
       this.setState({ myClasses });
@@ -63,24 +63,39 @@ class Dashboard extends React.Component {
     });
     this.setState({ myClasses: newClassList });
   }
-  // addClass(e) {
-  //   if (this._inputElement.value !== "") {
+  
+  // addStudent(e){
+  //   let newStudentFirst = document.getElementById(thing).value
+  //   let newStudentLast = document.getElementById(thing).value
+  //   if(newStudentFirst!==''&&newStudentLast!==''){
   //     this.setState({
-  //       myClasses: [...this.state.myClasses, this._inputElement.value],
-  //     });
-  //     this._inputElement.value = "";
-  //   }
-  //   e.preventDefault();
-  // }
-
+  //       myClasses: [...this.state.myClasses[this.state.classSelection].students]
+  //     })
+      
+  //   }}
   addClass(e) {
     let newClass = document.getElementById('addClassInput').value
     if (newClass !== "") {
       this.setState({
-        myClasses: [...this.state.myClasses, newClass],
+        myClasses: [...this.state.myClasses, {subject: newClass}],
       });
+      this.setState((prevState)=>{
+        const addStudentsObject = prevState.myClasses.map((subject)=>{
+          if(subject.students){
+            return subject
+          }else{
+            subject.students = []
+            return subject
+          }
+        })
+        return{
+          myClasses: addStudentsObject,
+        }
+      })
       document.getElementById('addClassInput').value = "";
     }
+    
+    console.log(this.state.myClasses)
     e.preventDefault();
   }
   
@@ -88,10 +103,37 @@ class Dashboard extends React.Component {
     this.setState({
       classSelection: subject - 1,
     });
-    console.log(subject - 1);
+    
+
+    console.log(this.state.classSelection);
   }
 
   render() {
+    let displayStudents;
+    if (this.state.myClasses.length === 0) {
+      console.log('classSelection'+this.state.classSelection)
+      displayStudents = <h5>You have no classes listed</h5>;
+    }else  if (this.state.classSelection === undefined) {
+      console.log('classSelection'+this.state.classSelection)
+      displayStudents = <span></span>;
+    }else if (this.state.myClasses[this.state.classSelection].students.length===0){
+      displayStudents = <h5>You have no students listed</h5>;
+    }
+    else {
+      displayStudents = this.state.myClasses[this.state.classSelection].students.map((student, index) => (
+        <li id={"sl" + index} key={"sl" + index}>
+          {student.lastName+', '+student.firstName}
+          <button
+            className="students"
+            onClick={(e) => this.handleOpenModal(e.target.className, index)}
+          >
+            Edit
+          </button>
+          <button onClick={() => this.removeClass(index)}>Remove</button>
+        </li>
+      ));
+    }
+
     let displayClasses;
     console.log(this.state.myClasses);
     if (this.state.myClasses.length === 0) {
@@ -99,7 +141,7 @@ class Dashboard extends React.Component {
     } else {
       displayClasses = this.state.myClasses.map((subject, index) => (
         <li id={"cl" + index} key={"cl" + index}>
-          {subject}
+          {subject.subject}
           <button
             className="classes"
             onClick={(e) => this.handleOpenModal(e.target.className, index)}
@@ -113,7 +155,7 @@ class Dashboard extends React.Component {
 
     let editValue;
     if (this.state.itemEditArray === "classes") {
-      editValue = this.state.myClasses[this.state.itemEditId];
+      editValue = this.state.myClasses[this.state.itemEditId].subject;
     }
 
     let classList;
@@ -123,7 +165,7 @@ class Dashboard extends React.Component {
       classList = this.state.myClasses.map(
         (subject, index) => (
           <option key={"cs"+index} id={"cs" + index} value={index}>
-            {subject}
+            {subject.subject}
           </option>
         )
       );
@@ -172,6 +214,7 @@ class Dashboard extends React.Component {
                 </option>
                 {classList}
               </select>
+              
             </div>
           </form> 
           <form onSubmit={this.addClass}>
@@ -188,7 +231,7 @@ class Dashboard extends React.Component {
               <input type="submit" value="Submit"></input>
             </form>
 
-            <ol>{displayClasses}</ol>
+            <ol>{displayStudents}</ol>
           </div>
         </div>
       </div>
