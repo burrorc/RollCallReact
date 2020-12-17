@@ -1,5 +1,6 @@
 import React from "react";
 import ReactModal from "react-modal";
+import './dashboard.css' 
 
 const classesArray = [];
 const studentsArray = [];
@@ -160,19 +161,19 @@ class Dashboard extends React.Component {
     let displayStudents;
     if (this.state.myClasses.length === 0) {
       console.log("classSelection" + this.state.classSelection);
-      displayStudents = <h5>You have no classes listed</h5>;
+      displayStudents = <h5 className="text-center" >You have no classes listed</h5>;
     } else if (this.state.classSelection === undefined) {
       console.log("classSelection" + this.state.classSelection);
       displayStudents = <span></span>;
     } else if (
       this.state.myClasses[this.state.classSelection].students.length === 0
     ) {
-      displayStudents = <h5>You have no students listed</h5>;
+      displayStudents = <h5 className="text-center">You have no students listed</h5>;
     } else {
       displayStudents = this.state.myClasses[
         this.state.classSelection
       ].students.map((student, index) => (
-        <li id={"sl" + index} key={"sl" + index}>
+        <li id={"sl" + index} key={"sl" + index} style={{fontWeight: 'bold'}}>
           {student.firstName + "  " + student.lastName}
           <button
             className="students"
@@ -188,10 +189,10 @@ class Dashboard extends React.Component {
     let displayClasses;
     console.log(this.state.myClasses);
     if (this.state.myClasses.length === 0) {
-      displayClasses = <h5>You have no classes listed</h5>;
+      displayClasses = <h5 className="text-center">You have no classes listed</h5>;
     } else {
       displayClasses = this.state.myClasses.map((subject, index) => (
-        <li id={"cl" + index} key={"cl" + index}>
+        <li id={"cl" + index} key={"cl" + index} style={{fontWeight: 'bold'}}>
           {subject.subject}
           <button
             className="classes"
@@ -243,23 +244,30 @@ class Dashboard extends React.Component {
             </form>
           </ReactModal>
         </div>
-        <div className="row">
-          <div className="col-12 col-md-3">
-            <h3>Classes</h3>
+        <div className='container-fluid'>
+        <div className="row justify-content-around">
+          <div className="col-12 col-md-3 mt-3 dashboard">
+            <h3 className="text-center">Classes</h3>
+            <div className="d-flex justify-content-center" >
             <form onSubmit={this.addClass}>
               <input
                 ref={(a) => (this._inputElement = a)}
                 id="addClassInput"
                 placeholder="Add a class"
+                className='mx-2'
               ></input>
-              <input type="submit" value="Submit"></input>
+              {/* <input className='mx-2'type="submit" value="Submit"></input> */}
+              <button className='mx-2 mybutton' type='submit' value='submit'>Submit</button>
             </form>
-
+            </div>
+            <div className="d-flex justify-content-center mt-2">
             <ol>{displayClasses}</ol>
+            </div>
           </div>
-          <div className="col-12 col-md-6">
-            <h3>People</h3>
-            <form>
+          <div className="col-12 col-md-5 dashboard mt-3">
+            <h3 className="text-center">People</h3>
+            <div className="d-flex justify-content-center" >
+            <form className="mx-auto">
               <div className="form-group">
                 <select
                   className="form-control"
@@ -279,27 +287,42 @@ class Dashboard extends React.Component {
                   >
                     Choose Class
                   </option>
+                 
                   {classList}
+                  
                 </select>
               </div>
             </form>
+            </div>
+            <div className="d-flex justify-content-center" >
             <form onSubmit={this.addStudent}>
+              <div className="d-flex justify-items-center">
               <input
                 ref={(a) => (this._inputElement = a)}
                 id="addStudentFirstName"
                 placeholder="First Name"
+                className='mx-2'
               ></input>
               <input
                 ref={(a) => (this._inputElement = a)}
                 id="addStudentLastName"
                 placeholder="Last Name"
+                className='mx-2'
               ></input>
-              <input type="submit" value="Submit"></input>
+              {/* <input className='mx-2' type="submit" value="Submit"></input> */}
+              <button className='mx-2 mybutton' type='submit' value='submit'>Submit</button>
+              </div>
             </form>
-
+            </div>
+            <div className="d-flex justify-content-center mt-2">
             <ol>{displayStudents}</ol>
+            </div>
+          </div>
+          <div className="col-12 col-md-3 mt-3 dashboard">
+            <h3 className="text-center">Settings</h3>
           </div>
         </div>
+      </div>
       </div>
     );
   }

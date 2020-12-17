@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Classes from "../pages/Classes";
 import Records from "../pages/Records";
 import Dashboard from "../pages/Dashboard";
-
+import './navbar.css' 
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +13,7 @@ class Navbar extends React.Component {
     let displayLinks;
     if (this.state.isLoggedIn) {
       displayLinks = (
-        <div className="navbar-nav ml-auto">
+        <div className="navbar-nav ml-auto na">
           <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/classes" className="loggedInLinks nav-item nav-link">
             Classes
           </Link>
@@ -52,8 +52,8 @@ class Navbar extends React.Component {
     return (
       <Router>
         <div>
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <Link to="/" className="navbar-brand">
+          <nav className="navbar navbar-expand-lg navbar-light  myNav">
+            <Link to="/" className="navbar-brand" style={{fontWeight:'bold',color:' #2C514C'}}>
               Roll Call
             </Link>
 
