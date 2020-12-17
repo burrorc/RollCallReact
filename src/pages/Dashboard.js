@@ -20,6 +20,7 @@ class Dashboard extends React.Component {
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.editItem = this.editItem.bind(this);
     this.handleClassSelection = this.handleClassSelection.bind(this);
+    this.addStudent = this.addStudent.bind(this)
   }
 
   editItem() {
@@ -44,10 +45,6 @@ class Dashboard extends React.Component {
       () => console.log(this.state.itemEditId),
       this.setState({ showModal: true })
     );
-
-    //this.editArray(array)
-    //this.editItemId(item)
-    //this.setState({ showModal: true, editArray: array, editItemId: item });
   }
 
   handleCloseModal() {
@@ -63,16 +60,40 @@ class Dashboard extends React.Component {
     });
     this.setState({ myClasses: newClassList });
   }
-  
-  // addStudent(e){
-  //   let newStudentFirst = document.getElementById(thing).value
-  //   let newStudentLast = document.getElementById(thing).value
-  //   if(newStudentFirst!==''&&newStudentLast!==''){
-  //     this.setState({
-  //       myClasses: [...this.state.myClasses[this.state.classSelection].students]
+
+  // removeStudent(id) {
+  //   let newArray = [...this.state.myClasses]
+  //   const newStudentList = this.state.myClasses[this.state.classSelection].students.filter((student, index) => {
+  //     if (index !== id) {
+  //       return student;
+  //     }
+  //   });
+  //   newArray[this.state.classSelection].students = {...newArray[this.state.classSelection].students, newStudentList}
+  //   this.setState({
+  //     myClasses: newArray,
   //     })
+  // }
+  
+  addStudent(e){
+    let newStudentFirst = document.getElementById("addStudentFirstName").value
+    let newStudentLast = document.getElementById("addStudentLastName").value
+    if(newStudentFirst!==''&& newStudentLast!==''){
+    let newArray = [...this.state.myClasses]
+    let studentIndex = newArray[this.state.classSelection].students.length
+    newArray[this.state.classSelection].students[studentIndex] = {...newArray[this.state.classSelection].students[studentIndex], firstName: newStudentFirst, lastName: newStudentLast}
+    this.setState({
+      myClasses: newArray,
+      },
+      ()=>console.log(this.state.myClasses)
+      );
+    
       
-  //   }}
+    }else{
+      alert("Please enter a complete student name")
+    }
+    e.preventDefault();
+  }
+
   addClass(e) {
     let newClass = document.getElementById('addClassInput').value
     if (newClass !== "") {
@@ -129,7 +150,7 @@ class Dashboard extends React.Component {
           >
             Edit
           </button>
-          <button onClick={() => this.removeClass(index)}>Remove</button>
+          <button onClick={() => this.removeStudent(index)}>Remove</button>
         </li>
       ));
     }
@@ -217,7 +238,8 @@ class Dashboard extends React.Component {
               
             </div>
           </form> 
-          <form onSubmit={this.addClass}>
+          <button onClick={()=>this.addStudent()}>click</button>
+          <form onSubmit={this.addStudent}>
               <input
                 ref={(a) => (this._inputElement = a)}
                 id="addStudentFirstName"
