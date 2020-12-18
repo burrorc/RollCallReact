@@ -5,7 +5,6 @@ function ClassButtons2(props) {
   return (
     <div>
       <button
-        key={props.key}
         id={"ca" + props.classIndex}
         className="my-3 classButton"
         onClick={props.handleOpenModal}

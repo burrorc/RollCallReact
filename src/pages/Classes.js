@@ -1,14 +1,21 @@
 import React from "react";
-import mySampleArray from "../mySampleArray.js";
+//import mySampleArray from "../mySampleArray.js";
 import ClassButtons2 from "../components/ClassButtons2";
 import ReactModal from "react-modal";
 import SimpleList from "../components/SimpleList";
+
+let myClassAttendance;
+if(JSON.parse(localStorage.getItem("localClassList"))){
+  myClassAttendance=JSON.parse(localStorage.getItem("localClassList"))
+}else{
+  myClassAttendance=[]
+}
 
 class Classes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sampleArray: mySampleArray,
+      classAttendance: myClassAttendance,
       showModal: false,
       classSelection: 0,
       toggleP: false,
@@ -24,7 +31,7 @@ class Classes extends React.Component {
   toggleCamera(){
     this.setState((prevState) => {
       const newToggle = !prevState.toggleC
-      const updatedSampleArray2 = prevState.sampleArray.map((item) => {
+      const updatedClassAttendance2 = prevState.classAttendance.map((item) => {
         if (item.students === undefined) {
           return item;
         } else 
@@ -40,21 +47,16 @@ class Classes extends React.Component {
           return item;
         }
       });
-      console.log(updatedSampleArray2)
       return {
-        ...prevState,sampleArray: updatedSampleArray2,toggleC:newToggle
+        ...prevState,classAttendance: updatedClassAttendance2,toggleC:newToggle
       };
     });
   }
 
   togglePresent(){
-    
-    
-    console.log(this.state.toggleP)
-
-    this.setState((prevState) => {
+   this.setState((prevState) => {
       const newToggle = !prevState.toggleP
-      const updatedSampleArray2 = prevState.sampleArray.map((item) => {
+      const updatedClassAttendance2 = prevState.classAttendance.map((item) => {
         if (item.students === undefined) {
           return item;
         } else 
@@ -70,9 +72,8 @@ class Classes extends React.Component {
           return item;
         }
       });
-      console.log(updatedSampleArray2)
       return {
-        ...prevState,sampleArray: updatedSampleArray2,toggleP:newToggle
+        ...prevState,classAttendance: updatedClassAttendance2,toggleP:newToggle
       };
     });
   }
@@ -87,7 +88,7 @@ class Classes extends React.Component {
 
   handleChange(boxName, studentIndex) {
     this.setState((prevState) => {
-      const updatedSampleArray = prevState.sampleArray.map((item) => {
+      const updatedClassAttendance = prevState.classAttendance.map((item) => {
         if (item.students === undefined) {
           return item;
         } else {
@@ -113,7 +114,7 @@ class Classes extends React.Component {
       });
 
       return {
-        mySampleArray: updatedSampleArray,
+        myclassAttendance: updatedClassAttendance,
       };
     });
   }
@@ -131,12 +132,20 @@ class Classes extends React.Component {
     }else{
       ToggleButtonC= "Clear All"
     }
-    const displayButtons = this.state.sampleArray.map((subject, index) => (
-      <ClassButtons2 key={index} classIndex={index} text={subject.subject} handleOpenModal={() => this.handleOpenModal(index)}/> 
-    ));
+    let displayButtons;
+    if(this.state.classAttendance.length===0){
+      displayButtons = <h5>Please go to the Dashboard to setup your classes</h5>
+    }else{
+      displayButtons = this.state.classAttendance.map((subject, index) => (
+        <ClassButtons2 key={'cb'+index} classIndex={index} text={subject.subject} handleOpenModal={() => this.handleOpenModal(index)}/> 
+      ));
+    }
+     
     let displayStudents;
-    if (this.state.sampleArray[this.state.classSelection].students) {
-      displayStudents = this.state.sampleArray[
+    if(this.state.classAttendance.length===0){
+      displayStudents=<span></span>
+    }else if (this.state.classAttendance[this.state.classSelection].students) {
+      displayStudents = this.state.classAttendance[
         this.state.classSelection
       ].students.map((student, index) => (
         <SimpleList

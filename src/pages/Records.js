@@ -183,6 +183,7 @@ class Records extends React.Component {
           <form>
             <div className="form-group">
               <select
+              defaultValue={'DEFAULT'}
                 className="form-control"
                 id="selClass"
                 onChange={() =>
@@ -191,7 +192,7 @@ class Records extends React.Component {
                   )
                 }
               >
-                <option key='defaultClass' value="none" disabled selected hidden>
+                <option value="DEFAULT" disabled hidden>
                   Choose Class
                 </option>
                 {classList}
@@ -208,6 +209,7 @@ class Records extends React.Component {
         <form>
           <div className="form-group">
             <select
+            defaultValue={'DEFAULT'}
               className="form-control"
               id="selDate"
               onChange={() =>
@@ -216,7 +218,7 @@ class Records extends React.Component {
                 )
               }
             >
-              <option key='defaultDate' value="none" disabled selected hidden>
+              <option value="DEFAULT" disabled hidden>
                 Choose Date
               </option>
 
