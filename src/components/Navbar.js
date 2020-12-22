@@ -9,7 +9,9 @@ class Navbar extends React.Component {
     super(props);
     this.state = { isLoggedIn:true };
   }
+  
   render() {
+    
     let displayLinks;
     if (this.state.isLoggedIn) {
       displayLinks = (

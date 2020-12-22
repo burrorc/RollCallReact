@@ -1,6 +1,32 @@
 import React from "react";
 import ReactModal from "react-modal";
 import "./dashboard.css";
+import ClassesSection from "../components/ClassesSection";
+import StudentsSection from "../components/StudentsSection";
+
+// let localClassSelection;
+// if(localStorage.getItem("SelItem")!=="DEFAULT"){
+//   if(JSON.parse(localStorage.getItem("SelItem"))==null){
+//     localClassSelection=undefined
+//     console.log("LCSn "+localClassSelection)
+//   }else{
+//     localClassSelection=JSON.parse(localStorage.getItem("SelItem"))
+//     console.log("LCSs "+localClassSelection)
+//   }
+  
+  
+// } else{
+//   localClassSelection=undefined;
+//   console.log("LCSu "+localClassSelection)
+// }
+
+// window.onload = function() {
+//   if(localClassSelection!=null){
+//     document.getElementById('selClass').value=localClassSelection;
+//   }
+  
+// };
+
 
 let myClassList;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -8,6 +34,7 @@ if (JSON.parse(localStorage.getItem("localClassList"))) {
 } else {
   myClassList = [];
 }
+
 const studentsArray = [];
 
 class Dashboard extends React.Component {
@@ -20,6 +47,7 @@ class Dashboard extends React.Component {
       itemEditSelection: "",
       itemEditId: "",
       classSelection: undefined,
+      previousSelection: "0",
     };
     this.addClass = this.addClass.bind(this);
     this.removeClass = this.removeClass.bind(this);
@@ -29,19 +57,28 @@ class Dashboard extends React.Component {
     this.addStudent = this.addStudent.bind(this);
     this.updateLocalStorage = this.updateLocalStorage.bind(this);
   }
+ 
   updateLocalStorage() {
     const toLocalClassList = JSON.stringify(this.state.myClasses);
+    //const toLocalClassSelection = document.getElementById('selClass').value
     window.localStorage.setItem("localClassList", toLocalClassList);
+    //window.localStorage.setItem("SelItem", toLocalClassSelection)
     console.log("hey" + window.localStorage.getItem("localClassList"));
+    //console.log("updated LCS "+ toLocalClassSelection)
+    //document.getElementById("saveChanges").disabled=true
+    console.log("reloading")
     window.location.reload();
   }
+
   editItem() {
     if (this.state.itemEditSelection === "classes") {
       let myClasses = [...this.state.myClasses];
       myClasses[this.state.itemEditId].subject = document.getElementById(
         "editThis"
       ).value;
-      this.setState({ myClasses }, this.updateLocalStorage);
+      this.setState({ myClasses }, 
+        // this.updateLocalStorage
+        );
     } else if (this.state.itemEditSelection === "students") {
       let editFirst = document.getElementById("editFirst").value;
       let editLast = document.getElementById("editLast").value;
@@ -55,7 +92,7 @@ class Dashboard extends React.Component {
         {
           myClasses: newArray,
         },
-        this.updateLocalStorage
+        //this.updateLocalStorage
       );
     }
   }
@@ -109,7 +146,9 @@ class Dashboard extends React.Component {
       return {
         myClasses: updatedClass,
       };
-    }, this.updateLocalStorage);
+    }, 
+    //this.updateLocalStorage
+    );
   }
 
   addStudent(e) {
@@ -130,7 +169,7 @@ class Dashboard extends React.Component {
         {
           myClasses: newArray,
         },
-        this.updateLocalStorage
+        //this.updateLocalStorage()
       );
       document.getElementById("addStudentFirstName").value = "";
       document.getElementById("addStudentLastName").value = "";
@@ -158,7 +197,8 @@ class Dashboard extends React.Component {
         return {
           myClasses: addStudentsObject,
         };
-      }, this.updateLocalStorage);
+      })
+      // this.updateLocalStorage);
       document.getElementById("addClassInput").value = "";
     }
 
@@ -174,19 +214,43 @@ class Dashboard extends React.Component {
     console.log(this.state.classSelection);
   }
 
+  // componentDidUpdate() {
+  //   document.getElementById('saveChanges').disabled=false
+  // }
+
   render() {
+    console.log('classSelection1 '+this.state.classSelection);
     let displayStudents;
     if (this.state.myClasses.length === 0) {
-      console.log("classSelection" + this.state.classSelection);
+      console.log("classSelection2 " + this.state.classSelection);
       displayStudents = (
         <li
-          style={{ marginLeft: "-25px", listStyleType: "none", fontWeight:'bold' }}
+          style={{
+            marginLeft: "-25px",
+            listStyleType: "none",
+            fontWeight: "bold",
+          }}
           className="text-center"
         >
           You have no classes listed
         </li>
       );
-    } else if (this.state.classSelection === undefined) {
+    }
+    //  else if(localClassSelection===undefined){
+    //   displayStudents = this.state.myClasses[0].students.map((student, index) => (
+    //     <li id={"sl" + index} key={"sl" + index} style={{ fontWeight: "bold" }}>
+    //       {student.firstName + "  " + student.lastName}
+    //       <button
+    //         className="students"
+    //         onClick={(e) => this.handleOpenModal(e.target.className, index)}
+    //       >
+    //         Edit
+    //       </button>
+    //       <button onClick={() => this.removeStudent(index)}>Remove</button>
+    //     </li>
+    //   ));
+    // }
+    else if (this.state.classSelection === undefined) {
       console.log("classSelection" + this.state.classSelection);
       displayStudents = <span></span>;
     } else if (
@@ -194,9 +258,15 @@ class Dashboard extends React.Component {
     ) {
       displayStudents = (
         <li
-          style={{ marginLeft: "-25px", listStyleType: "none", fontWeight:'bold' }}
+          style={{
+            marginLeft: "-25px",
+            listStyleType: "none",
+            fontWeight: "bold",
+          }}
           className="text-center"
-        >You have no students listed</li>
+        >
+          You have no students listed
+        </li>
       );
     } else {
       displayStudents = this.state.myClasses[
@@ -216,13 +286,18 @@ class Dashboard extends React.Component {
     }
 
     let displayClasses;
-    console.log(this.state.myClasses);
     if (this.state.myClasses.length === 0) {
       displayClasses = (
         <li
-          style={{ marginLeft: "-25px", listStyleType: "none", fontWeight:'bold' }}
+          style={{
+            marginLeft: "-25px",
+            listStyleType: "none",
+            fontWeight: "bold",
+          }}
           className="text-center"
-        >You have no classes listed</li>
+        >
+          You have no classes listed
+        </li>
       );
     } else {
       displayClasses = this.state.myClasses.map((subject, index) => (
@@ -273,7 +348,7 @@ class Dashboard extends React.Component {
 
     let classList;
     if (this.state.myClasses.length === 0) {
-      classList = <option></option>
+      classList = <option></option>;
     } else {
       classList = this.state.myClasses.map((subject, index) => (
         <option key={"cs" + index} id={"cs" + index} value={index}>
@@ -281,6 +356,7 @@ class Dashboard extends React.Component {
         </option>
       ));
     }
+
     return (
       <div>
         <div>
@@ -292,8 +368,26 @@ class Dashboard extends React.Component {
           </ReactModal>
         </div>
         <div className="container-fluid">
+          <button id="saveChanges" onClick={this.updateLocalStorage}>Save Changes</button>
           <div className="row justify-content-around">
-            <div className="col-11 col-md-3 mt-3 dashboard">
+            <ClassesSection
+              refVal={(a) => (this._inputElement = a)}
+              addClass={this.addClass}
+              displayClasses={displayClasses}
+            />
+            <StudentsSection
+              previousSelection={this.state.previousSelection}
+              refVal={(a) => (this._inputElement = a)}
+              displayStudents={displayStudents}
+              addStudent={this.addStudent}
+              classList={classList}
+              handleClassSelection={() =>
+                this.handleClassSelection(
+                  document.getElementById("selClass").selectedIndex
+                )
+              }
+            />
+            {/* <div className="col-11 col-md-3 mt-3 dashboard">
               <h3 className="text-center">Classes</h3>
               <div className="d-flex justify-content-center">
                 <form onSubmit={this.addClass}>
@@ -303,7 +397,6 @@ class Dashboard extends React.Component {
                     placeholder="Add a class"
                     className="mx-2"
                   ></input>
-                  {/* <input className='mx-2'type="submit" value="Submit"></input> */}
                   <button
                     className="mx-2 mybutton"
                     type="submit"
@@ -316,8 +409,9 @@ class Dashboard extends React.Component {
               <div className="d-flex justify-content-center mt-2">
                 <ol>{displayClasses}</ol>
               </div>
-            </div>
-            <div className="col-11 col-md-5 dashboard mt-3">
+            </div> */}
+
+            {/* <div className="col-11 col-md-5 dashboard mt-3">
               <h3 className="text-center">Students</h3>
               <div className="d-flex justify-content-center">
                 <form className="mx-auto">
@@ -356,7 +450,6 @@ class Dashboard extends React.Component {
                       placeholder="Last Name"
                       className="mx-2"
                     ></input>
-                    {/* <input className='mx-2' type="submit" value="Submit"></input> */}
                     <button
                       className="mx-2 mybutton"
                       type="submit"
@@ -370,7 +463,7 @@ class Dashboard extends React.Component {
               <div className="d-flex justify-content-center mt-2">
                 <ol>{displayStudents}</ol>
               </div>
-            </div>
+            </div> */}
             <div className="col-11 col-md-3 mt-3 dashboard">
               <h3 className="text-center">Settings</h3>
             </div>

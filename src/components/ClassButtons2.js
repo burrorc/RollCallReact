@@ -6,7 +6,7 @@ function ClassButtons2(props) {
     <div>
       <button
         id={"ca" + props.classIndex}
-        className="my-3 classButton"
+        className="my-3 mybutton"
         onClick={props.handleOpenModal}
         style={{ height: "100px" }}
       >

@@ -1,4 +1,79 @@
-.classButton {
-   
+.mybutton {
+  position: relative;
+  border-radius: 18px;
+  background-color: #2C514C;
+  border: solid 2px transparent;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all .1s ease-in-out;
+  outline: none;
+}
+.mybutton:focus {
+  outline: none;
+}
+  
+  .mybutton:hover {
+    color: #2C514C;
+    background-color: transparent;
+    border-color: #2C514C;
+    transition: all .1s ease-in-out;
+  }
+
+  .mybuttonCancel {
+    position: relative;
+    border-radius: 18px;
+    background-color: transparent;
+    border: solid 2px  #2C514C;
+    color:  #2C514C;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+  }
+    
+    .mybuttonCancel:hover {
+      color: #fff;
+      background-color: red;
+      border-color: red;
+      transition: all .1s ease-in-out;
+    }
+
+  .Modal {
+    position: absolute;
+    top: 20%;
+    bottom: auto;
+    background-color: white;
+    width: 100%;
+    font-weight: bold;
+    color: #2C514C;
   }
   
+@media (min-width: 768px){
+  
+  .Modal {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    right: auto;
+    bottom: auto;
+    border-radius: 20px;
+    border: 2px solid black;
+    width: 80%;
+  }
+  
+}
+
+input[type='checkbox'] {display:none;}
+input[type='checkbox'] + label:before {
+  font-family: 'Font Awesome 5 Free';
+  display: inline-block;
+}
+/* unchecked */
+input[type='checkbox'] + label:before { 
+  content: "\f00c";
+  font-weight:100;
+}
+/* checked */
+input[type='checkbox']:checked + label:before {font-weight:900;}
