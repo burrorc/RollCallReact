@@ -16,7 +16,7 @@
   
   .mybutton:hover {
     color: #2C514C;
-    background-color: transparent;
+    background-color: #fff;
     border-color: #2C514C;
     transition: all .1s ease-in-out;
   }
@@ -64,16 +64,3 @@
   }
   
 }
-
-input[type='checkbox'] {display:none;}
-input[type='checkbox'] + label:before {
-  font-family: 'Font Awesome 5 Free';
-  display: inline-block;
-}
-/* unchecked */
-input[type='checkbox'] + label:before { 
-  content: "\f00c";
-  font-weight:100;
-}
-/* checked */
-input[type='checkbox']:checked + label:before {font-weight:900;}

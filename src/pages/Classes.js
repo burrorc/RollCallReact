@@ -173,8 +173,8 @@ class Classes extends React.Component {
 
     return (
       <div className="container">
-        <input id="myInput" type="checkbox" name="myInput"/>
-        <label for="myInput"><i class="fas fa-ad"></i>Some text</label>
+        <input id="box1" type="checkbox" />
+        <label for="box1">Checkbox1</label>
         <div>
           <ReactModal isOpen={this.state.showModal} className="Modal">
             <div className="container">

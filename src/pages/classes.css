@@ -26,7 +26,7 @@
     
     .mybutton:hover {
       color: #2C514C;
-      background-color: transparent;
+      background-color: #fff;
       border-color: #2C514C;
       transition: all .1s ease-in-out;
     }
