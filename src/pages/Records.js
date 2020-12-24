@@ -228,7 +228,7 @@ class Records extends React.Component {
             {displayClass}
           </div>
         </div>
-        <div classname="row">
+        <div className="row">
           <div className="col d-flex justify-content-center">
             <button
               className="mx-2 my-2 mybutton"

@@ -161,9 +161,9 @@ class Dashboard extends React.Component {
         ...newArray[this.state.classSelection].students[studentIndex],
         firstName: newStudentFirst,
         lastName: newStudentLast,
-        present: true,
+        present: false,
         late: false,
-        camera: true,
+        camera: false,
       };
       this.setState(
         {

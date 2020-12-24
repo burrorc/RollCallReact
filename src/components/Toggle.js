@@ -9,7 +9,7 @@ function Toggle(props){
                 className={props.className}
                 onChange={(e) => props.handleChange(e.target.className, props.studentIndex)}
             />
-            <label for="myInput"></label>
+            <label htmlFor="myInput"></label>
             </div>
     )
 }
