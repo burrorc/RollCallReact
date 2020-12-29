@@ -3,6 +3,8 @@ import ReactModal from "react-modal";
 import "./dashboard.css";
 import ClassesSection from "../components/ClassesSection";
 import StudentsSection from "../components/StudentsSection";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 // let localClassSelection;
 // if(localStorage.getItem("SelItem")!=="DEFAULT"){
@@ -13,8 +15,7 @@ import StudentsSection from "../components/StudentsSection";
 //     localClassSelection=JSON.parse(localStorage.getItem("SelItem"))
 //     console.log("LCSs "+localClassSelection)
 //   }
-  
-  
+
 // } else{
 //   localClassSelection=undefined;
 //   console.log("LCSu "+localClassSelection)
@@ -24,9 +25,8 @@ import StudentsSection from "../components/StudentsSection";
 //   if(localClassSelection!=null){
 //     document.getElementById('selClass').value=localClassSelection;
 //   }
-  
-// };
 
+// };
 
 let myClassList;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -57,8 +57,9 @@ class Dashboard extends React.Component {
     this.addStudent = this.addStudent.bind(this);
     this.updateLocalStorage = this.updateLocalStorage.bind(this);
   }
- 
+
   updateLocalStorage() {
+    console.log(this.state.myClasses);
     const toLocalClassList = JSON.stringify(this.state.myClasses);
     //const toLocalClassSelection = document.getElementById('selClass').value
     window.localStorage.setItem("localClassList", toLocalClassList);
@@ -66,8 +67,8 @@ class Dashboard extends React.Component {
     console.log("hey" + window.localStorage.getItem("localClassList"));
     //console.log("updated LCS "+ toLocalClassSelection)
     //document.getElementById("saveChanges").disabled=true
-    console.log("reloading")
-    window.location.reload();
+    console.log("reloading");
+    //window.location.reload();
   }
 
   editItem() {
@@ -76,9 +77,10 @@ class Dashboard extends React.Component {
       myClasses[this.state.itemEditId].subject = document.getElementById(
         "editThis"
       ).value;
-      this.setState({ myClasses }, 
+      this.setState(
+        { myClasses }
         // this.updateLocalStorage
-        );
+      );
     } else if (this.state.itemEditSelection === "students") {
       let editFirst = document.getElementById("editFirst").value;
       let editLast = document.getElementById("editLast").value;
@@ -91,7 +93,7 @@ class Dashboard extends React.Component {
       this.setState(
         {
           myClasses: newArray,
-        },
+        }
         //this.updateLocalStorage
       );
     }
@@ -125,29 +127,30 @@ class Dashboard extends React.Component {
   }
 
   removeStudent(id) {
-    this.setState((prevState) => {
-      const updatedClass = prevState.myClasses.map((subject, index) => {
-        if (index !== this.state.classSelection) {
-          console.log("not" + subject.subject);
-          return subject;
-        }
-        const updatedStudents = subject.students.filter((student, index) => {
-          if (index !== id) {
-            return student;
-          } else {
-            return false;
+    this.setState(
+      (prevState) => {
+        const updatedClass = prevState.myClasses.map((subject, index) => {
+          if (index !== this.state.classSelection) {
+            console.log("not" + subject.subject);
+            return subject;
           }
+          const updatedStudents = subject.students.filter((student, index) => {
+            if (index !== id) {
+              return student;
+            } else {
+              return false;
+            }
+          });
+          return {
+            ...subject,
+            students: updatedStudents,
+          };
         });
         return {
-          ...subject,
-          students: updatedStudents,
+          myClasses: updatedClass,
         };
-      });
-      return {
-        myClasses: updatedClass,
-      };
-    }, 
-    //this.updateLocalStorage
+      }
+      //this.updateLocalStorage
     );
   }
 
@@ -168,7 +171,7 @@ class Dashboard extends React.Component {
       this.setState(
         {
           myClasses: newArray,
-        },
+        }
         //this.updateLocalStorage()
       );
       document.getElementById("addStudentFirstName").value = "";
@@ -197,7 +200,7 @@ class Dashboard extends React.Component {
         return {
           myClasses: addStudentsObject,
         };
-      })
+      });
       // this.updateLocalStorage);
       document.getElementById("addClassInput").value = "";
     }
@@ -219,7 +222,11 @@ class Dashboard extends React.Component {
   // }
 
   render() {
-    console.log('classSelection1 '+this.state.classSelection);
+    let editButtonStyle = {
+      border: "none",
+      backgroundColor: "transparent",
+    };
+    console.log("classSelection1 " + this.state.classSelection);
     let displayStudents;
     if (this.state.myClasses.length === 0) {
       console.log("classSelection2 " + this.state.classSelection);
@@ -273,14 +280,26 @@ class Dashboard extends React.Component {
         this.state.classSelection
       ].students.map((student, index) => (
         <li id={"sl" + index} key={"sl" + index} style={{ fontWeight: "bold" }}>
-          {student.firstName + "  " + student.lastName}
-          <button
-            className="students"
-            onClick={(e) => this.handleOpenModal(e.target.className, index)}
-          >
-            Edit
-          </button>
-          <button onClick={() => this.removeStudent(index)}>Remove</button>
+          <div className="my-2">
+            {student.firstName + "  " + student.lastName}
+            <span style={{ float: "right" }}>
+            <button className="editRemove">
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  onClick={(e) =>
+                    this.handleOpenModal('students', index)
+                  }
+                />
+                </button>
+              <button className="editRemove">
+                <FontAwesomeIcon
+                  icon={faTrashAlt}
+                  onClick={() => this.removeStudent(index)}
+                  
+                />
+              </button>
+            </span>
+          </div>
         </li>
       ));
     }
@@ -302,14 +321,28 @@ class Dashboard extends React.Component {
     } else {
       displayClasses = this.state.myClasses.map((subject, index) => (
         <li id={"cl" + index} key={"cl" + index} style={{ fontWeight: "bold" }}>
-          {subject.subject}
-          <button
-            className="classes"
-            onClick={(e) => this.handleOpenModal(e.target.className, index)}
-          >
-            Edit
-          </button>
-          <button onClick={() => this.removeClass(index)}>Remove</button>
+          <div className="my-2">
+            {subject.subject}
+
+            <span style={{ float: "right" }}>
+              <button className="editRemove">
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  onClick={(e) =>
+                    this.handleOpenModal('classes', index)
+                  }
+                />
+                </button>
+                <button className="editRemove">
+                <FontAwesomeIcon
+                  icon={faTrashAlt}
+                  onClick={() => this.removeClass(index)}
+                  
+                />
+              </button>
+              {/* <button onClick={() => this.removeClass(index)}>Remove</button> */}
+            </span>
+          </div>
         </li>
       ));
     }
@@ -368,7 +401,9 @@ class Dashboard extends React.Component {
           </ReactModal>
         </div>
         <div className="container-fluid">
-          <button id="saveChanges" onClick={this.updateLocalStorage}>Save Changes</button>
+          <button id="saveChanges" onClick={this.updateLocalStorage}>
+            Save Changes
+          </button>
           <div className="row justify-content-around">
             <ClassesSection
               refVal={(a) => (this._inputElement = a)}
@@ -387,86 +422,7 @@ class Dashboard extends React.Component {
                 )
               }
             />
-            {/* <div className="col-11 col-md-3 mt-3 dashboard">
-              <h3 className="text-center">Classes</h3>
-              <div className="d-flex justify-content-center">
-                <form onSubmit={this.addClass}>
-                  <input
-                    ref={(a) => (this._inputElement = a)}
-                    id="addClassInput"
-                    placeholder="Add a class"
-                    className="mx-2"
-                  ></input>
-                  <button
-                    className="mx-2 mybutton"
-                    type="submit"
-                    value="submit"
-                  >
-                    Submit
-                  </button>
-                </form>
-              </div>
-              <div className="d-flex justify-content-center mt-2">
-                <ol>{displayClasses}</ol>
-              </div>
-            </div> */}
-
-            {/* <div className="col-11 col-md-5 dashboard mt-3">
-              <h3 className="text-center">Students</h3>
-              <div className="d-flex justify-content-center">
-                <form className="mx-auto">
-                  <div className="form-group">
-                    <select
-                      defaultValue={"DEFAULT"}
-                      className="form-control"
-                      id="selClass"
-                      onChange={() =>
-                        this.handleClassSelection(
-                          document.getElementById("selClass").selectedIndex
-                        )
-                      }
-                    >
-                      <option value="DEFAULT" disabled hidden>
-                        Choose Class
-                      </option>
-
-                      {classList}
-                    </select>
-                  </div>
-                </form>
-              </div>
-              <div className="d-flex justify-content-center">
-                <form onSubmit={this.addStudent}>
-                  <div className="d-flex justify-items-center">
-                    <input
-                      ref={(a) => (this._inputElement = a)}
-                      id="addStudentFirstName"
-                      placeholder="First Name"
-                      className="mx-2"
-                    ></input>
-                    <input
-                      ref={(a) => (this._inputElement = a)}
-                      id="addStudentLastName"
-                      placeholder="Last Name"
-                      className="mx-2"
-                    ></input>
-                    <button
-                      className="mx-2 mybutton"
-                      type="submit"
-                      value="submit"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </form>
-              </div>
-              <div className="d-flex justify-content-center mt-2">
-                <ol>{displayStudents}</ol>
-              </div>
-            </div> */}
-            <div className="col-11 col-md-3 mt-3 dashboard">
-              <h3 className="text-center">Settings</h3>
-            </div>
+            
           </div>
         </div>
       </div>

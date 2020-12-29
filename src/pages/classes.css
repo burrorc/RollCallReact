@@ -11,9 +11,6 @@
 }
 .mybutton {
     position: relative;
-   
-    
-   
     border-radius: 18px;
     background-color: #2C514C;
     border: solid 2px transparent;
@@ -30,5 +27,6 @@
       border-color: #2C514C;
       transition: all .1s ease-in-out;
     }
+    
     
   

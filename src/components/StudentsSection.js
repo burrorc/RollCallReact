@@ -3,7 +3,7 @@ import React from 'react'
 
 function StudentsSection(props) {
     return(
-        <div className="col-11 col-md-5 dashboard mt-3">
+        <div className="col-11 col-md-7 dashboard mt-3">
               <h3 className="text-center">Students</h3>
               <div className="d-flex justify-content-center">
                 <form className="mx-auto">
@@ -48,7 +48,7 @@ function StudentsSection(props) {
                   </div>
                 </form>
               </div>
-              <div className="d-flex justify-content-center mt-2">
+              <div className="my-2">
                 <ol>{props.displayStudents}</ol>
               </div>
             </div>

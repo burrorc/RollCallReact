@@ -6,12 +6,13 @@ import SimpleList from "../components/SimpleList";
 import AttendanceModal from "../components/AttendanceModal";
 import ToggleButtons from "../components/ToggleButtons";
 
-let attendanceRecord=[["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
-attendanceRecord.map((day) => {
-  day.attendance = [];
-  return day;
-});
-console.log(attendanceRecord)
+let attendanceRecord;
+if (JSON.parse(localStorage.getItem("localAttendance"))) {
+  attendanceRecord = JSON.parse(localStorage.getItem("localAttendance"));
+} else {
+  attendanceRecord = [];
+}
+console.log('here'+ attendanceRecord)
 
 let myClassAttendance;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -29,7 +30,6 @@ class Classes extends React.Component {
       classSelection: undefined,
       toggleP: false,
       toggleC: false,
-      myAttendance: attendanceRecord
     };
     this.togglePresent = this.togglePresent.bind(this);
     this.toggleCamera = this.toggleCamera.bind(this);
@@ -148,35 +148,21 @@ class Classes extends React.Component {
         attendanceRecord[addIndex].attendance=[]
         attendanceRecord[addIndex].attendance.push(this.state.classAttendance[this.state.classSelection])
       }
-      this.setState({myAttendance: attendanceRecord})
       console.log('added class')
       console.log(attendanceRecord)
-      console.log(this.state.myAttendance)
     }else{
       attendanceRecord.push([newDate]);
       attendanceRecord[attendanceRecord.length-1].attendance=[]
       attendanceRecord[attendanceRecord.length-1].attendance.push(this.state.classAttendance[this.state.classSelection])
-      this.setState({myAttendance: attendanceRecord})
       console.log('added date and class')
       console.log(attendanceRecord)
-      console.log(this.state.myAttendance)
     }
-    console.log("to local");
-    let toLocalAttendance = JSON.stringify(this.state.myAttendance);
-    console.log(JSON.stringify(attendanceRecord));
-    console.log(JSON.parse(toLocalAttendance));
-    // let toLocalAttendance = JSON.stringify(attendanceRecord);
-    // localStorage.setItem("localAttendance", toLocalAttendance);
-    // console.log('to local');
-    // console.log(JSON.parse(localStorage.getItem("localAttendance")));
-    // const toLocalAttendance = JSON.stringify(this.state.myClasses);
-    // //const toLocalClassSelection = document.getElementById('selClass').value
-    // window.localStorage.setItem("localClassList", toLocalClassList);
-    // //window.localStorage.setItem("SelItem", toLocalClassSelection)
-    // console.log("hey" + window.localStorage.getItem("localClassList"));
-    // //console.log("updated LCS "+ toLocalClassSelection)
-    // //document.getElementById("saveChanges").disabled=true
-    // console.log("reloading")
+    
+    
+    const toLocalAttendance = JSON.stringify(attendanceRecord);
+    localStorage.setItem("localAttendance", toLocalAttendance);
+    console.log("hey" + JSON.parse(localStorage.getItem("localAttendance")));
+    // debugger
     // window.location.reload();
   }
 
