@@ -300,8 +300,8 @@ class Classes extends React.Component {
 
     return (
       <div className="container">
-        <input id="box1" type="checkbox" />
-        <label htmlFor="box1">Checkbox1</label>
+        <h1 style={{color: '#2C514C'}} className='text-center'>Attendance</h1>
+        
         <div>
           <ReactModal isOpen={this.state.showModal} className="Modal">
             <AttendanceModal
@@ -316,7 +316,7 @@ class Classes extends React.Component {
 
           </ReactModal>
         </div>
-        <h2 id='clickTitle'>Classes</h2>
+       
         
         <div className="row justify-content-around">{displayButtons}</div>
       </div>

@@ -17,17 +17,16 @@ function ClassesSection(props) {
             </div>
             <div className="col" style={{textAlign: 'center'}}>
               <button className="mx-2 my-1 mybutton" type="submit" value="submit">
-                Submit
+                Add Class
               </button>
             </div>
           </div>
         </form>
       </div>
-      <div className="container-fluid d-flex justify-content-center">
-      <div className="my-2 col-10 col-md-12 col-lg-9 px-md-0">
-        <ol >{props.displayClasses}</ol>
-      </div>
-      </div>
+      <div className="d-flex justify-content-center">
+        <ol style={{ width: "75%" }}>{props.displayClasses}</ol>
+       </div> 
+     
     </div>
   );
 }

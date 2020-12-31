@@ -5,6 +5,7 @@ import ClassesSection from "../components/ClassesSection";
 import StudentsSection from "../components/StudentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { Prompt } from 'react-router'
 
 // let localClassSelection;
 // if(localStorage.getItem("SelItem")!=="DEFAULT"){
@@ -48,6 +49,8 @@ class Dashboard extends React.Component {
       itemEditId: "",
       classSelection: undefined,
       previousSelection: "0",
+      edits: false,
+      hasBeenEdited: false,
     };
     this.addClass = this.addClass.bind(this);
     this.removeClass = this.removeClass.bind(this);
@@ -56,8 +59,24 @@ class Dashboard extends React.Component {
     this.handleClassSelection = this.handleClassSelection.bind(this);
     this.addStudent = this.addStudent.bind(this);
     this.updateLocalStorage = this.updateLocalStorage.bind(this);
+    this.openEdits = this.openEdits.bind(this);
+    this.closeEdits = this.closeEdits.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
   }
 
+  openEdits() {
+    console.log("open");
+    this.setState({
+      edits: true,
+    });
+  }
+
+  closeEdits() {
+    console.log("close");
+    this.setState({
+      edits: false,
+    });
+  }
   updateLocalStorage() {
     console.log(this.state.myClasses);
     const toLocalClassList = JSON.stringify(this.state.myClasses);
@@ -68,6 +87,10 @@ class Dashboard extends React.Component {
     //console.log("updated LCS "+ toLocalClassSelection)
     //document.getElementById("saveChanges").disabled=true
     console.log("reloading");
+    this.closeEdits();
+    this.setState({
+      hasBeenEdited: true,
+    })
     //window.location.reload();
   }
 
@@ -97,6 +120,7 @@ class Dashboard extends React.Component {
         //this.updateLocalStorage
       );
     }
+    this.openEdits();
   }
 
   handleOpenModal(array, item) {
@@ -105,6 +129,10 @@ class Dashboard extends React.Component {
       () => console.log(this.state.itemEditId),
       this.setState({ showModal: true })
     );
+  }
+
+  cancelEdit(){
+    this.setState({ showModal: false }); 
   }
 
   handleCloseModal() {
@@ -120,10 +148,12 @@ class Dashboard extends React.Component {
         return false;
       }
     });
-    this.setState({ myClasses: newClassList }, this.updateLocalStorage);
+    this.setState({ myClasses: newClassList });
     if (this.state.myClasses.length === 0) {
       this.setState({ itemEditSelection: "" });
+      
     }
+    this.openEdits();
   }
 
   removeStudent(id) {
@@ -152,6 +182,7 @@ class Dashboard extends React.Component {
       }
       //this.updateLocalStorage
     );
+    this.openEdits();
   }
 
   addStudent(e) {
@@ -180,6 +211,7 @@ class Dashboard extends React.Component {
       alert("Please enter a complete student name");
     }
     e.preventDefault();
+    this.openEdits();
   }
 
   addClass(e) {
@@ -206,6 +238,7 @@ class Dashboard extends React.Component {
     }
 
     e.preventDefault();
+    this.openEdits();
     console.log(this.state.myClasses);
   }
 
@@ -217,16 +250,75 @@ class Dashboard extends React.Component {
     console.log(this.state.classSelection);
   }
 
-  // componentDidUpdate() {
-  //   document.getElementById('saveChanges').disabled=false
-  // }
+  componentWillUnmount(){
+    if(this.state.hasBeenEdited){
+      window.location.reload()
+
+    }
+  }
 
   render() {
-    let editButtonStyle = {
-      border: "none",
-      backgroundColor: "transparent",
-    };
+    let editButton;
+    if (this.state.edits === false) {
+      editButton = <span></span>;
+    } else {
+      editButton = (
+        <button
+          id="saveChanges"
+          className="mybutton mt-2"
+          onClick={this.updateLocalStorage}
+        >
+          Save Changes
+        </button>
+      );
+    }
+
+    
     console.log("classSelection1 " + this.state.classSelection);
+    let addStudentInputs;
+    if (this.state.classSelection === undefined) {
+      addStudentInputs = <span></span>;
+    } else {
+      addStudentInputs = (
+        <div className="d-flex justify-content-center">
+          <form className="container-fluid" onSubmit={this.addStudent}>
+            <div className="row justify-content-center">
+              <div
+                className="col-12 col-md-8 px-0"
+                style={{ textAlign: "center" }}
+              >
+                <input
+                  ref={(a) => (this._inputElement = a)}
+                  id="addStudentFirstName"
+                  placeholder="First Name"
+                  className="mx-2 my-1"
+                ></input>
+                <input
+                  ref={(a) => (this._inputElement = a)}
+                  id="addStudentLastName"
+                  placeholder="Last Name"
+                  className="mx-2 my-1"
+                ></input>
+              </div>
+              <div
+                className="col-12 col-md-4 px-0"
+                style={{ textAlign: "center" }}
+              >
+                <button
+                  type="submit"
+                  value="submit"
+                  style={{ width: 130 }}
+                  className="mx-2 my-1 mybutton"
+                >
+                  Add Student
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      );
+    }
+
     let displayStudents;
     if (this.state.myClasses.length === 0) {
       console.log("classSelection2 " + this.state.classSelection);
@@ -242,22 +334,7 @@ class Dashboard extends React.Component {
           You have no classes listed
         </li>
       );
-    }
-    //  else if(localClassSelection===undefined){
-    //   displayStudents = this.state.myClasses[0].students.map((student, index) => (
-    //     <li id={"sl" + index} key={"sl" + index} style={{ fontWeight: "bold" }}>
-    //       {student.firstName + "  " + student.lastName}
-    //       <button
-    //         className="students"
-    //         onClick={(e) => this.handleOpenModal(e.target.className, index)}
-    //       >
-    //         Edit
-    //       </button>
-    //       <button onClick={() => this.removeStudent(index)}>Remove</button>
-    //     </li>
-    //   ));
-    // }
-    else if (this.state.classSelection === undefined) {
+    } else if (this.state.classSelection === undefined) {
       console.log("classSelection" + this.state.classSelection);
       displayStudents = <span></span>;
     } else if (
@@ -280,25 +357,24 @@ class Dashboard extends React.Component {
         this.state.classSelection
       ].students.map((student, index) => (
         <li id={"sl" + index} key={"sl" + index} style={{ fontWeight: "bold" }}>
-          <div className="my-2">
-            {student.firstName + "  " + student.lastName}
-            <span style={{ float: "right" }}>
-            <button className="editRemove">
+          <div className="d-flex">
+            <div className="col-6 col-md-8">
+              {student.firstName + "  " + student.lastName}
+            </div>
+            <div className="col-6 col-md-4 text-center">
+              <button className="editRemove">
                 <FontAwesomeIcon
                   icon={faEdit}
-                  onClick={(e) =>
-                    this.handleOpenModal('students', index)
-                  }
+                  onClick={(e) => this.handleOpenModal("students", index)}
                 />
-                </button>
+              </button>
               <button className="editRemove">
                 <FontAwesomeIcon
                   icon={faTrashAlt}
                   onClick={() => this.removeStudent(index)}
-                  
                 />
               </button>
-            </span>
+            </div>
           </div>
         </li>
       ));
@@ -321,27 +397,24 @@ class Dashboard extends React.Component {
     } else {
       displayClasses = this.state.myClasses.map((subject, index) => (
         <li id={"cl" + index} key={"cl" + index} style={{ fontWeight: "bold" }}>
-          <div className="my-2">
-            {subject.subject}
-
-            <span style={{ float: "right" }}>
-              <button className="editRemove">
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  onClick={(e) =>
-                    this.handleOpenModal('classes', index)
-                  }
-                />
+          <div className="my-2 d-flex">
+            <div className="col-5 col-md-7 px-0">{subject.subject}</div>
+            <div className="col-7 col-md-5 text-center px-0" >
+              {/* <span style={{ float: "right" }}> */}
+                <button className="editRemove">
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    onClick={(e) => this.handleOpenModal("classes", index)}
+                  />
                 </button>
                 <button className="editRemove">
-                <FontAwesomeIcon
-                  icon={faTrashAlt}
-                  onClick={() => this.removeClass(index)}
-                  
-                />
-              </button>
-              {/* <button onClick={() => this.removeClass(index)}>Remove</button> */}
-            </span>
+                  <FontAwesomeIcon
+                    icon={faTrashAlt}
+                    onClick={() => this.removeClass(index)}
+                  />
+                </button>
+              {/* </span> */}
+            </div>
           </div>
         </li>
       ));
@@ -373,8 +446,8 @@ class Dashboard extends React.Component {
     } else if (this.state.itemEditSelection === "students") {
       editOptions = (
         <div>
-          <input id="editFirst" defaultValue={editValue.firstName} />
-          <input id="editLast" defaultValue={editValue.lastName} />
+          <input id="editFirst" className=' my-2' defaultValue={editValue.firstName} />
+          <input id="editLast" className=' my-2' defaultValue={editValue.lastName} />
         </div>
       );
     }
@@ -392,18 +465,25 @@ class Dashboard extends React.Component {
 
     return (
       <div>
+        <Prompt
+  when={this.state.edits}
+  message="Do you want to leave without saving your changes?"
+/>
         <div>
-          <ReactModal isOpen={this.state.showModal}>
+          <ReactModal isOpen={this.state.showModal} className="Modal text-center">
             <form onSubmit={this.handleCloseModal}>
               {editOptions}
-              <input type="submit" value="Submit"></input>
+              <input type="submit" value="Submit" className="mybutton my-2 mx-1"></input>
+              <button className="mybuttonCancel my-2 mx-1" onClick={this.cancelEdit}>Cancel</button>
             </form>
           </ReactModal>
         </div>
         <div className="container-fluid">
-          <button id="saveChanges" onClick={this.updateLocalStorage}>
-            Save Changes
-          </button>
+        <h1 style={{color: '#2C514C'}} className='text-center'>Dashboard</h1>
+          <div className='text-center' style={{height: 30}}>
+          
+          {editButton}
+          </div>
           <div className="row justify-content-around">
             <ClassesSection
               refVal={(a) => (this._inputElement = a)}
@@ -411,6 +491,7 @@ class Dashboard extends React.Component {
               displayClasses={displayClasses}
             />
             <StudentsSection
+              addStudentInputs={addStudentInputs}
               previousSelection={this.state.previousSelection}
               refVal={(a) => (this._inputElement = a)}
               displayStudents={displayStudents}
@@ -422,7 +503,9 @@ class Dashboard extends React.Component {
                 )
               }
             />
-            
+          </div>
+          <div className='text-center' style={{height: 30}}>
+          {editButton}
           </div>
         </div>
       </div>

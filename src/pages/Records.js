@@ -203,6 +203,7 @@ class Records extends React.Component {
 
     return (
       <div className="container">
+        <h1 style={{color: '#2C514C'}} className='text-center'>Records</h1>
         <div className="row d-flex justify-content-center">
           <div className="col-6 my-2">
             <form>
