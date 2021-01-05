@@ -20,11 +20,20 @@ class Records extends React.Component {
       edit: false,
     };
     this.baseState = this.state;
+    this.cancelSave = this.cancelSave.bind(this);
     this.saveArray = this.saveArray.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleDateSelection = this.handleDateSelection.bind(this);
     this.handleClassSelection = this.handleClassSelection.bind(this);
+  }
+
+  cancelSave(){
+    this.setState({
+      edit: false,
+      classSelection: undefined,
+      dateSelection: undefined,
+    });
   }
 
   saveArray() {
@@ -38,8 +47,7 @@ class Records extends React.Component {
     if (this.state.edit === true) {
       console.log(this.state.edit);
       this.handleChange(boxName, studentIndex);
-    }
-    if (this.state.edit === false) {
+    } if (this.state.edit === false) {
       if (window.confirm("Are you sure you want to edit this record")) {
         this.setState({
           edit: true,
@@ -49,7 +57,7 @@ class Records extends React.Component {
       }
     }
   }
-  handleChange(boxName, studentIndex) {
+  handleChange(boxName, studentIndex, text) {
     this.setState((prevState) => {
       console.log(
         "date: " + prevState.dateSelection + ", " + prevState.classSelection
@@ -76,6 +84,9 @@ class Records extends React.Component {
                       break;
                     case "camera":
                       student.camera = !student.camera;
+                      break;
+                    case "comments":
+                      student.comments = text;
                       break;
                     default:
                   }
@@ -133,10 +144,13 @@ class Records extends React.Component {
 
     let displayStudents;
     let displayStudentsMessage;
+    let displayList;
     if (this.state.dateSelection === undefined) {
       displayStudentsMessage = <span></span>;
       displayStudents = <span></span>;
+      displayList = { display: "none" };
     } else if (this.state.classSelection === undefined) {
+      displayList = { display: "none" };
       displayStudentsMessage = (
         <h5 className="text-center">Select a class to see attendance</h5>
       );
@@ -146,12 +160,14 @@ class Records extends React.Component {
           this.state.classSelection
         ].students === undefined
       ) {
+        displayList = { display: "none" };
         displayStudentsMessage = (
           <h5 className="text-center">
             There are no students listed for this class
           </h5>
         );
       } else {
+        displayList = { display: "block" };
         displayStudents = this.state.myArray[
           this.state.dateSelection
         ].attendance[
@@ -173,11 +189,12 @@ class Records extends React.Component {
       displayClass = (
         <div>
           <form>
-            <div className="form-group">
+            <div className="form-group" align="center">
               <select
                 defaultValue={"DEFAULT"}
                 className="form-control"
                 id="selClass"
+                style={{ width: 300 }}
                 onChange={() =>
                   this.handleClassSelection(
                     document.getElementById("selClass").selectedIndex
@@ -193,25 +210,58 @@ class Records extends React.Component {
           </form>
           <div>{displayStudentsMessage}</div>
           <div className="row d-flex justify-content-center ">
-            <div className="col-10 attendanceRecord">
-              <ol>{displayStudents}</ol>
+            <div style={displayList} className="attendanceRecord">
+              <ol style={{ marginRight: "10px" }}>{displayStudents}</ol>
             </div>
           </div>
         </div>
       );
     }
 
+    let editButtons;
+    if (
+      this.state.dateSelection === undefined ||
+      this.state.classSelection === undefined ||
+      this.state.myArray[this.state.dateSelection].attendance[
+        this.state.classSelection
+      ].students === undefined
+    ) {
+      editButtons = <span></span>;
+    } else {
+      editButtons = (
+        <div className="row">
+          <div className="col d-flex justify-content-center">
+            <button
+              className="mx-2 my-2 mybutton"
+              onClick={() => this.saveArray()}
+            >
+              Save Changes
+            </button>
+            <button
+              className="mx-2 my-2 mybuttonCancel"
+              onClick={() => this.cancelSave()}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <div className="container">
-        <h1 style={{color: '#2C514C'}} className='text-center'>Records</h1>
+      <div className="container-fluid">
+        <h1 style={{ color: "#2C514C" }} className="text-center">
+          Records
+        </h1>
         <div className="row d-flex justify-content-center">
-          <div className="col-6 my-2">
+          <div className="col my-2">
             <form>
-              <div className="form-group">
+              <div className="form-group" align="center">
                 <select
                   defaultValue={"DEFAULT"}
                   className="form-control"
                   id="selDate"
+                  style={{ width: 300 }}
                   onChange={() =>
                     this.handleDateSelection(
                       document.getElementById("selDate").selectedIndex
@@ -229,22 +279,7 @@ class Records extends React.Component {
             {displayClass}
           </div>
         </div>
-        <div className="row">
-          <div className="col d-flex justify-content-center">
-            <button
-              className="mx-2 my-2 mybutton"
-              onClick={() => this.saveArray()}
-            >
-              Save Changes
-            </button>
-            <button
-              className="mx-2 my-2 mybuttonCancel"
-              onClick={() => this.saveArray()}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+        {editButtons}
       </div>
     );
   }

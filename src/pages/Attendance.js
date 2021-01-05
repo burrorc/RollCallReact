@@ -5,13 +5,22 @@ import ReactModal from "react-modal";
 import SimpleList from "../components/SimpleList";
 import AttendanceModal from "../components/AttendanceModal";
 import ToggleButtons from "../components/ToggleButtons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTimesCircle,
+  faCheckCircle,
+  faClock,
+  faVideo,
+  faVideoSlash,
+} from "@fortawesome/free-solid-svg-icons";
+import "./attendance.css";
 
-let attendanceRecord=[["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
+let attendanceRecord = [["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
 attendanceRecord.map((day) => {
   day.attendance = [];
   return day;
 });
-console.log(attendanceRecord)
+console.log(attendanceRecord);
 
 let myClassAttendance;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -29,7 +38,7 @@ class Classes extends React.Component {
       classSelection: undefined,
       toggleP: false,
       toggleC: false,
-      myAttendance: attendanceRecord
+      myAttendance: attendanceRecord,
     };
     this.togglePresent = this.togglePresent.bind(this);
     this.toggleCamera = this.toggleCamera.bind(this);
@@ -39,16 +48,24 @@ class Classes extends React.Component {
     this.updateLocalStorage = this.updateLocalStorage.bind(this);
   }
 
-  cancelSave(){
-    this.setState((prevState)=>{
-      prevState.classAttendance[this.state.classSelection].students.map((student)=>{
-        student.present = false;
-        student.late = false;
-        student.camera = false;
-        return student;
-      })
+  cancelSave() {
+    this.setState((prevState) => {
+      prevState.classAttendance[this.state.classSelection].students.map(
+        (student) => {
+          student.present = false;
+          student.late = false;
+          student.camera = false;
+          student.comments = "";
+          return student;
+        }
+      );
     });
-    this.setState({ showModal: false, classSelection: undefined, toggleP: false, toggleC: false });
+    this.setState({
+      showModal: false,
+      classSelection: undefined,
+      toggleP: false,
+      toggleC: false,
+    });
   }
 
   toggleCamera() {
@@ -106,60 +123,67 @@ class Classes extends React.Component {
   handleOpenModal(item) {
     const newDate = new Date().toDateString();
     let addIndex;
-    const dateExists = attendanceRecord.find(function(record, index) {
-      if(record == newDate){
+    const dateExists = attendanceRecord.find(function (record, index) {
+      if (record == newDate) {
         addIndex = index;
         return true;
-      }else{
+      } else {
         return false;
       }
-        
     });
-    if(dateExists){
-      const recordExists = attendanceRecord[addIndex].attendance.find( ({ subject }) => subject === this.state.classAttendance[item].subject )
-      if(recordExists !== undefined){
-        alert('You already have taken attendance for this class. Please go to your records in order to make changes')
-        document.getElementById('clickTitle').click();
-      }else{
+    if (dateExists) {
+      const recordExists = attendanceRecord[addIndex].attendance.find(
+        ({ subject }) => subject === this.state.classAttendance[item].subject
+      );
+      if (recordExists !== undefined) {
+        alert(
+          "You already have taken attendance for this class. Please go to your records in order to make changes"
+        );
+        document.getElementById("clickTitle").click();
+      } else {
         this.setState({ showModal: true, classSelection: item });
       }
-    }else{
+    } else {
       this.setState({ showModal: true, classSelection: item });
     }
-    
   }
 
   updateLocalStorage() {
     const newDate = new Date().toDateString();
     let addIndex;
-    const dateExists = attendanceRecord.find(function(record, index) {
-      if(record == newDate){
+    const dateExists = attendanceRecord.find(function (record, index) {
+      if (record == newDate) {
         addIndex = index;
         return true;
-      }else{
+      } else {
         return false;
       }
-        
     });
-    if(dateExists){
-      if(attendanceRecord[addIndex].attendance){
-        attendanceRecord[addIndex].attendance.push(this.state.classAttendance[this.state.classSelection])
-      }else{
-        attendanceRecord[addIndex].attendance=[]
-        attendanceRecord[addIndex].attendance.push(this.state.classAttendance[this.state.classSelection])
+    if (dateExists) {
+      if (attendanceRecord[addIndex].attendance) {
+        attendanceRecord[addIndex].attendance.push(
+          this.state.classAttendance[this.state.classSelection]
+        );
+      } else {
+        attendanceRecord[addIndex].attendance = [];
+        attendanceRecord[addIndex].attendance.push(
+          this.state.classAttendance[this.state.classSelection]
+        );
       }
-      this.setState({myAttendance: attendanceRecord})
-      console.log('added class')
-      console.log(attendanceRecord)
-      console.log(this.state.myAttendance)
-    }else{
+      this.setState({ myAttendance: attendanceRecord });
+      console.log("added class");
+      console.log(attendanceRecord);
+      console.log(this.state.myAttendance);
+    } else {
       attendanceRecord.push([newDate]);
-      attendanceRecord[attendanceRecord.length-1].attendance=[]
-      attendanceRecord[attendanceRecord.length-1].attendance.push(this.state.classAttendance[this.state.classSelection])
-      this.setState({myAttendance: attendanceRecord})
-      console.log('added date and class')
-      console.log(attendanceRecord)
-      console.log(this.state.myAttendance)
+      attendanceRecord[attendanceRecord.length - 1].attendance = [];
+      attendanceRecord[attendanceRecord.length - 1].attendance.push(
+        this.state.classAttendance[this.state.classSelection]
+      );
+      this.setState({ myAttendance: attendanceRecord });
+      console.log("added date and class");
+      console.log(attendanceRecord);
+      console.log(this.state.myAttendance);
     }
     console.log("to local");
     let toLocalAttendance = JSON.stringify(this.state.myAttendance);
@@ -187,7 +211,7 @@ class Classes extends React.Component {
     // window.location.reload();
   }
 
-  handleChange(boxName, studentIndex) {
+  handleChange(boxName, studentIndex, text) {
     this.setState((prevState) => {
       const updatedClassAttendance = prevState.classAttendance.map((item) => {
         if (item.students === undefined) {
@@ -205,9 +229,13 @@ class Classes extends React.Component {
                 case "camera":
                   student.camera = !student.camera;
                   break;
+                case "comments":
+                  student.comments = text;
+                  break;
                 default:
               }
             }
+            console.log(student);
             return student;
           });
           return item;
@@ -250,6 +278,7 @@ class Classes extends React.Component {
         />
       ));
     }
+
     let toggleButtons;
     let displayStudents;
     if (this.state.classAttendance.length === 0) {
@@ -282,26 +311,38 @@ class Classes extends React.Component {
         />
       ));
       saveAttendance = (
-        <button
-                  className="mx-2 my-2 mybutton"
-                  onClick={this.handleCloseModal}
-                >
-                  Save Attendance
-                </button>
-      )
+        <button className="mx-2 my-2 mybutton" onClick={this.handleCloseModal}>
+          Save Attendance
+        </button>
+      );
     } else {
       console.log("you do not have students");
       toggleButtons = <span></span>;
       displayStudents = (
-        <h5 className="my-2" style={{textAlign: 'center', fontWeight: 'bold'}}>You currently have no students listed in this class</h5>
+        <h5
+          className="my-2"
+          style={{ textAlign: "center", fontWeight: "bold" }}
+        >
+          You currently have no students listed in this class
+        </h5>
       );
-      saveAttendance=<span></span>;
+      saveAttendance = <span></span>;
     }
 
     return (
       <div className="container">
-        <h1 style={{color: '#2C514C'}} className='text-center'>Attendance</h1>
-        
+        <h1
+          id="clickTitle"
+          style={{ color: "#2C514C" }}
+          className="text-center"
+        >
+          Attendance
+        </h1>
+        <FontAwesomeIcon icon={faTimesCircle} />
+        <FontAwesomeIcon icon={faCheckCircle} />
+        <FontAwesomeIcon icon={faClock} />
+        <FontAwesomeIcon icon={faVideo} />
+        <FontAwesomeIcon icon={faVideoSlash} />
         <div>
           <ReactModal isOpen={this.state.showModal} className="Modal">
             <AttendanceModal
@@ -313,11 +354,9 @@ class Classes extends React.Component {
               toggleButtons={toggleButtons}
               saveAttendance={saveAttendance}
             />
-
           </ReactModal>
         </div>
-       
-        
+
         <div className="row justify-content-around">{displayButtons}</div>
       </div>
     );

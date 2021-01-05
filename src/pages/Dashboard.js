@@ -198,6 +198,7 @@ class Dashboard extends React.Component {
         present: false,
         late: false,
         camera: false,
+        comments: '',
       };
       this.setState(
         {

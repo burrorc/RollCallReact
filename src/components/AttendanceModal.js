@@ -2,7 +2,7 @@ import React from "react"
 
 function AttendanceModal(props){
     return(
-        <div className="container">
+        <div className="container-fluid">
             {props.toggleButtons}
               <ol>{props.displayStudents}</ol>
               <div className="d-flex justify-content-center">

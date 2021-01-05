@@ -1,0 +1,14 @@
+.fancy-checkbox input[type="checkbox"],
+      .fancy-checkbox .checked {
+        display: none;
+        
+      }
+      .fancy-checkbox input[type="checkbox"]:checked ~ .checked {
+        display: inline-block;
+        /* color: red; */
+      }
+
+      .fancy-checkbox input[type="checkbox"]:checked ~ .unchecked {
+        display: none;
+        
+      }

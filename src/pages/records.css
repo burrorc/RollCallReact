@@ -46,4 +46,13 @@
     background-color: #fff;
     border-radius: 18px;
     border: solid 2px  #2C514C;
+    width: 100%;
+}
+
+@media (min-width: 768px){
+
+  .attendanceRecord {
+ 
+  width: 80%;
+}
 }

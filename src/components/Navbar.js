@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Classes from "../pages/Classes";
+import Attendance from "../pages/Attendance";
 import Records from "../pages/Records";
 import Dashboard from "../pages/Dashboard";
 import './navbar.css' 
@@ -16,8 +16,8 @@ class Navbar extends React.Component {
     if (this.state.isLoggedIn) {
       displayLinks = (
         <div className="navbar-nav ml-auto na">
-          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/classes" className="loggedInLinks nav-item nav-link" >
-            Classes
+          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/attendance" className="loggedInLinks nav-item nav-link" >
+            Attendance
           </Link>
           <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/records" className="loggedInLinks nav-item nav-link">
             Records
@@ -78,8 +78,8 @@ class Navbar extends React.Component {
             </div>
           </nav>
           <Switch>
-            <Route path="/classes">
-              <Classes />
+            <Route path="/attendance">
+              <Attendance />
             </Route>
             <Route path="/records">
               <Records />
