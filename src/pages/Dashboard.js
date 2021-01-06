@@ -503,7 +503,7 @@ class Dashboard extends React.Component {
           </ReactModal>
         </div>
         <div className="container-fluid">
-          <h1 style={{ color: "#2C514C" }} className="text-center">
+          <h1 style={{ color: "#2C514C", fontWeight:'bold' }} className="text-center">
             Dashboard
           </h1>
           <div className="text-center" style={{ height: 30 }}>

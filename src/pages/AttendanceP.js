@@ -15,26 +15,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./attendance.css";
 
-let attendanceRecord;
-let localExists = localStorage.getItem("localAttendance");
-if (localExists){
-  alert('yes')
-  attendanceRecord = JSON.parse(localExists)
-  console.log(attendanceRecord);
-}else{
-  alert('no')
-  attendanceRecord = [];
-}
-
-// let attendanceRecord = [
-//   { date: "Tue Dec 08 2020" },
-//   { date: "Wed Dec 09 2020" },
-// ];
-// attendanceRecord.map((day) => {
-//   day.attendance = [];
-//   return day;
-// });
-// console.log("AR "+attendanceRecord);
+let attendanceRecord = [
+  { date: "Tue Dec 08 2020" },
+  { date: "Wed Dec 09 2020" },
+];
+attendanceRecord.map((day) => {
+  day.attendance = [];
+  return day;
+});
+console.log("AR "+attendanceRecord);
 
 let myClassAttendance;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -137,74 +126,117 @@ class Classes extends React.Component {
   handleOpenModal(item) {
     const newDate = new Date().toDateString();
     let addIndex;
-    const dateExists = attendanceRecord.find(function (record, index) {
+    const dateExists = this.state.myAttendance.find(function (record, index) {
       if (record.date == newDate) {
         addIndex = index;
+        console.log("date exists");
         return true;
       } else {
+        console.log("date not exists");
         return false;
       }
     });
     if (dateExists) {
-      const recordExists = attendanceRecord[addIndex].attendance.find(
-        ({ subject }) => subject === this.state.classAttendance[item].subject
-      );
-      if (recordExists !== undefined) {
-        alert(
-          "You already have taken attendance for this class. Please go to your records in order to make changes"
-        );
-        document.getElementById("clickTitle").click();
-      } else {
-        this.setState({ showModal: true, classSelection: item });
-      }
+      alert("this is here");
+      console.log(attendanceRecord[addIndex].attendance)
+      // const recordExists = attendanceRecord[addIndex].attendance.find(
+      //   ({ subject }) =>
+      //     subject === this.state.classAttendance[item].subject
+      // );
+      
     } else {
-      this.setState({ showModal: true, classSelection: item });
+      this.state.myAttendance.push({ date: newDate });
     }
+    console.log(this.state.myAttendance);
+    // let addIndex;
+    // const dateExists = this.state.myAttendance.find(function (record, index) {
+    //   if (record.date == newDate) {
+    //     addIndex = index;
+    //     console.log('date exists');
+    //     return true;
+    //   } else {
+    //     console.log('date not exists');
+    //     return false;
+    //   }
+    // });
+    // if (dateExists) {
+    //   const recordExists = attendanceRecord[addIndex].attendance.find(
+    //     ({ subject }) => subject.subject === this.state.classAttendance[item].subject
+    //   );
+    //   if (recordExists !== undefined) {
+    //     alert(
+    //       "You already have taken attendance for this class. Please go to your records in order to make changes"
+    //     );
+    //     document.getElementById("clickTitle").click();
+    //   } else {
+    //     this.setState({ showModal: true, classSelection: item });
+    //   }
+    // } else {
+    //   this.setState({ showModal: true, classSelection: item });
+    // }
   }
 
   updateLocalStorage() {
     const newDate = new Date().toDateString();
-    let addIndex;
-    const dateExists = attendanceRecord.find(function (record, index) {
-      if (record.date == newDate) {
-        addIndex = index;
-        return true;
-      } else {
-        return false;
+    const dateExists = this.state.myAttendance.find(function (record) {
+      if (record) {
+        console.log(record);
       }
     });
-    if (dateExists) {
-      if (attendanceRecord[addIndex].attendance) {
-        attendanceRecord[addIndex].attendance.push(
-          this.state.classAttendance[this.state.classSelection]
-        );
-      } else {
-        attendanceRecord[addIndex].attendance = [];
-        attendanceRecord[addIndex].attendance.push(
-          this.state.classAttendance[this.state.classSelection]
-        );
-      }
-      this.setState({ myAttendance: attendanceRecord });
-      console.log("added class");
-      console.log(attendanceRecord);
-      console.log(this.state.myAttendance);
-    } else {
-      attendanceRecord.push({date: newDate});
-      attendanceRecord[attendanceRecord.length - 1].attendance = [];
-      attendanceRecord[attendanceRecord.length - 1].attendance.push(
-        this.state.classAttendance[this.state.classSelection]
-      );
-      this.setState({ myAttendance: attendanceRecord });
-      console.log("added date and class");
-      console.log(attendanceRecord);
-      console.log(this.state.myAttendance);
-    }
-    console.log("to local");
+    console.log("dateExists " + dateExists);
+    // if (dateExists){
+    //   console.log("it does exist")
+    // }else{
+    //   console.log("it does not exist")
+    // }
+
+    this.setState({ myAttendance: attendanceRecord });
     let toLocalAttendance = JSON.stringify(this.state.myAttendance);
-    console.log(JSON.stringify(attendanceRecord));
-    console.log(JSON.parse(toLocalAttendance));
-    // let toLocalAttendance = JSON.stringify(attendanceRecord);
     localStorage.setItem("localAttendance", toLocalAttendance);
+
+    // const newDate = new Date().toDateString();
+    // let addIndex;
+    // const dateExists = attendanceRecord.find(function (record, index) {
+    //   if (record.date == newDate) {
+    //     addIndex = index;
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // });
+    // if (dateExists) {
+    //   if (attendanceRecord[addIndex].attendance) {
+    //     attendanceRecord[addIndex].attendance.push(
+    //       this.state.classAttendance[this.state.classSelection]
+    //     );
+    //   } else {
+    //     attendanceRecord[addIndex].attendance = [];
+    //     attendanceRecord[addIndex].attendance.push(
+    //       this.state.classAttendance[this.state.classSelection]
+    //     );
+    //   }
+    //   this.setState({ myAttendance: attendanceRecord });
+    //   console.log("added class");
+    //   console.log(attendanceRecord);
+    //   console.log(this.state.myAttendance);
+    // } else {
+    //   attendanceRecord.push([newDate]);
+    //   attendanceRecord[attendanceRecord.length - 1].attendance = [];
+    //   attendanceRecord[attendanceRecord.length - 1].attendance.push(
+    //     this.state.classAttendance[this.state.classSelection]
+    //   );
+    //   this.setState({ myAttendance: attendanceRecord });
+    //   console.log("added date and class");
+    //   console.log(attendanceRecord);
+    //   console.log(this.state.myAttendance);
+    // }
+    // console.log("to local");
+    // let toLocalAttendance = JSON.stringify(this.state.myAttendance);
+    // console.log(JSON.stringify(attendanceRecord));
+    // console.log(JSON.parse(toLocalAttendance));
+
+    // let toLocalAttendance = JSON.stringify(attendanceRecord);
+    // localStorage.setItem("localAttendance", toLocalAttendance);
     // console.log('to local');
     // console.log(JSON.parse(localStorage.getItem("localAttendance")));
     // const toLocalAttendance = JSON.stringify(this.state.myClasses);
@@ -221,8 +253,8 @@ class Classes extends React.Component {
   handleCloseModal() {
     this.setState({ showModal: false, classSelection: undefined });
     this.updateLocalStorage();
-    console.log('CA '+this.state.classAttendance);
-    console.log('MA '+this.state.myAttendance)
+    console.log("CA " + this.state.classAttendance);
+    console.log("MA " + this.state.myAttendance);
     // window.localStorage.setItem("SelItem", '');
     // window.location.reload();
   }
@@ -262,7 +294,7 @@ class Classes extends React.Component {
         classAttendance: updatedClassAttendance,
       };
     });
-    console.log("CA "+this.state.classAttendance)
+    console.log("CA " + this.state.classAttendance);
   }
 
   render() {
@@ -350,7 +382,7 @@ class Classes extends React.Component {
       <div className="container">
         <h1
           id="clickTitle"
-          style={{ color: "#2C514C", fontWeight:'bold' }}
+          style={{ color: "#2C514C" }}
           className="text-center"
         >
           Attendance

@@ -3,12 +3,22 @@ import mySampleArray from "../mySampleArray.js";
 import SimpleList from "../components/SimpleList";
 import "./records.css";
 
-let recordsArray = [["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
-recordsArray.map((day) => {
-  day.attendance = mySampleArray;
-  return day;
-});
-console.log(recordsArray);
+let recordsArray;
+let localExists = localStorage.getItem("localAttendance");
+if (localExists){
+  alert('yes')
+  recordsArray = JSON.parse(localExists)
+  console.log(recordsArray);
+}else{
+  alert('no')
+  recordsArray = [];
+}
+// let recordsArray = [{date: "Tue Dec 08 2020"}, {date: "Wed Dec 09 2020"}];
+// recordsArray.map((day) => {
+//   day.attendance = mySampleArray;
+//   return day;
+// });
+// console.log(recordsArray);
 
 class Records extends React.Component {
   constructor() {
@@ -125,7 +135,7 @@ class Records extends React.Component {
   render() {
     const dayList = recordsArray.map((day, index) => (
       <option key={"ds" + index} id={"ds" + index} value={index}>
-        {day}
+        {day.date}
         {console.log(this.state.dateSelection, this.state.classSelection)}
       </option>
     ));
@@ -251,7 +261,7 @@ class Records extends React.Component {
 
     return (
       <div className="container-fluid">
-        <h1 style={{ color: "#2C514C" }} className="text-center">
+        <h1 style={{ color: "#2C514C", fontWeight:'bold' }} className="text-center">
           Records
         </h1>
         <div className="row d-flex justify-content-center">

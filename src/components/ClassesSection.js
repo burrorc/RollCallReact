@@ -15,7 +15,7 @@ function ClassesSection(props) {
                 className=" my-1"
               ></input>
             </div>
-            <div className="col" style={{flex: '0 0 130px'}}>
+            <div className="col" style={{flex: '0 0 150px'}}>
               <button className="mx-0 my-1 mybutton" type="submit" value="submit">
                 Add Class
               </button>
