@@ -243,9 +243,10 @@ class Classes extends React.Component {
       });
 
       return {
-        myclassAttendance: updatedClassAttendance,
+        classAttendance: updatedClassAttendance,
       };
     });
+    console.log("CA "+this.state.classAttendance)
   }
 
   render() {

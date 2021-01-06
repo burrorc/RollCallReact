@@ -359,10 +359,10 @@ class Dashboard extends React.Component {
       ].students.map((student, index) => (
         <li id={"sl" + index} key={"sl" + index} style={{ fontWeight: "bold" }}>
           <div className="d-flex">
-            <div className="col-6 col-md-8">
+            <div className="col-10 col-md-9">
               {student.firstName + "  " + student.lastName}
             </div>
-            <div className="col-6 col-md-4 text-center">
+            <div className="col edits">
               <button className="editRemove">
                 <FontAwesomeIcon
                   icon={faEdit}
@@ -398,9 +398,9 @@ class Dashboard extends React.Component {
     } else {
       displayClasses = this.state.myClasses.map((subject, index) => (
         <li id={"cl" + index} key={"cl" + index} style={{ fontWeight: "bold" }}>
-          <div className="my-2 d-flex">
-            <div className="col-5 col-md-7 px-0">{subject.subject}</div>
-            <div className="col-7 col-md-5 text-center px-0" >
+          <div className="d-flex">
+            <div className="col-8">{subject.subject}</div>
+            <div className="col edits" >
               {/* <span style={{ float: "right" }}> */}
                 <button className="editRemove">
                   <FontAwesomeIcon
@@ -443,12 +443,12 @@ class Dashboard extends React.Component {
 
     let editOptions;
     if (this.state.itemEditSelection === "classes") {
-      editOptions = <input id="editThis" defaultValue={editValue} />;
+      editOptions = <input id="editThis" defaultValue={editValue} style={{width: 250}}/>;
     } else if (this.state.itemEditSelection === "students") {
       editOptions = (
         <div>
-          <input id="editFirst" className=' my-2' defaultValue={editValue.firstName} />
-          <input id="editLast" className=' my-2' defaultValue={editValue.lastName} />
+          <input id="editFirst" className=' my-2' defaultValue={editValue.firstName} style={{marginRight:2, marginLeft:2, width: 250}}/>
+          <input id="editLast" className=' my-2' defaultValue={editValue.lastName} style={{marginRight:2, marginLeft:2, width: 250}}/>
         </div>
       );
     }
@@ -474,7 +474,7 @@ class Dashboard extends React.Component {
           <ReactModal isOpen={this.state.showModal} className="Modal text-center">
             <form onSubmit={this.handleCloseModal}>
               {editOptions}
-              <input type="submit" value="Submit" className="mybutton my-2 mx-1"></input>
+              <button type="submit" className="mybutton my-2 mx-1">Submit</button>
               <button className="mybuttonCancel my-2 mx-1" onClick={this.cancelEdit}>Cancel</button>
             </form>
           </ReactModal>

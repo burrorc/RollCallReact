@@ -32,8 +32,9 @@ class Records extends React.Component {
     this.setState({
       edit: false,
       classSelection: undefined,
-      dateSelection: undefined,
+      
     });
+    document.getElementById("selClass").value = "DEFAULT";
   }
 
   saveArray() {

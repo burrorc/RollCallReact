@@ -1,14 +1,19 @@
 .fancy-checkbox input[type="checkbox"],
-      .fancy-checkbox .checked {
-        display: none;
-        
-      }
-      .fancy-checkbox input[type="checkbox"]:checked ~ .checked {
-        display: inline-block;
-        /* color: red; */
-      }
+.fancy-checkbox .checked {
+  display: none;
+}
+.fancy-checkbox input[type="checkbox"]:checked ~ .checked {
+  display: inline-block;
+  /* color: red; */
+}
 
-      .fancy-checkbox input[type="checkbox"]:checked ~ .unchecked {
-        display: none;
-        
-      }
+.fancy-checkbox input[type="checkbox"]:checked ~ .unchecked {
+  display: none;
+}
+.icons {
+  -ms-flex: 0 0 90px;
+  flex: 0 0 90px;
+}
+.listItem:nth-child(odd) {
+  background-color:#F8F8F8;
+}
