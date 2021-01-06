@@ -15,7 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./attendance.css";
 
-let attendanceRecord = [{date: "Tue Dec 08 2020"}, {date: "Wed Dec 09 2020"}];
+let attendanceRecord = [["Tue Dec 08 2020"], ["Wed Dec 09 2020"]];
 attendanceRecord.map((day) => {
   day.attendance = [];
   return day;
@@ -122,108 +122,73 @@ class Classes extends React.Component {
 
   handleOpenModal(item) {
     const newDate = new Date().toDateString();
-    this.state.myAttendance.push({date: newDate});
-    const dateExists = this.state.myAttendance.find(function (record, index) {
-        if (record.date == newDate) {
-          // addIndex = index;
-          console.log('date exists');
-          return true;
-        } else {
-          console.log('date not exists');
-          return false;
-        }
-      });
-    console.log(this.state.myAttendance);
-    // let addIndex;
-    // const dateExists = this.state.myAttendance.find(function (record, index) {
-    //   if (record.date == newDate) {
-    //     addIndex = index;
-    //     console.log('date exists');
-    //     return true;
-    //   } else {
-    //     console.log('date not exists');
-    //     return false;
-    //   }
-    // });
-    // if (dateExists) {
-    //   const recordExists = attendanceRecord[addIndex].attendance.find(
-    //     ({ subject }) => subject.subject === this.state.classAttendance[item].subject
-    //   );
-    //   if (recordExists !== undefined) {
-    //     alert(
-    //       "You already have taken attendance for this class. Please go to your records in order to make changes"
-    //     );
-    //     document.getElementById("clickTitle").click();
-    //   } else {
-    //     this.setState({ showModal: true, classSelection: item });
-    //   }
-    // } else {
-    //   this.setState({ showModal: true, classSelection: item });
-    // }
+    let addIndex;
+    const dateExists = attendanceRecord.find(function (record, index) {
+      if (record == newDate) {
+        addIndex = index;
+        return true;
+      } else {
+        return false;
+      }
+    });
+    if (dateExists) {
+      const recordExists = attendanceRecord[addIndex].attendance.find(
+        ({ subject }) => subject === this.state.classAttendance[item].subject
+      );
+      if (recordExists !== undefined) {
+        alert(
+          "You already have taken attendance for this class. Please go to your records in order to make changes"
+        );
+        document.getElementById("clickTitle").click();
+      } else {
+        this.setState({ showModal: true, classSelection: item });
+      }
+    } else {
+      this.setState({ showModal: true, classSelection: item });
+    }
   }
 
   updateLocalStorage() {
     const newDate = new Date().toDateString();
-    const dateExists = this.state.myAttendance.find(function (record) {
-      if (record) {
-       console.log(record)
+    let addIndex;
+    const dateExists = attendanceRecord.find(function (record, index) {
+      if (record == newDate) {
+        addIndex = index;
+        return true;
+      } else {
+        return false;
       }
     });
-    console.log('dateExists '+dateExists)
-    // if (dateExists){
-    //   console.log("it does exist")
-    // }else{
-    //   console.log("it does not exist")
-    // }
-    
-    
-    this.setState({ myAttendance: attendanceRecord })
-    let toLocalAttendance = JSON.stringify(this.state.myAttendance)
-    localStorage.setItem("localAttendance", toLocalAttendance)
-    
-    // const newDate = new Date().toDateString();
-    // let addIndex;
-    // const dateExists = attendanceRecord.find(function (record, index) {
-    //   if (record.date == newDate) {
-    //     addIndex = index;
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // });
-    // if (dateExists) {
-    //   if (attendanceRecord[addIndex].attendance) {
-    //     attendanceRecord[addIndex].attendance.push(
-    //       this.state.classAttendance[this.state.classSelection]
-    //     );
-    //   } else {
-    //     attendanceRecord[addIndex].attendance = [];
-    //     attendanceRecord[addIndex].attendance.push(
-    //       this.state.classAttendance[this.state.classSelection]
-    //     );
-    //   }
-    //   this.setState({ myAttendance: attendanceRecord });
-    //   console.log("added class");
-    //   console.log(attendanceRecord);
-    //   console.log(this.state.myAttendance);
-    // } else {
-    //   attendanceRecord.push([newDate]);
-    //   attendanceRecord[attendanceRecord.length - 1].attendance = [];
-    //   attendanceRecord[attendanceRecord.length - 1].attendance.push(
-    //     this.state.classAttendance[this.state.classSelection]
-    //   );
-    //   this.setState({ myAttendance: attendanceRecord });
-    //   console.log("added date and class");
-    //   console.log(attendanceRecord);
-    //   console.log(this.state.myAttendance);
-    // }
-    // console.log("to local");
-    // let toLocalAttendance = JSON.stringify(this.state.myAttendance);
-    // console.log(JSON.stringify(attendanceRecord));
-    // console.log(JSON.parse(toLocalAttendance));
-
-
-
+    if (dateExists) {
+      if (attendanceRecord[addIndex].attendance) {
+        attendanceRecord[addIndex].attendance.push(
+          this.state.classAttendance[this.state.classSelection]
+        );
+      } else {
+        attendanceRecord[addIndex].attendance = [];
+        attendanceRecord[addIndex].attendance.push(
+          this.state.classAttendance[this.state.classSelection]
+        );
+      }
+      this.setState({ myAttendance: attendanceRecord });
+      console.log("added class");
+      console.log(attendanceRecord);
+      console.log(this.state.myAttendance);
+    } else {
+      attendanceRecord.push([newDate]);
+      attendanceRecord[attendanceRecord.length - 1].attendance = [];
+      attendanceRecord[attendanceRecord.length - 1].attendance.push(
+        this.state.classAttendance[this.state.classSelection]
+      );
+      this.setState({ myAttendance: attendanceRecord });
+      console.log("added date and class");
+      console.log(attendanceRecord);
+      console.log(this.state.myAttendance);
+    }
+    console.log("to local");
+    let toLocalAttendance = JSON.stringify(this.state.myAttendance);
+    console.log(JSON.stringify(attendanceRecord));
+    console.log(JSON.parse(toLocalAttendance));
     // let toLocalAttendance = JSON.stringify(attendanceRecord);
     // localStorage.setItem("localAttendance", toLocalAttendance);
     // console.log('to local');

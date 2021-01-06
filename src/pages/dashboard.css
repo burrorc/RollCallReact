@@ -18,7 +18,7 @@
 
 .mybutton:hover {
   color: #2c514c;
-  background-color: transparent;
+  background-color:  #fff;
   border-color: #2c514c;
   transition: all 0.1s ease-in-out;
 }
@@ -35,7 +35,7 @@
 .mybuttonCancel {
   position: relative;
   border-radius: 18px;
-  background-color: transparent;
+  background-color:  #fff;
   border: solid 2px  #2C514C;
   color:  #2C514C;
   font-size: 18px;
@@ -76,6 +76,11 @@
 
 }
 .edits {
+  -ms-flex: 0 0 90px;
+  flex: 0 0 90px;
+}
+
+.addStudent {
   -ms-flex: 0 0 90px;
   flex: 0 0 90px;
 }

@@ -39,6 +39,9 @@
         border-color: red;
         transition: all .1s ease-in-out;
       }
+      .mybuttonCancel:focus {
+        outline: none;
+      }
       
 .attendanceRecord{
     color: #2C514C;
@@ -46,5 +49,6 @@
     background-color: #fff;
     border-radius: 18px;
     border: solid 2px  #2C514C;
+    width: 80%;
 }
 

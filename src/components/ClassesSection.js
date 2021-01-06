@@ -4,19 +4,19 @@ function ClassesSection(props) {
   return (
     <div className="col-11 col-md-4 mt-3 dashboard px-md-0">
       <h3 className="text-center">Classes</h3>
-      <div className="d-flex justify-content-center">
-        <form onSubmit={props.addClass}>
-          <div className="row justify-content-center">
-            <div className="col" style={{textAlign: 'center'}}>
+      <div className="container-fluid d-flex justify-content-center">
+        <form onSubmit={props.addClass} style={{width: '100%'}}>
+          <div className="row justify-content-center mb-2">
+            <div className="col-10 col-sm-6 col-md-8 col-lg-6" style={{textAlign: 'center'}}>
               <input
                 ref={props.ref}
                 id="addClassInput"
                 placeholder="Add a class"
-                className="mx-2 my-1"
+                className=" my-1"
               ></input>
             </div>
-            <div className="col" style={{textAlign: 'center'}}>
-              <button className="mx-2 my-1 mybutton" type="submit" value="submit">
+            <div className="col" style={{flex: '0 0 130px'}}>
+              <button className="mx-0 my-1 mybutton" type="submit" value="submit">
                 Add Class
               </button>
             </div>

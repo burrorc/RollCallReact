@@ -5,7 +5,7 @@ import ClassesSection from "../components/ClassesSection";
 import StudentsSection from "../components/StudentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { Prompt } from 'react-router'
+import { Prompt } from "react-router";
 
 // let localClassSelection;
 // if(localStorage.getItem("SelItem")!=="DEFAULT"){
@@ -90,7 +90,7 @@ class Dashboard extends React.Component {
     this.closeEdits();
     this.setState({
       hasBeenEdited: true,
-    })
+    });
     //window.location.reload();
   }
 
@@ -131,8 +131,8 @@ class Dashboard extends React.Component {
     );
   }
 
-  cancelEdit(){
-    this.setState({ showModal: false }); 
+  cancelEdit() {
+    this.setState({ showModal: false });
   }
 
   handleCloseModal() {
@@ -151,7 +151,6 @@ class Dashboard extends React.Component {
     this.setState({ myClasses: newClassList });
     if (this.state.myClasses.length === 0) {
       this.setState({ itemEditSelection: "" });
-      
     }
     this.openEdits();
   }
@@ -198,7 +197,7 @@ class Dashboard extends React.Component {
         present: false,
         late: false,
         camera: false,
-        comments: '',
+        comments: "",
       };
       this.setState(
         {
@@ -251,10 +250,9 @@ class Dashboard extends React.Component {
     console.log(this.state.classSelection);
   }
 
-  componentWillUnmount(){
-    if(this.state.hasBeenEdited){
-      window.location.reload()
-
+  componentWillUnmount() {
+    if (this.state.hasBeenEdited) {
+      window.location.reload();
     }
   }
 
@@ -274,37 +272,40 @@ class Dashboard extends React.Component {
       );
     }
 
-    
     console.log("classSelection1 " + this.state.classSelection);
     let addStudentInputs;
-    if (this.state.classSelection === undefined) {
+    if (this.state.classSelection === undefined || this.state.myClasses.length===0) {
       addStudentInputs = <span></span>;
     } else {
       addStudentInputs = (
         <div className="d-flex justify-content-center">
           <form className="container-fluid" onSubmit={this.addStudent}>
             <div className="row justify-content-center">
-              <div
-                className="col-12 col-md-8 px-0"
-                style={{ textAlign: "center" }}
-              >
-                <input
-                  ref={(a) => (this._inputElement = a)}
-                  id="addStudentFirstName"
-                  placeholder="First Name"
-                  className="mx-2 my-1"
-                ></input>
-                <input
-                  ref={(a) => (this._inputElement = a)}
-                  id="addStudentLastName"
-                  placeholder="Last Name"
-                  className="mx-2 my-1"
-                ></input>
+              <div className="row justify-content-center">
+                <div
+                  className="col-10 col-sm-6"
+                  style={{ textAlign: "center" }}
+                >
+                  <input
+                    ref={(a) => (this._inputElement = a)}
+                    id="addStudentFirstName"
+                    placeholder="First Name"
+                    className="my-1"
+                  ></input>
+                </div>
+                <div
+                  className="col-10 col-sm-6"
+                  style={{ textAlign: "center" }}
+                >
+                  <input
+                    ref={(a) => (this._inputElement = a)}
+                    id="addStudentLastName"
+                    placeholder="Last Name"
+                    className="my-1"
+                  ></input>
+                </div>
               </div>
-              <div
-                className="col-12 col-md-4 px-0"
-                style={{ textAlign: "center" }}
-              >
+              <div className="col addStudent" style={{ textAlign: "center" }}>
                 <button
                   type="submit"
                   value="submit"
@@ -344,7 +345,7 @@ class Dashboard extends React.Component {
       displayStudents = (
         <li
           style={{
-            marginLeft: "-25px",
+            marginLeft: "-40px",
             listStyleType: "none",
             fontWeight: "bold",
           }}
@@ -386,7 +387,7 @@ class Dashboard extends React.Component {
       displayClasses = (
         <li
           style={{
-            marginLeft: "-25px",
+            marginLeft: "-40px",
             listStyleType: "none",
             fontWeight: "bold",
           }}
@@ -400,20 +401,20 @@ class Dashboard extends React.Component {
         <li id={"cl" + index} key={"cl" + index} style={{ fontWeight: "bold" }}>
           <div className="d-flex">
             <div className="col-8">{subject.subject}</div>
-            <div className="col edits" >
+            <div className="col edits">
               {/* <span style={{ float: "right" }}> */}
-                <button className="editRemove">
-                  <FontAwesomeIcon
-                    icon={faEdit}
-                    onClick={(e) => this.handleOpenModal("classes", index)}
-                  />
-                </button>
-                <button className="editRemove">
-                  <FontAwesomeIcon
-                    icon={faTrashAlt}
-                    onClick={() => this.removeClass(index)}
-                  />
-                </button>
+              <button className="editRemove">
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  onClick={(e) => this.handleOpenModal("classes", index)}
+                />
+              </button>
+              <button className="editRemove">
+                <FontAwesomeIcon
+                  icon={faTrashAlt}
+                  onClick={() => this.removeClass(index)}
+                />
+              </button>
               {/* </span> */}
             </div>
           </div>
@@ -443,12 +444,24 @@ class Dashboard extends React.Component {
 
     let editOptions;
     if (this.state.itemEditSelection === "classes") {
-      editOptions = <input id="editThis" defaultValue={editValue} style={{width: 250}}/>;
+      editOptions = (
+        <input id="editThis" defaultValue={editValue} style={{ width: 250 }} />
+      );
     } else if (this.state.itemEditSelection === "students") {
       editOptions = (
         <div>
-          <input id="editFirst" className=' my-2' defaultValue={editValue.firstName} style={{marginRight:2, marginLeft:2, width: 250}}/>
-          <input id="editLast" className=' my-2' defaultValue={editValue.lastName} style={{marginRight:2, marginLeft:2, width: 250}}/>
+          <input
+            id="editFirst"
+            className=" my-2"
+            defaultValue={editValue.firstName}
+            style={{ marginRight: 2, marginLeft: 2, width: 250 }}
+          />
+          <input
+            id="editLast"
+            className=" my-2"
+            defaultValue={editValue.lastName}
+            style={{ marginRight: 2, marginLeft: 2, width: 250 }}
+          />
         </div>
       );
     }
@@ -467,23 +480,34 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Prompt
-  when={this.state.edits}
-  message="Do you want to leave without saving your changes?"
-/>
+          when={this.state.edits}
+          message="Do you want to leave without saving your changes?"
+        />
         <div>
-          <ReactModal isOpen={this.state.showModal} className="Modal text-center">
+          <ReactModal
+            isOpen={this.state.showModal}
+            className="Modal text-center"
+          >
             <form onSubmit={this.handleCloseModal}>
               {editOptions}
-              <button type="submit" className="mybutton my-2 mx-1">Submit</button>
-              <button className="mybuttonCancel my-2 mx-1" onClick={this.cancelEdit}>Cancel</button>
+              <button type="submit" className="mybutton my-2 mx-1">
+                Submit
+              </button>
+              <button
+                className="mybuttonCancel my-2 mx-1"
+                onClick={this.cancelEdit}
+              >
+                Cancel
+              </button>
             </form>
           </ReactModal>
         </div>
         <div className="container-fluid">
-        <h1 style={{color: '#2C514C'}} className='text-center'>Dashboard</h1>
-          <div className='text-center' style={{height: 30}}>
-          
-          {editButton}
+          <h1 style={{ color: "#2C514C" }} className="text-center">
+            Dashboard
+          </h1>
+          <div className="text-center" style={{ height: 30 }}>
+            {editButton}
           </div>
           <div className="row justify-content-around">
             <ClassesSection
@@ -505,8 +529,8 @@ class Dashboard extends React.Component {
               }
             />
           </div>
-          <div className='text-center' style={{height: 30}}>
-          {editButton}
+          <div className="text-center" style={{ height: 30 }}>
+            {editButton}
           </div>
         </div>
       </div>
