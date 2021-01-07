@@ -2,90 +2,114 @@ input {
   width: 100%;
 }
 .attendance {
-    width: 300px;
-    color: red;
+  width: 300px;
+  color: red;
 }
 
-.dashboard{
-    color: #2C514C;
-    background-color: #9ec5ab;
-    border: 2px solid  #2C514C;
-    border-radius: 5px;
+.dashboard {
+  color: #2c514c;
+  background-color: #9ec5ab;
+  border: 2px solid #2c514c;
+  border-radius: 5px;
 }
 .mybutton {
-    position: relative;
-    border-radius: 18px;
-    background-color: #2C514C;
-    border: solid 2px transparent;
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all .1s ease-in-out;
+  position: relative;
+  border-radius: 18px;
+  background-color: #2c514c;
+  border: solid 2px transparent;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
 }
-    
-    .mybutton:hover {
-      color: #2C514C;
-      background-color: #fff;
-      border-color: #2C514C;
-      transition: all .1s ease-in-out;
-    }
-    
-    .mybuttonCancel {
-        position: relative;
-        border-radius: 18px;
-        background-color: transparent;
-        border: solid 2px  #2C514C;
-        color:  #2C514C;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all .1s ease-in-out;
-      }
-        
-        .mybuttonCancel:hover {
-          color: #fff;
-          background-color: red;
-          border-color: red;
-          transition: all .1s ease-in-out;
-        }
-      
-      .Modal {
-        position: absolute;
-        top: 20%;
-        bottom: auto;
-        background-color: white;
-        width: 100%;
-        font-weight: bold;
-        color: #2C514C;
-      }
-      
-      @media (min-width: 768px){
-      
-      .Modal {
-        position: absolute;
-        top: 20%;
-        left: 10%;
-        right: auto;
-        bottom: auto;
-        border-radius: 20px;
-        border: 2px solid black;
-        width: 80%;
-      }
-      
-      }  
-      .fancy-checkbox input[type="checkbox"],
-      .fancy-checkbox .checked {
-        display: none;
-        
-      }
-      .fancy-checkbox input[type="checkbox"]:checked ~ .checked {
-        display: inline-block;
-        /* color: red; */
-      }
 
-      .fancy-checkbox input[type="checkbox"]:checked ~ .unchecked {
-        display: none;
-        
-      } 
+.mybutton:hover {
+  color: #2c514c;
+  background-color: #fff;
+  border-color: #2c514c;
+  transition: all 0.1s ease-in-out;
+}
+
+.mybuttonCancel {
+  position: relative;
+  border-radius: 18px;
+  background-color: transparent;
+  border: solid 2px #2c514c;
+  color: #2c514c;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.mybuttonCancel:hover {
+  color: #fff;
+  background-color: red;
+  border-color: red;
+  transition: all 0.1s ease-in-out;
+}
+.ReactModal__Html--open,
+.ReactModal__Body--open {
+  overflow: hidden;
+}
+
+.ReactModal__Overlay {
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ReactModal__Content {
+  background: white;
+  outline: none;
+  width: 50rem;
   
+  max-height: calc(100vh - 20px);
+  box-shadow: 0 0 34px 0 rgba(0, 0, 0, 0.24);
+  overflow-y: auto;
+  position: relative;
+}
+
+.Modal {
+  position: absolute;
+  top: 10px;
+  
+  background-color: white;
+  width: 98%;
+  font-weight: bold;
+  color: #2c514c;
+  border-radius: 20px;
+  border: 2px solid #2c514c;
+}
+
+@media (min-width: 768px) {
+  .Modal {
+    position: absolute;
+
+    left: 10%;
+    right: auto;
+    
+
+    width: 80%;
+  }
+}
+.fancy-checkbox input[type="checkbox"],
+.fancy-checkbox .checked {
+  display: none;
+}
+.fancy-checkbox input[type="checkbox"]:checked ~ .checked {
+  display: inline-block;
+  /* color: red; */
+}
+
+.fancy-checkbox input[type="checkbox"]:checked ~ .unchecked {
+  display: none;
+}

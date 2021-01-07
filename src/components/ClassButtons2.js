@@ -11,7 +11,7 @@ function ClassButtons2(props) {
         style={{ height: "100px" }}
       >
         <div className="col" style={{ width: "50vw" }}>
-          <h3 className="text-center my-0">{props.text}</h3>
+          <h3 className="text-center my-0" style={{ fontWeight: '900'}}>{props.text}</h3>
         </div>
       </button>
     </div>

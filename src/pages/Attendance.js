@@ -5,14 +5,6 @@ import ReactModal from "react-modal";
 import SimpleList from "../components/SimpleList";
 import AttendanceModal from "../components/AttendanceModal";
 import ToggleButtons from "../components/ToggleButtons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTimesCircle,
-  faCheckCircle,
-  faClock,
-  faVideo,
-  faVideoSlash,
-} from "@fortawesome/free-solid-svg-icons";
 import "./attendance.css";
 
 let attendanceRecord;
@@ -221,6 +213,7 @@ class Classes extends React.Component {
   handleCloseModal() {
     this.setState({ showModal: false, classSelection: undefined });
     this.updateLocalStorage();
+    window.location.reload()
     console.log('CA '+this.state.classAttendance);
     console.log('MA '+this.state.myAttendance)
     // window.localStorage.setItem("SelItem", '');
@@ -351,15 +344,11 @@ class Classes extends React.Component {
         <h1
           id="clickTitle"
           style={{ color: "#2C514C", fontWeight:'bold' }}
-          className="text-center"
+          className="text-center mt-3"
         >
           Attendance
         </h1>
-        <FontAwesomeIcon icon={faTimesCircle} />
-        <FontAwesomeIcon icon={faCheckCircle} />
-        <FontAwesomeIcon icon={faClock} />
-        <FontAwesomeIcon icon={faVideo} />
-        <FontAwesomeIcon icon={faVideoSlash} />
+       
         <div>
           <ReactModal isOpen={this.state.showModal} className="Modal">
             <AttendanceModal

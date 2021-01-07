@@ -11,15 +11,17 @@
   border: solid 2px transparent;
   color: #fff;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 900;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
+  padding-top: 3px;
 }
 
 .mybutton:hover {
   color: #2c514c;
   background-color:  #fff;
   border-color: #2c514c;
+  font-weight: 900;
   transition: all 0.1s ease-in-out;
 }
 
@@ -42,6 +44,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: all .1s ease-in-out;
+  padding-top: 3px;
 }
   
   .mybuttonCancel:hover {
@@ -81,6 +84,6 @@
 }
 
 .addStudent {
-  -ms-flex: 0 0 250px;
-  flex: 0 0 250px;
+  -ms-flex: 0 0 90px;
+  flex: 0 0 90px;
 }

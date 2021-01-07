@@ -309,7 +309,7 @@ class Dashboard extends React.Component {
                 <button
                   type="submit"
                   value="submit"
-                  style={{ width: 130 }}
+                  style={{ width: 140 }}
                   className="mx-2 my-1 mybutton"
                 >
                   Add Student
@@ -503,7 +503,7 @@ class Dashboard extends React.Component {
           </ReactModal>
         </div>
         <div className="container-fluid">
-          <h1 style={{ color: "#2C514C", fontWeight:'bold' }} className="text-center">
+          <h1 style={{ color: "#2C514C", fontWeight:'bold' }} className="text-center mt-3">
             Dashboard
           </h1>
           <div className="text-center" style={{ height: 30 }}>

@@ -3,11 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTimesCircle,
   faCheckCircle,
-  faClock,
-  faVideo,
-  faVideoSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import "./toggle.css";
+
 
 function Toggle(props) {
   return (

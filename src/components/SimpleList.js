@@ -1,5 +1,4 @@
 import React from "react";
-import Toggle from "./Toggle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTimesCircle,

@@ -3,7 +3,7 @@ import React from "react";
 function ClassesSection(props) {
   return (
     <div className="col-11 col-md-4 mt-3 dashboard px-md-0">
-      <h3 className="text-center">Classes</h3>
+      <h3 className="text-center" style={{marginTop: 10, fontWeight: 'bold'}}>Classes</h3>
       <div className="container-fluid d-flex justify-content-center">
         <form onSubmit={props.addClass} style={{width: '100%'}}>
           <div className="row justify-content-center mb-2">

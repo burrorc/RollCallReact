@@ -194,7 +194,10 @@ class Records extends React.Component {
       }
     }
     let displayClass;
-    if (this.state.dateSelection === undefined) {
+    if (this.state.myArray.length===0){
+      displayClass = <h5 className="text-center">You have no attendance records</h5>;
+    }
+    else if (this.state.dateSelection === undefined) {
       displayClass = <h5 className="text-center">Please select a date</h5>;
     } else {
       displayClass = (
@@ -261,7 +264,7 @@ class Records extends React.Component {
 
     return (
       <div className="container-fluid">
-        <h1 style={{ color: "#2C514C", fontWeight:'bold' }} className="text-center">
+        <h1 style={{ color: "#2C514C", fontWeight:'bold' }} className="text-center mt-3">
           Records
         </h1>
         <div className="row d-flex justify-content-center">
