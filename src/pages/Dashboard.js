@@ -11,15 +11,11 @@ import { Prompt } from "react-router";
 // if(localStorage.getItem("SelItem")!=="DEFAULT"){
 //   if(JSON.parse(localStorage.getItem("SelItem"))==null){
 //     localClassSelection=undefined
-//     console.log("LCSn "+localClassSelection)
 //   }else{
 //     localClassSelection=JSON.parse(localStorage.getItem("SelItem"))
-//     console.log("LCSs "+localClassSelection)
-//   }
 
 // } else{
 //   localClassSelection=undefined;
-//   console.log("LCSu "+localClassSelection)
 // }
 
 // window.onload = function() {
@@ -65,28 +61,22 @@ class Dashboard extends React.Component {
   }
 
   openEdits() {
-    console.log("open");
     this.setState({
       edits: true,
     });
   }
 
   closeEdits() {
-    console.log("close");
     this.setState({
       edits: false,
     });
   }
   updateLocalStorage() {
-    console.log(this.state.myClasses);
     const toLocalClassList = JSON.stringify(this.state.myClasses);
     //const toLocalClassSelection = document.getElementById('selClass').value
     window.localStorage.setItem("localClassList", toLocalClassList);
     //window.localStorage.setItem("SelItem", toLocalClassSelection)
-    console.log("hey" + window.localStorage.getItem("localClassList"));
-    //console.log("updated LCS "+ toLocalClassSelection)
     //document.getElementById("saveChanges").disabled=true
-    console.log("reloading");
     this.closeEdits();
     this.setState({
       hasBeenEdited: true,
@@ -126,7 +116,7 @@ class Dashboard extends React.Component {
   handleOpenModal(array, item) {
     this.setState(
       { itemEditSelection: array, itemEditId: item },
-      () => console.log(this.state.itemEditId),
+      // () => console.log(this.state.itemEditId),
       this.setState({ showModal: true })
     );
   }
@@ -160,7 +150,6 @@ class Dashboard extends React.Component {
       (prevState) => {
         const updatedClass = prevState.myClasses.map((subject, index) => {
           if (index !== this.state.classSelection) {
-            console.log("not" + subject.subject);
             return subject;
           }
           const updatedStudents = subject.students.filter((student, index) => {
@@ -239,15 +228,12 @@ class Dashboard extends React.Component {
 
     e.preventDefault();
     this.openEdits();
-    console.log(this.state.myClasses);
   }
 
   handleClassSelection(subject) {
     this.setState({
       classSelection: subject - 1,
     });
-
-    console.log(this.state.classSelection);
   }
 
   componentWillUnmount() {
@@ -272,7 +258,6 @@ class Dashboard extends React.Component {
       );
     }
 
-    console.log("classSelection1 " + this.state.classSelection);
     let addStudentInputs;
     if (this.state.classSelection === undefined || this.state.myClasses.length===0) {
       addStudentInputs = <span></span>;
@@ -323,7 +308,6 @@ class Dashboard extends React.Component {
 
     let displayStudents;
     if (this.state.myClasses.length === 0) {
-      console.log("classSelection2 " + this.state.classSelection);
       displayStudents = (
         <li
           style={{
@@ -337,7 +321,6 @@ class Dashboard extends React.Component {
         </li>
       );
     } else if (this.state.classSelection === undefined) {
-      console.log("classSelection" + this.state.classSelection);
       displayStudents = <span></span>;
     } else if (
       this.state.myClasses[this.state.classSelection].students.length === 0

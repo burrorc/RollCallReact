@@ -10,7 +10,6 @@ import {
 import "./toggle.css";
 
 function SimpleList(props) {
-  console.log(props.student.present);
   return (
     <li id={"sa" + props.item} className="listItem pl-3">
       <div className="row my-1">

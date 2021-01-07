@@ -20,7 +20,6 @@ attendanceRecord.map((day) => {
   day.attendance = [];
   return day;
 });
-console.log(attendanceRecord);
 
 let myClassAttendance;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -171,9 +170,6 @@ class Classes extends React.Component {
         );
       }
       this.setState({ myAttendance: attendanceRecord });
-      console.log("added class");
-      console.log(attendanceRecord);
-      console.log(this.state.myAttendance);
     } else {
       attendanceRecord.push([newDate]);
       attendanceRecord[attendanceRecord.length - 1].attendance = [];
@@ -181,14 +177,8 @@ class Classes extends React.Component {
         this.state.classAttendance[this.state.classSelection]
       );
       this.setState({ myAttendance: attendanceRecord });
-      console.log("added date and class");
-      console.log(attendanceRecord);
-      console.log(this.state.myAttendance);
     }
-    console.log("to local");
     let toLocalAttendance = JSON.stringify(this.state.myAttendance);
-    console.log(JSON.stringify(attendanceRecord));
-    console.log(JSON.parse(toLocalAttendance));
     // let toLocalAttendance = JSON.stringify(attendanceRecord);
     // localStorage.setItem("localAttendance", toLocalAttendance);
     // console.log('to local');
@@ -207,8 +197,6 @@ class Classes extends React.Component {
   handleCloseModal() {
     this.setState({ showModal: false, classSelection: undefined });
     this.updateLocalStorage();
-    console.log('CA '+this.state.classAttendance);
-    console.log('MA '+this.state.myAttendance)
     // window.localStorage.setItem("SelItem", '');
     // window.location.reload();
   }
@@ -237,7 +225,6 @@ class Classes extends React.Component {
                 default:
               }
             }
-            console.log(student);
             return student;
           });
           return item;
@@ -248,12 +235,10 @@ class Classes extends React.Component {
         classAttendance: updatedClassAttendance,
       };
     });
-    console.log("CA "+this.state.classAttendance)
   }
 
   render() {
     let saveAttendance;
-    console.log("classSelection " + this.state.classSelection);
     let ToggleButtonP;
     if (this.state.toggleP === false) {
       ToggleButtonP = "All Present";
@@ -294,7 +279,6 @@ class Classes extends React.Component {
       this.state.classAttendance[this.state.classSelection].students.length !==
       0
     ) {
-      console.log("you have students");
       toggleButtons = (
         <ToggleButtons
           togglePresent={this.togglePresent}
@@ -319,7 +303,6 @@ class Classes extends React.Component {
         </button>
       );
     } else {
-      console.log("you do not have students");
       toggleButtons = <span></span>;
       displayStudents = (
         <h5

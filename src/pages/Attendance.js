@@ -6,15 +6,19 @@ import SimpleList from "../components/SimpleList";
 import AttendanceModal from "../components/AttendanceModal";
 import ToggleButtons from "../components/ToggleButtons";
 import "./attendance.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTimesCircle,
+  faCheckCircle,
+  faVideo,
+  faVideoSlash,
+} from "@fortawesome/free-solid-svg-icons";
 
 let attendanceRecord;
 let localExists = localStorage.getItem("localAttendance");
 if (localExists){
-  alert('yes')
   attendanceRecord = JSON.parse(localExists)
-  console.log(attendanceRecord);
 }else{
-  alert('no')
   attendanceRecord = [];
 }
 
@@ -177,9 +181,6 @@ class Classes extends React.Component {
         );
       }
       this.setState({ myAttendance: attendanceRecord });
-      console.log("added class");
-      console.log(attendanceRecord);
-      console.log(this.state.myAttendance);
     } else {
       attendanceRecord.push({date: newDate});
       attendanceRecord[attendanceRecord.length - 1].attendance = [];
@@ -187,14 +188,8 @@ class Classes extends React.Component {
         this.state.classAttendance[this.state.classSelection]
       );
       this.setState({ myAttendance: attendanceRecord });
-      console.log("added date and class");
-      console.log(attendanceRecord);
-      console.log(this.state.myAttendance);
     }
-    console.log("to local");
     let toLocalAttendance = JSON.stringify(this.state.myAttendance);
-    console.log(JSON.stringify(attendanceRecord));
-    console.log(JSON.parse(toLocalAttendance));
     // let toLocalAttendance = JSON.stringify(attendanceRecord);
     localStorage.setItem("localAttendance", toLocalAttendance);
     // console.log('to local');
@@ -214,8 +209,6 @@ class Classes extends React.Component {
     this.setState({ showModal: false, classSelection: undefined });
     this.updateLocalStorage();
     window.location.reload()
-    console.log('CA '+this.state.classAttendance);
-    console.log('MA '+this.state.myAttendance)
     // window.localStorage.setItem("SelItem", '');
     // window.location.reload();
   }
@@ -244,7 +237,6 @@ class Classes extends React.Component {
                 default:
               }
             }
-            console.log(student);
             return student;
           });
           return item;
@@ -255,23 +247,21 @@ class Classes extends React.Component {
         classAttendance: updatedClassAttendance,
       };
     });
-    console.log("CA "+this.state.classAttendance)
   }
 
   render() {
     let saveAttendance;
-    console.log("classSelection " + this.state.classSelection);
     let ToggleButtonP;
     if (this.state.toggleP === false) {
-      ToggleButtonP = "All Present";
+      ToggleButtonP = <div><FontAwesomeIcon icon={faCheckCircle} /> All</div>;
     } else {
-      ToggleButtonP = "Clear All";
+      ToggleButtonP = <div><FontAwesomeIcon icon={faTimesCircle} /> All</div>;
     }
     let ToggleButtonC;
     if (this.state.toggleC === false) {
-      ToggleButtonC = "All On";
+      ToggleButtonC = <div><FontAwesomeIcon icon={faVideo} className='fa-fw'/> All</div>;
     } else {
-      ToggleButtonC = "Clear All";
+      ToggleButtonC = <div><FontAwesomeIcon icon={faVideoSlash} className='fa-fw'/> All</div>;
     }
     let displayButtons;
     if (this.state.classAttendance.length === 0) {
@@ -301,7 +291,6 @@ class Classes extends React.Component {
       this.state.classAttendance[this.state.classSelection].students.length !==
       0
     ) {
-      console.log("you have students");
       toggleButtons = (
         <ToggleButtons
           togglePresent={this.togglePresent}
@@ -326,7 +315,6 @@ class Classes extends React.Component {
         </button>
       );
     } else {
-      console.log("you do not have students");
       toggleButtons = <span></span>;
       displayStudents = (
         <h5

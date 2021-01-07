@@ -6,11 +6,8 @@ import "./records.css";
 let recordsArray;
 let localExists = localStorage.getItem("localAttendance");
 if (localExists){
-  alert('yes')
   recordsArray = JSON.parse(localExists)
-  console.log(recordsArray);
 }else{
-  alert('no')
   recordsArray = [];
 }
 // let recordsArray = [{date: "Tue Dec 08 2020"}, {date: "Wed Dec 09 2020"}];
@@ -52,32 +49,25 @@ class Records extends React.Component {
       edit: false,
     });
     recordsArray = this.state.myArray;
-    console.log(recordsArray);
   }
   handleEdit(boxName, studentIndex) {
     if (this.state.edit === true) {
-      console.log(this.state.edit);
       this.handleChange(boxName, studentIndex);
     } if (this.state.edit === false) {
       if (window.confirm("Are you sure you want to edit this record")) {
         this.setState({
           edit: true,
         });
-        console.log(this.state.edit);
         this.handleChange(boxName, studentIndex);
       }
     }
   }
   handleChange(boxName, studentIndex, text) {
     this.setState((prevState) => {
-      console.log(
-        "date: " + prevState.dateSelection + ", " + prevState.classSelection
-      );
 
       const updatedArray = prevState.myArray.map((day, index) => {
         // debugger
         if (index !== prevState.dateSelection) {
-          console.log(day);
           return day;
         } else {
           day.attendance.map((subject, index) => {
@@ -115,7 +105,6 @@ class Records extends React.Component {
         myArray: updatedArray,
       };
     });
-    console.log(this.state.myArray);
   }
 
   handleDateSelection(date) {
@@ -123,20 +112,17 @@ class Records extends React.Component {
       dateSelection: date - 1,
       edit: false,
     });
-    console.log(date - 1);
   }
   handleClassSelection(subject) {
     this.setState({
       classSelection: subject - 1,
       edit: false,
     });
-    console.log(subject - 1);
   }
   render() {
     const dayList = recordsArray.map((day, index) => (
       <option key={"ds" + index} id={"ds" + index} value={index}>
         {day.date}
-        {console.log(this.state.dateSelection, this.state.classSelection)}
       </option>
     ));
     let classList;
@@ -147,7 +133,6 @@ class Records extends React.Component {
         (day, index) => (
           <option key={"cs" + index} id={"cs" + index} value={index}>
             {day.subject}
-            {console.log(this.state.dateSelection, this.state.classSelection)}
           </option>
         )
       );

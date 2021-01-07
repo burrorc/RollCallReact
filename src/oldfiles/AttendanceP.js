@@ -23,7 +23,6 @@ attendanceRecord.map((day) => {
   day.attendance = [];
   return day;
 });
-console.log("AR "+attendanceRecord);
 
 let myClassAttendance;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -129,16 +128,13 @@ class Classes extends React.Component {
     const dateExists = this.state.myAttendance.find(function (record, index) {
       if (record.date == newDate) {
         addIndex = index;
-        console.log("date exists");
         return true;
       } else {
-        console.log("date not exists");
         return false;
       }
     });
     if (dateExists) {
       alert("this is here");
-      console.log(attendanceRecord[addIndex].attendance)
       // const recordExists = attendanceRecord[addIndex].attendance.find(
       //   ({ subject }) =>
       //     subject === this.state.classAttendance[item].subject
