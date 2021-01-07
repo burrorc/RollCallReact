@@ -384,7 +384,7 @@ class Dashboard extends React.Component {
     let editOptions;
     if (this.state.itemEditSelection === "classes") {
       editOptions = (
-        <input id="editThis" defaultValue={editValue} style={{ width: 250 }} />
+        <input id="editThis" className=" my-2" defaultValue={editValue} style={{ width: 250 }} />
       );
     } else if (this.state.itemEditSelection === "students") {
       editOptions = (
@@ -429,6 +429,7 @@ class Dashboard extends React.Component {
           >
             <form onSubmit={this.handleCloseModal}>
               {editOptions}
+              <div>
               <button type="submit" className="mybutton my-2 mx-1">
                 Submit
               </button>
@@ -438,6 +439,7 @@ class Dashboard extends React.Component {
               >
                 Cancel
               </button>
+              </div>
             </form>
           </ReactModal>
         </div>

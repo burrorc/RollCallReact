@@ -17,13 +17,13 @@ class Navbar extends React.Component {
       displayLinks = (
         <div className="navbar-nav ml-auto na">
           <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/attendance" className="loggedInLinks nav-item nav-link" >
-            Attendance
+            ATTENDANCE
           </Link>
           <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/records" className="loggedInLinks nav-item nav-link">
-            Records
+            RECORDS
           </Link>
           <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/dashboard" className="loggedInLinks nav-item nav-link">
-            Dashboard
+            DASHBOARD
           </Link>
         </div>
       );
@@ -56,7 +56,7 @@ class Navbar extends React.Component {
         <div>
           <nav className="navbar navbar-expand-lg navbar-light  myNav">
             <Link to="/" className="navbar-brand" style={{fontWeight:'bold',color:' #2C514C'}}>
-              Roll Call
+              ROLL CALL
             </Link>
 
             <button

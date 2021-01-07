@@ -123,7 +123,7 @@ class Classes extends React.Component {
     const newDate = new Date().toDateString();
     let addIndex;
     const dateExists = attendanceRecord.find(function (record, index) {
-      if (record.date == newDate) {
+      if (record.date === newDate) {
         addIndex = index;
         return true;
       } else {
@@ -151,7 +151,7 @@ class Classes extends React.Component {
     const newDate = new Date().toDateString();
     let addIndex;
     const dateExists = attendanceRecord.find(function (record, index) {
-      if (record.date == newDate) {
+      if (record.date === newDate) {
         addIndex = index;
         return true;
       } else {
@@ -199,12 +199,13 @@ class Classes extends React.Component {
               switch (boxName) {
                 case "present":
                   student.present = !student.present;
+                  if (student.present === false) {
+                    student.late = false;}
                   break;
                 case "late":
                   student.late = !student.late;
                   if (student.late === true) {
-                    student.present = true;
-                  }
+                    student.present = true;}
                   break;
                 case "camera":
                   student.camera = !student.camera;
@@ -273,26 +274,16 @@ class Classes extends React.Component {
       ));
     }
 
-    let toggleButtons;
+    let showToggleBtns;
     let displayStudents;
-    if (this.state.classAttendance.length === 0) {
+    if (this.state.classAttendance.length === 0 || this.state.classSelection === undefined) {
       displayStudents = <span></span>;
-      toggleButtons = <span></span>;
-    } else if (this.state.classSelection === undefined) {
-      toggleButtons = <span></span>;
-      displayStudents = <span></span>;
-    } else if (
+      showToggleBtns = {display: 'none'}
+    }else if (
       this.state.classAttendance[this.state.classSelection].students.length !==
       0
     ) {
-      toggleButtons = (
-        <ToggleButtons
-          togglePresent={this.togglePresent}
-          toggleCamera={this.toggleCamera}
-          ToggleButtonP={ToggleButtonP}
-          ToggleButtonC={ToggleButtonC}
-        />
-      );
+      showToggleBtns = {display: 'block'}
       displayStudents = this.state.classAttendance[
         this.state.classSelection
       ].students.map((student, index) => (
@@ -313,13 +304,13 @@ class Classes extends React.Component {
         </button>
       );
     } else {
-      toggleButtons = <span></span>;
+      showToggleBtns = {display: 'none'}
       displayStudents = (
         <h5
           className="my-2"
-          style={{ textAlign: "center", fontWeight: "bold" }}
+          style={{ textAlign: "center", fontWeight: "bold", marginRight:55 }}
         >
-          You currently have no students listed in this class
+          You do not have any students listed in this class
         </h5>
       );
       saveAttendance = <span></span>;
@@ -338,12 +329,18 @@ class Classes extends React.Component {
         <div>
           <ReactModal isOpen={this.state.showModal} className="Modal">
             <AttendanceModal
+              showToggleBtns={showToggleBtns}
               togglePresent={this.togglePresent}
               toggleCamera={this.toggleCamera}
               handleCloseModal={this.handleCloseModal}
               cancelSave={this.cancelSave}
               displayStudents={displayStudents}
-              toggleButtons={toggleButtons}
+              toggleButtons={<ToggleButtons
+                togglePresent={this.togglePresent}
+                toggleCamera={this.toggleCamera}
+                ToggleButtonP={ToggleButtonP}
+                ToggleButtonC={ToggleButtonC}
+              />}
               saveAttendance={saveAttendance}
             />
           </ReactModal>

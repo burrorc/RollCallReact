@@ -57,9 +57,12 @@
 .Modal {
   position: absolute;
   top: 20%;
+  left:auto;
   bottom: auto;
   background-color: white;
-  width: 100%;
+  width: auto;
+  padding-left:30px;
+  padding-right:27px;
   font-weight: bold;
   color: #2C514C;
 }
@@ -69,12 +72,11 @@
 .Modal {
   position: absolute;
   top: 20%;
-  left: 24%;
+  left: auto;
   right: auto;
   bottom: auto;
   border-radius: 20px;
-  border: 2px solid black;
-  width: 52%;
+  border: 2px solid #2C514C;
 }
 
 }
