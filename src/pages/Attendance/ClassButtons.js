@@ -1,5 +1,5 @@
 import React from "react";
-import './classes.css'
+import './classbuttons.css'
 
 function ClassButtons2(props) {
   return (

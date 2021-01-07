@@ -6,13 +6,15 @@ function AttendanceModal(props){
             {props.toggleButtons}
               <ol>{props.displayStudents}</ol>
               <div className="d-flex justify-content-center">
+              {props.saveAttendance}
                 <button
                   className="mx-2 my-2 mybuttonCancel"
+                  style={{width:100}}
                   onClick={props.cancelSave}
                 >
                   Cancel
                 </button>
-                {props.saveAttendance}
+                
               </div>
             </div>
     )

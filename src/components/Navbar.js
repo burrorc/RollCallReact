@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Attendance from "../pages/Attendance";
-import Records from "../pages/Records";
-import Dashboard from "../pages/Dashboard";
+import Attendance from "../pages/Attendance/Attendance";
+import Records from "../pages/Records/Records";
+import Dashboard from "../pages/Dashboard/Dashboard";
 import './navbar.css' 
 class Navbar extends React.Component {
   constructor(props) {

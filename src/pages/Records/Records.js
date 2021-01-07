@@ -1,12 +1,11 @@
 import React from "react";
-import mySampleArray from "../mySampleArray.js";
-import SimpleList from "../components/SimpleList";
+import SimpleList from "../../components/SimpleList";
 import "./records.css";
 
 let recordsArray;
 let localExists = localStorage.getItem("localAttendance");
 if (localExists){
-  recordsArray = JSON.parse(localExists)
+  recordsArray = JSON.parse(localExists);
 }else{
   recordsArray = [];
 }
@@ -48,25 +47,25 @@ class Records extends React.Component {
     this.setState({
       edit: false,
     });
-    recordsArray = this.state.myArray;
+    let updateLocal = JSON.stringify(this.state.myArray);
+    localStorage.setItem("localAttendance", updateLocal);
+    window.location.reload();
   }
-  handleEdit(boxName, studentIndex) {
+  handleEdit(boxName, studentIndex, text) {
     if (this.state.edit === true) {
-      this.handleChange(boxName, studentIndex);
+      this.handleChange(boxName, studentIndex, text);
     } if (this.state.edit === false) {
       if (window.confirm("Are you sure you want to edit this record")) {
         this.setState({
           edit: true,
         });
-        this.handleChange(boxName, studentIndex);
+        this.handleChange(boxName, studentIndex, text);
       }
     }
   }
   handleChange(boxName, studentIndex, text) {
     this.setState((prevState) => {
-
       const updatedArray = prevState.myArray.map((day, index) => {
-        // debugger
         if (index !== prevState.dateSelection) {
           return day;
         } else {
@@ -82,6 +81,9 @@ class Records extends React.Component {
                       break;
                     case "late":
                       student.late = !student.late;
+                      if(student.late === true){
+                        student.present = true
+                      }
                       break;
                     case "camera":
                       student.camera = !student.camera;
@@ -105,6 +107,7 @@ class Records extends React.Component {
         myArray: updatedArray,
       };
     });
+    console.log(this.state.myArray)
   }
 
   handleDateSelection(date) {
@@ -218,7 +221,7 @@ class Records extends React.Component {
     }
 
     let editButtons;
-    if (
+    if (this.state.edit === false ||
       this.state.dateSelection === undefined ||
       this.state.classSelection === undefined ||
       this.state.myArray[this.state.dateSelection].attendance[

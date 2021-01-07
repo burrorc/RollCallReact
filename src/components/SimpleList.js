@@ -7,7 +7,7 @@ import {
   faVideo,
   faVideoSlash,
 } from "@fortawesome/free-solid-svg-icons";
-import "./toggle.css";
+import "./simplelist.css";
 
 function SimpleList(props) {
   return (

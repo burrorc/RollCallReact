@@ -1,11 +1,9 @@
 import React from "react";
-//import mySampleArray from "../mySampleArray.js";
-import ClassButtons2 from "../components/ClassButtons2";
+import ClassButtons from "./ClassButtons";
 import ReactModal from "react-modal";
-import SimpleList from "../components/SimpleList";
-import AttendanceModal from "../components/AttendanceModal";
-import ToggleButtons from "../components/ToggleButtons";
-import "./attendance.css";
+import SimpleList from "../../components/SimpleList";
+import AttendanceModal from "./AttendanceModal";
+import ToggleButtons from "./ToggleButtons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTimesCircle,
@@ -13,24 +11,15 @@ import {
   faVideo,
   faVideoSlash,
 } from "@fortawesome/free-solid-svg-icons";
+import "./attendance.css";
 
 let attendanceRecord;
 let localExists = localStorage.getItem("localAttendance");
-if (localExists){
-  attendanceRecord = JSON.parse(localExists)
-}else{
+if (localExists) {
+  attendanceRecord = JSON.parse(localExists);
+} else {
   attendanceRecord = [];
 }
-
-// let attendanceRecord = [
-//   { date: "Tue Dec 08 2020" },
-//   { date: "Wed Dec 09 2020" },
-// ];
-// attendanceRecord.map((day) => {
-//   day.attendance = [];
-//   return day;
-// });
-// console.log("AR "+attendanceRecord);
 
 let myClassAttendance;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -182,7 +171,7 @@ class Classes extends React.Component {
       }
       this.setState({ myAttendance: attendanceRecord });
     } else {
-      attendanceRecord.push({date: newDate});
+      attendanceRecord.push({ date: newDate });
       attendanceRecord[attendanceRecord.length - 1].attendance = [];
       attendanceRecord[attendanceRecord.length - 1].attendance.push(
         this.state.classAttendance[this.state.classSelection]
@@ -190,27 +179,13 @@ class Classes extends React.Component {
       this.setState({ myAttendance: attendanceRecord });
     }
     let toLocalAttendance = JSON.stringify(this.state.myAttendance);
-    // let toLocalAttendance = JSON.stringify(attendanceRecord);
     localStorage.setItem("localAttendance", toLocalAttendance);
-    // console.log('to local');
-    // console.log(JSON.parse(localStorage.getItem("localAttendance")));
-    // const toLocalAttendance = JSON.stringify(this.state.myClasses);
-    // //const toLocalClassSelection = document.getElementById('selClass').value
-    // window.localStorage.setItem("localClassList", toLocalClassList);
-    // //window.localStorage.setItem("SelItem", toLocalClassSelection)
-    // console.log("hey" + window.localStorage.getItem("localClassList"));
-    // //console.log("updated LCS "+ toLocalClassSelection)
-    // //document.getElementById("saveChanges").disabled=true
-    // console.log("reloading")
-    // window.location.reload();
   }
 
   handleCloseModal() {
     this.setState({ showModal: false, classSelection: undefined });
     this.updateLocalStorage();
-    window.location.reload()
-    // window.localStorage.setItem("SelItem", '');
-    // window.location.reload();
+    window.location.reload();
   }
 
   handleChange(boxName, studentIndex, text) {
@@ -227,6 +202,9 @@ class Classes extends React.Component {
                   break;
                 case "late":
                   student.late = !student.late;
+                  if (student.late === true) {
+                    student.present = true;
+                  }
                   break;
                 case "camera":
                   student.camera = !student.camera;
@@ -242,26 +220,42 @@ class Classes extends React.Component {
           return item;
         }
       });
-
       return {
         classAttendance: updatedClassAttendance,
       };
     });
+    console.log(this.state.classAttendance);
   }
 
   render() {
     let saveAttendance;
     let ToggleButtonP;
     if (this.state.toggleP === false) {
-      ToggleButtonP = <div><FontAwesomeIcon icon={faCheckCircle} /> All</div>;
+      ToggleButtonP = (
+        <div>
+          <FontAwesomeIcon icon={faCheckCircle} /> All
+        </div>
+      );
     } else {
-      ToggleButtonP = <div><FontAwesomeIcon icon={faTimesCircle} /> All</div>;
+      ToggleButtonP = (
+        <div>
+          <FontAwesomeIcon icon={faTimesCircle} /> All
+        </div>
+      );
     }
     let ToggleButtonC;
     if (this.state.toggleC === false) {
-      ToggleButtonC = <div><FontAwesomeIcon icon={faVideo} className='fa-fw'/> All</div>;
+      ToggleButtonC = (
+        <div>
+          <FontAwesomeIcon icon={faVideo} className="fa-fw" /> All
+        </div>
+      );
     } else {
-      ToggleButtonC = <div><FontAwesomeIcon icon={faVideoSlash} className='fa-fw'/> All</div>;
+      ToggleButtonC = (
+        <div>
+          <FontAwesomeIcon icon={faVideoSlash} className="fa-fw" /> All
+        </div>
+      );
     }
     let displayButtons;
     if (this.state.classAttendance.length === 0) {
@@ -270,7 +264,7 @@ class Classes extends React.Component {
       );
     } else {
       displayButtons = this.state.classAttendance.map((subject, index) => (
-        <ClassButtons2
+        <ClassButtons
           key={"cb" + index}
           classIndex={index}
           text={subject.subject}
@@ -310,8 +304,12 @@ class Classes extends React.Component {
         />
       ));
       saveAttendance = (
-        <button className="mx-2 my-2 mybutton" onClick={this.handleCloseModal}>
-          Save Attendance
+        <button
+          className="mx-2 my-2 mybutton"
+          style={{ width: 100 }}
+          onClick={this.handleCloseModal}
+        >
+          Save
         </button>
       );
     } else {
@@ -331,12 +329,12 @@ class Classes extends React.Component {
       <div className="container">
         <h1
           id="clickTitle"
-          style={{ color: "#2C514C", fontWeight:'bold' }}
+          style={{ color: "#2C514C", fontWeight: "bold" }}
           className="text-center mt-3"
         >
           Attendance
         </h1>
-       
+
         <div>
           <ReactModal isOpen={this.state.showModal} className="Modal">
             <AttendanceModal
