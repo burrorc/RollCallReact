@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Prompt } from "react-router";
 import _ from "lodash";
-import "./dashboard.css";
 
 let myClassList;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -430,7 +429,7 @@ class Dashboard extends React.Component {
         <div>
           <ReactModal
             isOpen={this.state.showModal}
-            className="Modal text-center"
+            className="Modal2 text-center"
           >
             <form onSubmit={this.handleCloseModal}>
               {editOptions}

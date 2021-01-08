@@ -1,10 +1,6 @@
 input {
   width: 100%;
 }
-.attendance {
-  width: 300px;
-  color: red;
-}
 
 .dashboard {
   color: #2c514c;

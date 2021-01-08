@@ -1,6 +1,6 @@
 import React from "react";
 import SimpleList from "../../components/SimpleList";
-import "./records.css";
+// import "./attendance.css";
 
 let recordsArray;
 let localExists = localStorage.getItem("localAttendance");

@@ -11,7 +11,6 @@ import {
   faVideo,
   faVideoSlash,
 } from "@fortawesome/free-solid-svg-icons";
-import "./attendance.css";
 
 let attendanceRecord;
 let localExists = localStorage.getItem("localAttendance");
@@ -48,7 +47,6 @@ class Classes extends React.Component {
   }
 
   cancelSave() {
-    document.getElementById('dashboardLink').focus();
     this.setState((prevState) => {
       prevState.classAttendance[this.state.classSelection].students.map(
         (student) => {
@@ -80,6 +78,9 @@ class Classes extends React.Component {
               return student;
             } else {
               student.camera = newToggle;
+              if(student.camera===true){
+                student.present=true;
+              }
               return student;
             }
           });
@@ -106,6 +107,10 @@ class Classes extends React.Component {
               return student;
             } else {
               student.present = newToggle;
+              if(student.present===false){
+                student.late=false;
+                student.camera=false;
+              }
               return student;
             }
           });
@@ -201,7 +206,8 @@ class Classes extends React.Component {
                 case "present":
                   student.present = !student.present;
                   if (student.present === false) {
-                    student.late = false;}
+                    student.late = false;
+                    student.camera = false;}
                   break;
                 case "late":
                   student.late = !student.late;
@@ -210,6 +216,8 @@ class Classes extends React.Component {
                   break;
                 case "camera":
                   student.camera = !student.camera;
+                  if (student.camera === true) {
+                    student.present = true;}
                   break;
                 case "comments":
                   student.comments = text;

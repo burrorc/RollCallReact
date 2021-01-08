@@ -1,7 +1,6 @@
 import React from "react";
-import './classbuttons.css'
 
-function ClassButtons2(props) {
+function ClassButtons(props) {
   return (
     <div>
       <button
@@ -17,4 +16,4 @@ function ClassButtons2(props) {
     </div>
   );
 }
-export default ClassButtons2;
+export default ClassButtons;

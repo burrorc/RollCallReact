@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Attendance from "../pages/Attendance/Attendance";
 import Records from "../pages/Records/Records";
 import Dashboard from "../pages/Dashboard/Dashboard";
-import './navbar.css' 
+// import './navbar.css' 
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
