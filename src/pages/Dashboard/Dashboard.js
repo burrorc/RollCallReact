@@ -1,11 +1,12 @@
 import React from "react";
 import ReactModal from "react-modal";
-import "./dashboard.css";
 import ClassesSection from "./ClassesSection";
 import StudentsSection from "./StudentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Prompt } from "react-router";
+import _ from "lodash";
+import "./dashboard.css";
 
 let myClassList;
 if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -70,8 +71,8 @@ class Dashboard extends React.Component {
       ).value;
       this.setState({ myClasses });
     } else if (this.state.itemEditSelection === "students") {
-      let editFirst = document.getElementById("editFirst").value;
-      let editLast = document.getElementById("editLast").value;
+      let editFirst = _.upperFirst(document.getElementById("editFirst").value);
+      let editLast = _.upperFirst(document.getElementById("editLast").value);
       let newArray = [...this.state.myClasses];
       newArray[this.state.classSelection].students[this.state.itemEditId] = {
         ...newArray[this.state.classSelection].students[this.state.itemEditId],
@@ -142,8 +143,8 @@ class Dashboard extends React.Component {
   }
 
   addStudent(e) {
-    let newStudentFirst = document.getElementById("addStudentFirstName").value;
-    let newStudentLast = document.getElementById("addStudentLastName").value;
+    let newStudentFirst = _.upperFirst(document.getElementById("addStudentFirstName").value);
+    let newStudentLast = _.upperFirst(document.getElementById("addStudentLastName").value);
     if (newStudentFirst !== "" && newStudentLast !== "") {
       let newArray = [...this.state.myClasses];
       let studentIndex = newArray[this.state.classSelection].students.length;
@@ -156,8 +157,12 @@ class Dashboard extends React.Component {
         camera: false,
         comments: "",
       };
+      let orderedArray = _.orderBy(newArray[this.state.classSelection].students,['lastName'],['asc']);
+      console.log(orderedArray);
+      let reorderedArray = [...newArray];
+      reorderedArray[this.state.classSelection].students=orderedArray;
       this.setState({
-        myClasses: newArray,
+        myClasses: reorderedArray,
       });
       document.getElementById("addStudentFirstName").value = "";
       document.getElementById("addStudentLastName").value = "";
@@ -445,6 +450,7 @@ class Dashboard extends React.Component {
         </div>
         <div className="container-fluid">
           <h1
+          id="clickTitle2"
             style={{ color: "#2C514C", fontWeight: "bold" }}
             className="text-center mt-3"
           >
@@ -475,7 +481,7 @@ class Dashboard extends React.Component {
             <button
             style={displayEditBtn}
               id="saveChanges"
-              className="mybutton mt-3"
+              className="mybutton my-3"
               onClick={this.updateLocalStorage}
             >
               Save Changes

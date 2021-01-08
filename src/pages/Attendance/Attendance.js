@@ -48,6 +48,7 @@ class Classes extends React.Component {
   }
 
   cancelSave() {
+    document.getElementById('dashboardLink').focus();
     this.setState((prevState) => {
       prevState.classAttendance[this.state.classSelection].students.map(
         (student) => {

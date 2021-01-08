@@ -16,13 +16,13 @@ class Navbar extends React.Component {
     if (this.state.isLoggedIn) {
       displayLinks = (
         <div className="navbar-nav ml-auto na">
-          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/attendance" className="loggedInLinks nav-item nav-link" >
+          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/attendance" className="loggedInLinks nav-item nav-link" style={{color: '#2C514C'}} >
             ATTENDANCE
           </Link>
-          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/records" className="loggedInLinks nav-item nav-link">
+          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/records" className="loggedInLinks nav-item nav-link" style={{color: '#2C514C'}}>
             RECORDS
           </Link>
-          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/dashboard" className="loggedInLinks nav-item nav-link">
+          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/dashboard" className="loggedInLinks nav-item nav-link" style={{color: '#2C514C'}}>
             DASHBOARD
           </Link>
         </div>
