@@ -319,8 +319,7 @@ class Classes extends React.Component {
       <div className="container">
         <h1
           id="clickTitle"
-          style={{ color: "#2C514C" }}
-          className="text-center"
+          className="text-center textC"
         >
           Attendance
         </h1>

@@ -220,8 +220,7 @@ class Records extends React.Component {
     return (
       <div className="container-fluid">
         <h1
-          style={{ color: "#2C514C", fontWeight: "bold" }}
-          className="text-center mt-3"
+          className="text-center mt-3 textC"
         >
           Records
         </h1>

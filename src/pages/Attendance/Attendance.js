@@ -316,8 +316,8 @@ class Classes extends React.Component {
       showToggleBtns = {display: 'none'}
       displayStudents = (
         <h5
-          className="my-2"
-          style={{ textAlign: "center", fontWeight: "bold", marginRight:55 }}
+          className="my-2 textC"
+          style={{ textAlign: "center", marginRight:55 }}
         >
           You do not have any students listed in this class
         </h5>
@@ -329,8 +329,7 @@ class Classes extends React.Component {
       <div className="container">
         <h1
           id="clickTitle"
-          style={{ color: "#2C514C", fontWeight: "bold" }}
-          className="text-center mt-3"
+          className="text-center mt-3 textC"
         >
           Attendance
         </h1>

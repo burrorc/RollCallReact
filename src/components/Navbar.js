@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Attendance from "../pages/Attendance/Attendance";
 import Records from "../pages/Records/Records";
 import Dashboard from "../pages/Dashboard/Dashboard";
-// import './navbar.css' 
+
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
@@ -54,8 +54,8 @@ class Navbar extends React.Component {
     return (
       <Router>
         <div>
-          <nav className="navbar navbar-expand-lg navbar-light  myNav">
-            <Link to="/" className="navbar-brand" style={{fontWeight:'bold',color:' #2C514C'}}>
+          <nav className="navbar navbar-expand-lg navbar-dark myNav">
+            <Link to="/" className="navbar-brand">
               ROLL CALL
             </Link>
 

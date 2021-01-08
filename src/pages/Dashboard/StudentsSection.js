@@ -3,7 +3,7 @@ import React from "react";
 function StudentsSection(props) {
   return (
     <div className="col-11 col-md-7 dashboard mt-3">
-      <h3 className="text-center" style={{marginTop: 10, fontWeight: 'bold'}}>Students</h3>
+      <h3 className="text-center textC" style={{marginTop: 10}}>Students</h3>
 
       <div className="d-flex justify-content-center">
         <form className="mx-auto">

@@ -275,9 +275,8 @@ class Dashboard extends React.Component {
           style={{
             marginLeft: "-25px",
             listStyleType: "none",
-            fontWeight: "bold",
           }}
-          className="text-center"
+          className="text-center textC"
         >
           You have no classes listed
         </li>
@@ -292,9 +291,8 @@ class Dashboard extends React.Component {
           style={{
             marginLeft: "-40px",
             listStyleType: "none",
-            fontWeight: "bold",
           }}
-          className="text-center"
+          className="text-center textC"
         >
           You have no students listed
         </li>
@@ -303,7 +301,7 @@ class Dashboard extends React.Component {
       displayStudents = this.state.myClasses[
         this.state.classSelection
       ].students.map((student, index) => (
-        <li id={"sl" + index} key={"sl" + index} style={{ fontWeight: "bold" }}>
+        <li id={"sl" + index} key={"sl" + index} classname='textC'>
           <div className="d-flex">
             <div className="col-10 col-md-9">
               {student.firstName + "  " + student.lastName}
@@ -334,16 +332,15 @@ class Dashboard extends React.Component {
           style={{
             marginLeft: "-40px",
             listStyleType: "none",
-            fontWeight: "bold",
           }}
-          className="text-center"
+          className="text-center textC"
         >
           You have no classes listed
         </li>
       );
     } else {
       displayClasses = this.state.myClasses.map((subject, index) => (
-        <li id={"cl" + index} key={"cl" + index} style={{ fontWeight: "bold" }}>
+        <li id={"cl" + index} key={"cl" + index} className="textC">
           <div className="d-flex">
             <div className="col-8">{subject.subject}</div>
             <div className="col edits">
@@ -450,8 +447,7 @@ class Dashboard extends React.Component {
         <div className="container-fluid">
           <h1
           id="clickTitle2"
-            style={{ color: "#2C514C", fontWeight: "bold" }}
-            className="text-center mt-3"
+            className="text-center mt-3 textC"
           >
             Dashboard
           </h1>
