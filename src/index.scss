@@ -1,8 +1,31 @@
 $primaryColor:  #036937;
 $secondaryColor:#fff;
-$tertiaryColor: transparentize($primaryColor, .8);
-// $tertiaryColor: #B8D87A;
+$tertiaryColor: lighten( desaturate( adjust-hue( $primaryColor, -1deg ), 69 ), 63 );
 $cancelColor: #690403;
+
+nav
+{
+overflow: auto;
+}
+
+.jumbotron{
+  background-image: url("/backgroundImage.jpg");
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: white;
+  background-repeat: no-repeat;
+  border-radius: 0px;
+  height: 100%;
+  width: 100vw;
+  position:absolute;
+  background-position: left 50% top 0;
+ }
+
+  @media (max-width: 768px) {
+    #logoTitle{
+      display: none;
+    }
+   }
 
 .textC{
     color: $primaryColor;
@@ -22,7 +45,7 @@ $cancelColor: #690403;
 .myNav{
     color:$secondaryColor;
     background-color: $primaryColor;
-    font-weight: 600;
+    font-weight: 700;
   }
   
   input {
@@ -49,9 +72,8 @@ $cancelColor: #690403;
   
   .mybutton:hover {
     color: $primaryColor;
-    background-color: $secondaryColor;
+    background-color: $tertiaryColor;
     border-color: $primaryColor;
-    transition: all 0.1s ease-in-out;
   }
   
   .mybutton:focus {
@@ -61,7 +83,7 @@ $cancelColor: #690403;
   .mybuttonCancel {
     position: relative;
     border-radius: 18px;
-    background-color: $secondaryColor;
+    background-color: $tertiaryColor;
     border: solid 2px $primaryColor;
     color: $primaryColor;
     font-size: 18px;
@@ -123,6 +145,7 @@ $cancelColor: #690403;
   }
   
   @media (min-width: 768px) {
+
     .Modal {
       position: absolute;
   
@@ -156,6 +179,7 @@ $cancelColor: #690403;
   }
   .editRemove {
     border: none;
+    color: $primaryColor;
     background-color: transparent;
   }
   

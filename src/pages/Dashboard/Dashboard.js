@@ -301,7 +301,7 @@ class Dashboard extends React.Component {
       displayStudents = this.state.myClasses[
         this.state.classSelection
       ].students.map((student, index) => (
-        <li id={"sl" + index} key={"sl" + index} classname='textC'>
+        <li id={"sl" + index} key={"sl" + index} className='textC'>
           <div className="d-flex">
             <div className="col-10 col-md-9">
               {student.firstName + "  " + student.lastName}
@@ -451,7 +451,16 @@ class Dashboard extends React.Component {
           >
             Dashboard
           </h1>
-
+          <div className="text-center" style={{ height: 30 }}>
+            <button
+            style={displayEditBtn}
+              id="saveChanges"
+              className="mybutton"
+              onClick={this.updateLocalStorage}
+            >
+              Save Changes
+            </button>
+          </div>
           <div className="row justify-content-around">
             <ClassesSection
               refVal={(a) => (this._inputElement = a)}

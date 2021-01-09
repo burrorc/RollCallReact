@@ -1,6 +1,5 @@
 import React from "react";
 import SimpleList from "../../components/SimpleList";
-// import "./attendance.css";
 
 let recordsArray;
 let localExists = localStorage.getItem("localAttendance");
@@ -144,15 +143,15 @@ class Records extends React.Component {
 
     if (this.state.myArray.length === 0) {
       displayClass = (
-        <h5 className="text-center">You have no attendance records</h5>
+        <h5 className="text-center textC">You have no attendance records</h5>
       );
     } else if (this.state.dateSelection === undefined) {
       displayClass = (
-        <h5 className="text-center">Select a date to see attendance</h5>
+        <h5 className="text-center textC">Select a date to see attendance</h5>
       );
     } else if (this.state.classSelection === undefined) {
       displayClass = (
-        <h5 className="text-center">Select a class to see attendance</h5>
+        <h5 className="text-center textC">Select a class to see attendance</h5>
       );
     } else {
       if (

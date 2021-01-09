@@ -1,8 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Home from "../pages/Home/Home"
 import Attendance from "../pages/Attendance/Attendance";
 import Records from "../pages/Records/Records";
 import Dashboard from "../pages/Dashboard/Dashboard";
+import logo from './rollCall.png'
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -16,14 +18,14 @@ class Navbar extends React.Component {
     if (this.state.isLoggedIn) {
       displayLinks = (
         <div className="navbar-nav ml-auto na">
-          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/attendance" className="loggedInLinks nav-item nav-link" style={{color: '#2C514C'}} >
-            ATTENDANCE
+          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/attendance" className="loggedInLinks nav-item nav-link">
+            <span className='textI'>ATTENDANCE</span>
           </Link>
-          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/records" className="loggedInLinks nav-item nav-link" style={{color: '#2C514C'}}>
-            RECORDS
+          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/records" className="loggedInLinks nav-item nav-link">
+          <span className='textI'>RECORDS</span>
           </Link>
-          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/dashboard" className="loggedInLinks nav-item nav-link" style={{color: '#2C514C'}}>
-            DASHBOARD
+          <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/dashboard" className="loggedInLinks nav-item nav-link">
+          <span className='textI'>DASHBOARD</span>
           </Link>
         </div>
       );
@@ -55,10 +57,11 @@ class Navbar extends React.Component {
       <Router>
         <div>
           <nav className="navbar navbar-expand-lg navbar-dark myNav">
-            <Link to="/" className="navbar-brand">
-              ROLL CALL
+            <Link to="/" className="navbar-brand align-bottom">
+            <img src={logo} alt="logo" style={{height:40}}/>
+            <span className="align-middle" id="logoTitle"> ROLL CALL</span>
             </Link>
-
+            
             <button
               className="navbar-toggler"
               type="button"
@@ -78,6 +81,7 @@ class Navbar extends React.Component {
             </div>
           </nav>
           <Switch>
+            <Route exact path="/"><Home /></Route>
             <Route path="/attendance">
               <Attendance />
             </Route>
