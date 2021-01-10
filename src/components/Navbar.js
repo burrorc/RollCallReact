@@ -8,7 +8,11 @@ import logo from "./rollCall.png";
 import Signup from "./Signup";
 import Login from "./Login";
 import { auth } from "../firebase/firebase";
+import {db} from "../firebase/firebase";
 import { signup, login, signInWithGoogle } from "../firebase/auth";
+
+let classList= JSON.parse(localStorage.getItem("localClassList"));
+let attendance= JSON.parse(localStorage.getItem("localAttendance"));
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -32,7 +36,23 @@ class Navbar extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.googleSignIn = this.googleSignIn.bind(this);
     this.resetForm = this.resetForm.bind(this);
+    // this.sendFirestore = this.sendFirestore.bind(this);
   }
+  
+  // sendFirestore(){
+  //   db.collection("users").add({
+  //     user: this.state.user,
+  //     classList: classList,
+  //     attendance: attendance,
+
+  // })
+  // .then(function(docRef) {
+  //     console.log("Document written with ID: ", docRef.id);
+  // })
+  // .catch(function(error) {
+  //     console.error("Error adding document: ", error);
+  // });
+  // };
 
   resetForm(){
     this.setState({
@@ -221,7 +241,7 @@ class Navbar extends React.Component {
                 ROLL CALL
               </span>
             </Link>
-
+            <button onClick={this.sendFirestore}>Firestore</button>
             <button
               className="navbar-toggler"
               type="button"

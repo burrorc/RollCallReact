@@ -106,13 +106,13 @@ function Signup(props) {
 
             <div className="form-group text-center">
               <p style={{height: '1em', color:'red', marginTop:"-8", fontWeight: 'bold'}}>{props.error}</p>
-              <button type="submit" className="btn btn-primary btn-lg mx-auto">
-                Sign Up
+              <button type="submit" className="btn btn-primary btn-lg px-0" style={{width:263}}>
+                Sign Up With Email
               </button>
-              <p>Or</p>
-              <button onClick={props.googleSignIn} type="button" className="btn btn-primary btn-lg mx-auto px-1 py-0">
+              <p className="my-2">Or</p>
+              <button style={{width:263}} onClick={props.googleSignIn} type="button" className="btn btn-primary btn-lg mx-auto pl-0 pr-1 py-0">
                 <img src={google} alt="sign up with google" />
-                Sign up with Google
+                Sign Up With Google
               </button>
             </div>
           </form>
