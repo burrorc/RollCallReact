@@ -1,22 +1,23 @@
 import React from "react";
-
+import google from "./googleSignin.svg";
 function Signup(props) {
   return (
     <div
       id="modal-signup"
       className="modal fade"
-      tabindex="-1"
+      tabIndex="-1"
       display={props.showSignup}
     >
       <div className="modal-dialog">
         <div className="modal-content p-3">
-          <form id="signupForm">
+          <form id="signupForm" onSubmit={props.handleSubmit}>
             <button
               id="closeSignup"
               type="button"
               className="close"
               data-dismiss="modal"
               aria-label="Close"
+              onClick={props.resetForm}
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -46,6 +47,8 @@ function Signup(props) {
                   name="email"
                   placeholder="Email Address"
                   required="required"
+                  value={props.email}
+                  onChange={props.handleChange}
                 />
               </div>
             </div>
@@ -65,11 +68,13 @@ function Signup(props) {
                 </div>
                 <input
                   id="signup-password"
-                  type="text"
+                  type="password"
                   className="form-control"
                   name="password"
                   placeholder="Password"
                   required="required"
+                  value={props.password}
+                  onChange={props.handleChange}
                 />
               </div>
             </div>
@@ -90,16 +95,24 @@ function Signup(props) {
                 <input
                   type="text"
                   className="form-control"
-                  name="confirm_password"
+                  name="passwordConfirm"
                   placeholder="Confirm Password"
                   required="required"
+                  value={props.passwordConfirm}
+                  onChange={props.handleChange}
                 />
               </div>
             </div>
 
             <div className="form-group text-center">
+              <p style={{height: '1em', color:'red', marginTop:"-8", fontWeight: 'bold'}}>{props.error}</p>
               <button type="submit" className="btn btn-primary btn-lg mx-auto">
                 Sign Up
+              </button>
+              <p>Or</p>
+              <button onClick={props.googleSignIn} type="button" className="btn btn-primary btn-lg mx-auto px-1 py-0">
+                <img src={google} alt="sign up with google" />
+                Sign up with Google
               </button>
             </div>
           </form>
@@ -111,7 +124,7 @@ function Signup(props) {
               data-toggle="modal"
               data-target="#modal-login"
               style={{ color: "#0069D9" }}
-              onClick={() => document.getElementById('closeSignup').click()}
+              onClick={() => document.getElementById("closeSignup").click()}
             >
               Login here
             </span>
