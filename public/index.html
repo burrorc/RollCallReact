@@ -41,7 +41,7 @@
     />
     <style>
       body {
-        font-family: 'Montserrat';
+        font-family: "Montserrat";
         font-weight: bold;
       }
       .loggedOutLinks {
@@ -59,7 +59,7 @@
         display: list-item;
       }
       body {
-        background-color:white;
+        background-color: white;
       }
     </style>
     <script>
@@ -70,10 +70,10 @@
   <body>
     <div id="root"></div>
 
-    <div id="modal-signup" class="modal fade" tabindex="-1">
+    <!-- <div id="modal-signup" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content p-3">
-          <form action="/examples/actions/confirmation.php" method="post">
+          <form id="signupForm" >
             <button
               id="closeme"
               type="button"
@@ -103,6 +103,7 @@
                   </span>
                 </div>
                 <input
+                id="signup-email"
                   type="email"
                   class="form-control"
                   name="email"
@@ -126,6 +127,7 @@
                   </span>
                 </div>
                 <input
+                id="signup-password"
                   type="text"
                   class="form-control"
                   name="password"
@@ -177,7 +179,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div id="modal-login" class="modal fade" tabindex="-1">
       <div class="modal-dialog">
@@ -267,5 +269,6 @@
         document.getElementsByClassName("close")[num].click();
       }
     </script>
+</script>
   </body>
 </html>

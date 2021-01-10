@@ -5,19 +5,50 @@ import Attendance from "../pages/Attendance/Attendance";
 import Records from "../pages/Records/Records";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import logo from './rollCall.png'
+import Signup from './Signup'
+import Login from './Login'
 
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isLoggedIn:true };
+    this.state = { isLoggedIn:false,
+    showSignup: "none",
+    showLogin: "none" };
+    this.openSignup = this.openSignup.bind(this);
+    this.openLogin = this.openLogin.bind(this);
+    this.switchModal = this.switchModal.bind(this)
   }
+switchModal(modal){
   
+  if(modal === 'signup'){
+  document.getElementById('closeSignup').click();
+  this.setState({
+    showLogin: "block"
+  })
+}else if(modal==='login'){
+  document.getElementById('closeLogin').click();
+  this.setState({
+    showSignup: "block"
+  })
+}
+}
+
+openSignup (){
+  this.setState({
+    showSignup: "block"
+  })
+} 
+openLogin (){
+  this.setState({
+    showLogin: "block"
+  })
+}  
   render() {
     
     let displayLinks;
     if (this.state.isLoggedIn) {
       displayLinks = (
-        <div className="navbar-nav ml-auto na">
+        <div className="navbar-nav ml-auto">
           <Link data-toggle="collapse" data-target="#navbarNavAltMarkup" to="/attendance" className="loggedInLinks nav-item nav-link">
             <span className='textI'>ATTENDANCE</span>
           </Link>
@@ -37,16 +68,19 @@ class Navbar extends React.Component {
             className="btn btn-link loggedOutLinks nav-item nav-link navbar-right "
             data-toggle="modal"
             data-target="#modal-signup"
+            style={{color:'white', fontWeight: 'bold'}}
+            onClick={()=> this.openSignup()}
           >
-            <i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up
+            <i className="fa fa-user-plus" aria-hidden="true"></i> Sign Up
           </button>
           <button
             type="button"
             className="btn btn-link loggedOutLinks nav-item nav-link navbar-right "
             data-toggle="modal"
             data-target="#modal-login"
+            style={{color:'white', fontWeight: 'bold'}}
           >
-            <i class="fa fa-user-circle-o" aria-hidden="true"></i> login
+            <i className="fa fa-user-circle-o" aria-hidden="true"></i> login
           </button>
 
         </div>
@@ -56,6 +90,8 @@ class Navbar extends React.Component {
     return (
       <Router>
         <div>
+          <Signup showSignup={this.state.showSignup} switchModal={this.switchModal}/>
+          <Login showLogin={this.state.showLogin} switchModal={this.switchModal}/>
           <nav className="navbar navbar-expand-lg navbar-dark myNav">
             <Link to="/" className="navbar-brand align-bottom">
             <img src={logo} alt="logo" style={{height:40}}/>
