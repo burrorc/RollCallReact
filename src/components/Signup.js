@@ -1,5 +1,6 @@
 import React from "react";
 import google from "./googleSignin.svg";
+import facebook from "./facebookSignin.png";
 function Signup(props) {
   return (
     <div
@@ -24,7 +25,6 @@ function Signup(props) {
             <h2>Sign Up</h2>
 
             <p>Please fill in this form to create an account!</p>
-            <hr />
 
             <div className="form-group">
               <div className="input-group">
@@ -102,17 +102,61 @@ function Signup(props) {
                   onChange={props.handleChange}
                 />
               </div>
+              <p
+                style={{
+                  height: ".75em",
+                  color: "red",
+                  marginTop: 5,
+                  fontWeight: 400,
+                  textAlign: "center",
+                }}
+              >
+                {props.error}
+              </p>
             </div>
 
             <div className="form-group text-center">
-              <p style={{height: '1em', color:'red', marginTop:"-8", fontWeight: 'bold'}}>{props.error}</p>
-              <button type="submit" className="btn btn-primary btn-lg px-0" style={{width:263}}>
+              <button
+                type="submit"
+                className="btn btn-light border btn-lg px-0"
+                style={{ width: 300 }}
+              >
                 Sign Up With Email
               </button>
               <p className="my-2">Or</p>
-              <button style={{width:263}} onClick={props.googleSignIn} type="button" className="btn btn-primary btn-lg mx-auto pl-0 pr-1 py-0">
-                <img src={google} alt="sign up with google" />
-                Sign Up With Google
+              <button
+                style={{ width: 300 }}
+                onClick={props.googleSignIn}
+                type="button"
+                className="btn btn-primary btn-lg mb-1 py-0 px-0 align-text-bottom"
+              >
+                <img
+                  style={{ float: "left" }}
+                  src={google}
+                  alt="sign up with google"
+                />
+                <span style={{ lineHeight: "46px", verticalAlign: "bottom" }}>
+                  Sign Up With Google
+                </span>
+              </button>
+              <button
+                style={{
+                  width: 300,
+                  paddingLeft: 3,
+                  backgroundColor: "#3B5998",
+                }}
+                onClick={props.googleSignIn}
+                type="button"
+                className="btn btn-primary btn-lg pr-0 py-0 align-text-bottom"
+              >
+                <img
+                  style={{ float: "left", height: 43, paddingTop: 3 }}
+                  src={facebook}
+                  alt="sign up with facebook"
+                />
+                <span style={{ lineHeight: "46px", verticalAlign: "bottom" }}>
+                  Sign Up With Facebook
+                </span>
               </button>
             </div>
           </form>

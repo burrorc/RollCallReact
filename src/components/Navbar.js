@@ -88,7 +88,7 @@ class Navbar extends React.Component {
     this.setState({ error: "" });
     if (this.state.password !== this.state.passwordConfirm) {
       this.setState({
-        error: "PASSWORD CONFIRMATION FAILED",
+        error: "PASSWORD MUST MATCH CONFIRM PASSSWORD",
         password: "",
         passwordConfirm: "",
       });
