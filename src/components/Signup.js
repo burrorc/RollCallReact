@@ -11,7 +11,7 @@ function Signup(props) {
     >
       <div className="modal-dialog">
         <div className="modal-content p-3">
-          <form id="signupForm" onSubmit={props.handleSubmit}>
+          <form id="signupForm" onSubmit={props.handleSignUp}>
             <button
               id="closeSignup"
               type="button"
@@ -93,7 +93,7 @@ function Signup(props) {
                   </span>
                 </div>
                 <input
-                  type="text"
+                  type="password"
                   className="form-control"
                   name="passwordConfirm"
                   placeholder="Confirm Password"
@@ -126,7 +126,7 @@ function Signup(props) {
               <p className="my-2">Or</p>
               <button
                 style={{ width: 300 }}
-                onClick={props.googleSignIn}
+                onClick={props.googleLogin}
                 type="button"
                 className="btn btn-primary btn-lg mb-1 py-0 px-0 align-text-bottom"
               >
@@ -145,7 +145,7 @@ function Signup(props) {
                   paddingLeft: 3,
                   backgroundColor: "#3B5998",
                 }}
-                onClick={props.googleSignIn}
+                onClick={props.facebookLogin}
                 type="button"
                 className="btn btn-primary btn-lg pr-0 py-0 align-text-bottom"
               >

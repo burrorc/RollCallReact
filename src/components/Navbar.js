@@ -9,7 +9,7 @@ import Signup from "./Signup";
 import Login from "./Login";
 import { auth } from "../firebase/firebase";
 import {db} from "../firebase/firebase";
-import { signup, login, signInWithGoogle } from "../firebase/auth";
+import { signup, login, signInWithGoogle, signInWithFacebook, signOut} from "../firebase/auth";
 
 let classList= JSON.parse(localStorage.getItem("localClassList"));
 let attendance= JSON.parse(localStorage.getItem("localAttendance"));
@@ -19,7 +19,7 @@ class Navbar extends React.Component {
     super(props);
     this.state = {
       error: null,
-      user: null,
+      userName: null,
       email: "",
       password: "",
       passwordConfirm: "",
@@ -33,8 +33,11 @@ class Navbar extends React.Component {
     this.openLogin = this.openLogin.bind(this);
     this.switchModal = this.switchModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.googleSignIn = this.googleSignIn.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.googleLogin = this.googleLogin.bind(this);
+    this.facebookLogin = this.facebookLogin.bind(this);
+    this.signOut = this.signOut.bind(this);
     this.resetForm = this.resetForm.bind(this);
     // this.sendFirestore = this.sendFirestore.bind(this);
   }
@@ -54,6 +57,11 @@ class Navbar extends React.Component {
   // });
   // };
 
+  signOut(){
+    signOut()
+    .then (()=>console.log('signed out'))
+  }
+
   resetForm(){
     this.setState({
       email: "",
@@ -68,22 +76,40 @@ class Navbar extends React.Component {
     });
   }
 
-  googleSignIn() {
-    signInWithGoogle()
-      .then((user) => {
-        this.setState({
-          user: user,
-          showSignup: "none",
-        });
-      })
-      .then(() => document.getElementById("closeSignup").click())
+  facebookLogin(){
+    signInWithFacebook()
+    .then((cred)=>{
+      this.setState({
+        userName: cred.user.email,
+        showSignup: "none",
+      });
+      console.log(this.state.userName)
+    })
+    .then(() => document.getElementById("closeSignup").click())
+    .then(() => document.getElementById("closeLogin").click())
 
       .catch((error) => {
         this.setState({ error: error.message });
       });
   }
 
-  handleSubmit(event) {
+  googleLogin() {
+    signInWithGoogle()
+      .then((cred) => {
+        this.setState({
+          userName: cred.user.email,
+          showSignup: "none",
+        });
+        console.log(this.state.userName)
+      })
+      .then(() => document.getElementById("closeSignup").click())
+      .then(() => document.getElementById("closeLogin").click())
+      .catch((error) => {
+        this.setState({ error: error.message });
+      });
+  }
+
+  handleSignUp(event) {
     event.preventDefault();
     this.setState({ error: "" });
     if (this.state.password !== this.state.passwordConfirm) {
@@ -94,9 +120,9 @@ class Navbar extends React.Component {
       });
     }else{
     signup(this.state.email, this.state.password)
-      .then((user) => {
+      .then((cred) => {
         this.setState({
-          user: user,
+          user: cred.user.email,
           showSignup: "none",
         });
       })
@@ -106,6 +132,25 @@ class Navbar extends React.Component {
         this.setState({ error: error.message });
       });
     }
+  }
+
+  handleLogin(event) {
+    event.preventDefault();
+    this.setState({ error: "" });
+    login(this.state.email, this.state.password)
+      .then((cred) => {
+        this.setState({
+          user: cred.user.email,
+          showLogin: "none",
+        });
+        console.log(this.state.user)
+      })
+      .then(() => document.getElementById("closeLogin").click())
+
+      .catch((error) => {
+        this.setState({ error: error.message });
+      });
+    
   }
   // async handleSubmit(event) {
   //   event.preventDefault();
@@ -121,6 +166,7 @@ class Navbar extends React.Component {
     auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
+          userName: user.email,
           authenticated: true,
           loading: false,
         });
@@ -186,6 +232,15 @@ class Navbar extends React.Component {
           >
             <span className="textI">DASHBOARD</span>
           </Link>
+          <button
+            type="button"
+            className="btn btn-link loggedInLinks nav-item nav-link mybuttonAlt"
+            style={{ lineHeight:' 22px', color: "#036937", fontWeight: "bold", width:118, textAlign:'center' }}
+            onClick={()=>this.signOut()}
+          >
+            <i className="fa fa-sign-out"></i><span> SIGN OUT</span>
+          </button>
+          
         </div>
       );
     } else {
@@ -196,7 +251,7 @@ class Navbar extends React.Component {
             className="btn btn-link loggedOutLinks nav-item nav-link navbar-right "
             data-toggle="modal"
             data-target="#modal-signup"
-            style={{ color: "white", fontWeight: "bold" }}
+            style={{ color: "white", fontWeight: "bold", width:105,textAlign:'left' }}
             onClick={() => this.openSignup()}
           >
             <i className="fa fa-user-plus" aria-hidden="true"></i> Sign Up
@@ -206,9 +261,9 @@ class Navbar extends React.Component {
             className="btn btn-link loggedOutLinks nav-item nav-link navbar-right "
             data-toggle="modal"
             data-target="#modal-login"
-            style={{ color: "white", fontWeight: "bold" }}
+            style={{ color: "white", fontWeight: "bold", width:105, textAlign:'left' }}
           >
-            <i className="fa fa-user-circle-o" aria-hidden="true"></i> login
+            <i className="fa fa-user-circle-o" aria-hidden="true"></i> Login
           </button>
         </div>
       );
@@ -220,18 +275,28 @@ class Navbar extends React.Component {
           <Signup
             showSignup={this.state.showSignup}
             switchModal={this.switchModal}
-            handleSubmit={this.handleSubmit}
+            handleSignUp={this.handleSignUp}
             handleChange={this.handleChange}
             email={this.state.email}
             password={this.state.password}
             passwordConfirm={this.state.passwordConfirm}
             error={this.state.error}
-            googleSignIn={this.googleSignIn}
+            googleLogin={this.googleLogin}
+            facebookLogin={this.facebookLogin}
             resetForm={this.resetForm}
           />
           <Login
             showLogin={this.state.showLogin}
             switchModal={this.switchModal}
+            handleLogin={this.handleLogin}
+            handleChange={this.handleChange}
+            email={this.state.email}
+            password={this.state.password}
+            passwordConfirm={this.state.passwordConfirm}
+            error={this.state.error}
+            googleLogin={this.googleLogin}
+            facebookLogin={this.facebookLogin}
+            resetForm={this.resetForm}
           />
           <nav className="navbar navbar-expand-lg navbar-dark myNav">
             <Link to="/" className="navbar-brand align-bottom">
@@ -271,7 +336,7 @@ class Navbar extends React.Component {
               <Records />
             </Route>
             <Route path="/dashboard">
-              <Dashboard />
+              <Dashboard userName={this.state.userName}/>
             </Route>
           </Switch>
         </div>

@@ -58,6 +58,20 @@ overflow: auto;
     border: 2px solid $primaryColor;
     border-radius: 5px;
   }
+  .mybuttonAlt {
+    background-color: $tertiaryColor;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+  }
+  
+  .mybuttonAlt:hover {
+    background-color: $secondaryColor;
+  }
+  
+  .mybuttonAlt:focus {
+    outline: none;
+  }
+
   .mybutton {
     position: relative;
     border-radius: 18px;

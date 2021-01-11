@@ -5,6 +5,7 @@ import StudentsSection from "./StudentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Prompt } from "react-router";
+import { db } from "../../firebase/firebase";
 import _ from "lodash";
 
 let myClassList;
@@ -17,8 +18,8 @@ if (JSON.parse(localStorage.getItem("localClassList"))) {
 const studentsArray = [];
 
 class Dashboard extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       showModal: false,
       myClasses: myClassList,
@@ -40,6 +41,28 @@ class Dashboard extends React.Component {
     this.openEdits = this.openEdits.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
+    this.createUserDb = this.createUserDb.bind(this);
+  }
+
+  createUserDb(userName) {
+    db.collection("users")
+      .add({
+        userName: userName,
+        classList: this.state.myClasses,
+      })
+      .then(function (docRef) {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .then(()=>{
+        // this.closeEdits();
+        this.setState({
+          edits: false,
+          hasBeenEdited: true,
+        });
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
   }
 
   openEdits() {
@@ -142,8 +165,12 @@ class Dashboard extends React.Component {
   }
 
   addStudent(e) {
-    let newStudentFirst = _.upperFirst(document.getElementById("addStudentFirstName").value);
-    let newStudentLast = _.upperFirst(document.getElementById("addStudentLastName").value);
+    let newStudentFirst = _.upperFirst(
+      document.getElementById("addStudentFirstName").value
+    );
+    let newStudentLast = _.upperFirst(
+      document.getElementById("addStudentLastName").value
+    );
     if (newStudentFirst !== "" && newStudentLast !== "") {
       let newArray = [...this.state.myClasses];
       let studentIndex = newArray[this.state.classSelection].students.length;
@@ -156,10 +183,14 @@ class Dashboard extends React.Component {
         camera: false,
         comments: "",
       };
-      let orderedArray = _.orderBy(newArray[this.state.classSelection].students,['lastName'],['asc']);
+      let orderedArray = _.orderBy(
+        newArray[this.state.classSelection].students,
+        ["lastName"],
+        ["asc"]
+      );
       console.log(orderedArray);
       let reorderedArray = [...newArray];
-      reorderedArray[this.state.classSelection].students=orderedArray;
+      reorderedArray[this.state.classSelection].students = orderedArray;
       this.setState({
         myClasses: reorderedArray,
       });
@@ -210,6 +241,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    console.log(this.props.userName);
     let displayEditBtn;
     if (this.state.edits === false) {
       displayEditBtn = { display: "none" };
@@ -301,7 +333,7 @@ class Dashboard extends React.Component {
       displayStudents = this.state.myClasses[
         this.state.classSelection
       ].students.map((student, index) => (
-        <li id={"sl" + index} key={"sl" + index} className='textC'>
+        <li id={"sl" + index} key={"sl" + index} className="textC">
           <div className="d-flex">
             <div className="col-10 col-md-9">
               {student.firstName + "  " + student.lastName}
@@ -385,7 +417,12 @@ class Dashboard extends React.Component {
     let editOptions;
     if (this.state.itemEditSelection === "classes") {
       editOptions = (
-        <input id="editThis" className=" my-2" defaultValue={editValue} style={{ width: 250 }} />
+        <input
+          id="editThis"
+          className=" my-2"
+          defaultValue={editValue}
+          style={{ width: 250 }}
+        />
       );
     } else if (this.state.itemEditSelection === "students") {
       editOptions = (
@@ -431,32 +468,29 @@ class Dashboard extends React.Component {
             <form onSubmit={this.handleCloseModal}>
               {editOptions}
               <div>
-              <button type="submit" className="mybutton my-2 mx-1">
-                Submit
-              </button>
-              <button
-                className="mybuttonCancel my-2 mx-1"
-                onClick={this.cancelEdit}
-              >
-                Cancel
-              </button>
+                <button type="submit" className="mybutton my-2 mx-1">
+                  Submit
+                </button>
+                <button
+                  className="mybuttonCancel my-2 mx-1"
+                  onClick={this.cancelEdit}
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           </ReactModal>
         </div>
         <div className="container-fluid">
-          <h1
-          id="clickTitle2"
-            className="text-center mt-3 textC"
-          >
+          <h1 id="clickTitle2" className="text-center mt-3 textC">
             Dashboard
           </h1>
           <div className="text-center" style={{ height: 30 }}>
             <button
-            style={displayEditBtn}
+              style={displayEditBtn}
               id="saveChanges"
               className="mybutton"
-              onClick={this.updateLocalStorage}
+              onClick={() => this.createUserDb(this.props.userName)}
             >
               Save Changes
             </button>
@@ -483,7 +517,7 @@ class Dashboard extends React.Component {
           </div>
           <div className="text-center" style={{ height: 30 }}>
             <button
-            style={displayEditBtn}
+              style={displayEditBtn}
               id="saveChanges"
               className="mybutton my-3"
               onClick={this.updateLocalStorage}

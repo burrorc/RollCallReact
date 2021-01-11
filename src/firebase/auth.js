@@ -12,3 +12,17 @@ export function signInWithGoogle() {
   const provider = new auth.GoogleAuthProvider();
   return auth().signInWithPopup(provider);
 }
+
+export function googleLogin() {
+  const provider = new auth.GoogleAuthProvider();
+  return auth().signInWithPopup(provider);
+}
+
+export function signInWithFacebook(){
+  const provider = new auth.FacebookAuthProvider();
+  return auth().signInWithRedirect(provider);
+}
+
+export function signOut(){
+  return auth().signOut();
+}
