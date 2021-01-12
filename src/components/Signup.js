@@ -126,7 +126,7 @@ function Signup(props) {
               <p className="my-2">Or</p>
               <button
                 style={{ width: 300 }}
-                onClick={props.googleLogin}
+                onClick={()=>props.googleLogin('newuser')}
                 type="button"
                 className="btn btn-primary btn-lg mb-1 py-0 px-0 align-text-bottom"
               >

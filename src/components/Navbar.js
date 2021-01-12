@@ -20,6 +20,7 @@ class Navbar extends React.Component {
     this.state = {
       error: null,
       userName: null,
+      userID: null,
       email: "",
       password: "",
       passwordConfirm: "",
@@ -79,8 +80,12 @@ class Navbar extends React.Component {
   facebookLogin(){
     signInWithFacebook()
     .then((cred)=>{
+      db.collection('users').doc(cred.user.uid).set({
+        userName: cred.user.email
+      });
       this.setState({
         userName: cred.user.email,
+        userID: cred.user.uid,
         showSignup: "none",
       });
       console.log(this.state.userName)
@@ -93,20 +98,26 @@ class Navbar extends React.Component {
       });
   }
 
-  googleLogin() {
+  googleLogin(newUser) {
     signInWithGoogle()
       .then((cred) => {
+        if(newUser){
+        db.collection('users').doc(cred.user.uid).set({
+          userName: cred.user.email
+        });
+      }
+      console.log('olduser')
         this.setState({
           userName: cred.user.email,
+          userID: cred.user.uid,
           showSignup: "none",
         });
-        console.log(this.state.userName)
       })
       .then(() => document.getElementById("closeSignup").click())
       .then(() => document.getElementById("closeLogin").click())
       .catch((error) => {
         this.setState({ error: error.message });
-      });
+      })
   }
 
   handleSignUp(event) {
@@ -120,15 +131,25 @@ class Navbar extends React.Component {
       });
     }else{
     signup(this.state.email, this.state.password)
-      .then((cred) => {
+      .then((cred)=> {
+        db.collection('users').doc(cred.user.uid).set({
+          userName: cred.user.email
+        });
         this.setState({
-          user: cred.user.email,
+          userName: cred.user.email,
+          userID: cred.user.uid,
           showSignup: "none",
         });
       })
+      .then(()=>{
+        
+        console.log(this.state.userName)
+      })
+
       .then(() => document.getElementById("closeSignup").click())
 
       .catch((error) => {
+        console.log(error);
         this.setState({ error: error.message });
       });
     }
@@ -140,7 +161,7 @@ class Navbar extends React.Component {
     login(this.state.email, this.state.password)
       .then((cred) => {
         this.setState({
-          user: cred.user.email,
+          userName: cred.user.email,
           showLogin: "none",
         });
         console.log(this.state.user)

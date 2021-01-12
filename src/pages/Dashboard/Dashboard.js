@@ -53,7 +53,7 @@ class Dashboard extends React.Component {
       .then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);
       })
-      .then(()=>{
+      .then(() => {
         // this.closeEdits();
         this.setState({
           edits: false,
@@ -485,7 +485,11 @@ class Dashboard extends React.Component {
           <h1 id="clickTitle2" className="text-center mt-3 textC">
             Dashboard
           </h1>
-          <div className="text-center" style={{ height: 30 }}>
+          {/* <div
+            className="text-center align-items-center saveChanges"
+            
+          >
+            <button className="pulsingButton">Save Changes</button>
             <button
               style={displayEditBtn}
               id="saveChanges"
@@ -494,7 +498,7 @@ class Dashboard extends React.Component {
             >
               Save Changes
             </button>
-          </div>
+          </div> */}
           <div className="row justify-content-around">
             <ClassesSection
               refVal={(a) => (this._inputElement = a)}
@@ -516,17 +520,24 @@ class Dashboard extends React.Component {
             />
           </div>
           <div className="text-center" style={{ height: 30 }}>
-            <button
+            {/* <button
               style={displayEditBtn}
               id="saveChanges"
               className="mybutton my-3"
               onClick={this.updateLocalStorage}
             >
               Save Changes
-            </button>
+            </button> */}
           </div>
         </div>
+        <div
+      className="text-center align-items-center saveChanges"
+      style={displayEditBtn} 
+    >
+      <button className="pulsingButton" id="saveChanges" onClick={() => this.createUserDb(this.props.userName)}>Save Changes</button>
       </div>
+      </div>
+      
     );
   }
 }
