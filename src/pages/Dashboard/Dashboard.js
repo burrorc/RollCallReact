@@ -8,12 +8,13 @@ import { Prompt } from "react-router";
 import { db } from "../../firebase/firebase";
 import _ from "lodash";
 
-let myClassList;
-if (JSON.parse(localStorage.getItem("localClassList"))) {
-  myClassList = JSON.parse(localStorage.getItem("localClassList"));
-} else {
-  myClassList = [];
-}
+// let myClassList;
+
+// if (JSON.parse(localStorage.getItem("localClassList"))) {
+//   myClassList = JSON.parse(localStorage.getItem("localClassList"));
+// } else {
+//   myClassList = [];
+// }
 
 const studentsArray = [];
 
@@ -22,7 +23,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       showModal: false,
-      myClasses: myClassList,
+      myClasses:[],
       myStudents: studentsArray,
       itemEditSelection: "",
       itemEditId: "",
@@ -41,20 +42,16 @@ class Dashboard extends React.Component {
     this.openEdits = this.openEdits.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
-    this.createUserDb = this.createUserDb.bind(this);
+    this.updateUserDb = this.updateUserDb.bind(this);
   }
 
-  createUserDb(userName) {
+  updateUserDb(docID) {
     db.collection("users")
-      .add({
-        userName: userName,
+      .doc(docID)
+      .set({
         classList: this.state.myClasses,
-      })
-      .then(function (docRef) {
-        console.log("Document written with ID: ", docRef.id);
-      })
+      }, { merge: true })
       .then(() => {
-        // this.closeEdits();
         this.setState({
           edits: false,
           hasBeenEdited: true,
@@ -233,7 +230,17 @@ class Dashboard extends React.Component {
       classSelection: subject - 1,
     });
   }
-
+  componentDidMount(){
+    if(this.props.userID !== null){
+      db.collection('users').doc(this.props.userID).get().then(doc => {
+        if(doc.data().classList){
+          this.setState({
+            myClasses: doc.data().classList
+          })
+        }
+        })
+      }
+  }
   componentWillUnmount() {
     if (this.state.hasBeenEdited) {
       window.location.reload();
@@ -241,6 +248,15 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    if(this.props.userID !== null){
+    db.collection('users').doc(this.props.userID).get().then(doc => {
+      if(doc.data().classList){
+        console.log('classlist exists')
+      }else{
+        console.log('classlist does not exists')
+      }
+      })
+    }
     console.log(this.props.userName);
     let displayEditBtn;
     if (this.state.edits === false) {
@@ -531,13 +547,25 @@ class Dashboard extends React.Component {
           </div>
         </div>
         <div
-      className="text-center align-items-center saveChanges"
-      style={displayEditBtn} 
-    >
-      <button className="pulsingButton" id="saveChanges" onClick={() => this.createUserDb(this.props.userName)}>Save Changes</button>
+          className="text-center align-items-center saveChanges"
+          style={displayEditBtn}
+        >
+          {/* <button
+            className="pulsingButton"
+            id="saveChanges"
+            onClick={() => console.log(this.props.userID)}
+          >
+            Save Changes
+          </button> */}
+          <button
+            className="pulsingButton"
+            id="saveChanges"
+            onClick={() => this.updateUserDb(this.props.userID)}
+          >
+            Save Changes
+          </button>
+        </div>
       </div>
-      </div>
-      
     );
   }
 }

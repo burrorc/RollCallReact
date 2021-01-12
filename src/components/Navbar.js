@@ -104,7 +104,7 @@ class Navbar extends React.Component {
         if(newUser){
         db.collection('users').doc(cred.user.uid).set({
           userName: cred.user.email
-        });
+        }, { merge: true });
       }
       console.log('olduser')
         this.setState({
@@ -113,6 +113,7 @@ class Navbar extends React.Component {
           showSignup: "none",
         });
       })
+      .then(()=>console.log(this.state.userID))
       .then(() => document.getElementById("closeSignup").click())
       .then(() => document.getElementById("closeLogin").click())
       .catch((error) => {
@@ -357,7 +358,7 @@ class Navbar extends React.Component {
               <Records />
             </Route>
             <Route path="/dashboard">
-              <Dashboard userName={this.state.userName}/>
+              <Dashboard userID={this.state.userID}/>
             </Route>
           </Switch>
         </div>
