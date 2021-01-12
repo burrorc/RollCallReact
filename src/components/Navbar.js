@@ -29,6 +29,7 @@ class Navbar extends React.Component {
       isLoggedIn: false,
       showSignup: "none",
       showLogin: "none",
+      myClasses: [],
     };
     this.openSignup = this.openSignup.bind(this);
     this.openLogin = this.openLogin.bind(this);
@@ -40,6 +41,7 @@ class Navbar extends React.Component {
     this.facebookLogin = this.facebookLogin.bind(this);
     this.signOut = this.signOut.bind(this);
     this.resetForm = this.resetForm.bind(this);
+    this.checkUser = this.checkUser.bind(this);
     // this.sendFirestore = this.sendFirestore.bind(this);
   }
   
@@ -163,6 +165,7 @@ class Navbar extends React.Component {
       .then((cred) => {
         this.setState({
           userName: cred.user.email,
+          userID: cred.user.uid,
           showLogin: "none",
         });
         console.log(this.state.user)
@@ -183,10 +186,25 @@ class Navbar extends React.Component {
   //     this.setState({ error: error.message });
   //   }
   // }
+  checkUser(){
+    let activeUser=auth().currentUser
+    if (activeUser != null){
+     console.log('nmae'+activeUser.email)
+     console.log('id'+activeUser.uid)
+     this.setState({
+       userName: activeUser.email,
+       userID: activeUser.uid,
+     })
+    }else{
+      console.log('no active')
+    }
+  }
 
   componentDidMount() {
+    
     auth().onAuthStateChanged((user) => {
       if (user) {
+        console.log(auth().currentUser.uid);
         this.setState({
           userName: user.email,
           authenticated: true,
@@ -226,10 +244,12 @@ class Navbar extends React.Component {
     });
   }
   render() {
+    
     let displayLinks;
     if (this.state.authenticated) {
       displayLinks = (
         <div className="navbar-nav ml-auto">
+          <span>{this.state.userID}</span>
           <Link
             data-toggle="collapse"
             data-target="#navbarNavAltMarkup"
@@ -328,7 +348,7 @@ class Navbar extends React.Component {
                 ROLL CALL
               </span>
             </Link>
-            <button onClick={this.sendFirestore}>Firestore</button>
+            <button onClick={this.checkUser}>Firestore</button>
             <button
               className="navbar-toggler"
               type="button"
@@ -352,7 +372,7 @@ class Navbar extends React.Component {
               <Home />
             </Route>
             <Route path="/attendance">
-              <Attendance />
+              <Attendance userID={this.state.userID}/>
             </Route>
             <Route path="/records">
               <Records />

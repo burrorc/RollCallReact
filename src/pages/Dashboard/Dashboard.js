@@ -31,6 +31,7 @@ class Dashboard extends React.Component {
       previousSelection: "0",
       edits: false,
       hasBeenEdited: false,
+      sample: props.sample,
     };
     this.addClass = this.addClass.bind(this);
     this.removeClass = this.removeClass.bind(this);
@@ -248,6 +249,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    console.log('sample'+this.state.sample)
     if(this.props.userID !== null){
     db.collection('users').doc(this.props.userID).get().then(doc => {
       if(doc.data().classList){

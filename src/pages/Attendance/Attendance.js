@@ -5,6 +5,7 @@ import SimpleList from "../../components/SimpleList";
 import AttendanceModal from "./AttendanceModal";
 import ToggleButtons from "./ToggleButtons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { db } from "../../firebase/firebase";
 import {
   faTimesCircle,
   faCheckCircle,
@@ -20,18 +21,18 @@ if (localExists) {
   attendanceRecord = [];
 }
 
-let myClassAttendance;
-if (JSON.parse(localStorage.getItem("localClassList"))) {
-  myClassAttendance = JSON.parse(localStorage.getItem("localClassList"));
-} else {
-  myClassAttendance = [];
-}
+// let myClassAttendance;
+// if (JSON.parse(localStorage.getItem("localClassList"))) {
+//   myClassAttendance = JSON.parse(localStorage.getItem("localClassList"));
+// } else {
+//   myClassAttendance = [];
+// }
 
 class Classes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      classAttendance: myClassAttendance,
+      classAttendance: [],
       showModal: false,
       classSelection: undefined,
       toggleP: false,
@@ -44,6 +45,18 @@ class Classes extends React.Component {
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.cancelSave = this.cancelSave.bind(this);
     this.updateLocalStorage = this.updateLocalStorage.bind(this);
+  }
+
+  componentDidMount(){
+    if(this.props.userID !== null){
+      db.collection('users').doc(this.props.userID).get().then(doc => {
+        if(doc.data().classList){
+          this.setState({
+            classAttendance: doc.data().classList
+          })
+        }
+        })
+      }
   }
 
   cancelSave() {
