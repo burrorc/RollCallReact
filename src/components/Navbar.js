@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Home from "../pages/Home/Home";
-import Attendance from "../pages/Attendance/Attendance";
+import Attendance from "../pages/Attendance/AttendanceGOOD";
 import Records from "../pages/Records/Records";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import logo from "./rollCall.png";
@@ -375,7 +375,7 @@ class Navbar extends React.Component {
               <Attendance userID={this.state.userID}/>
             </Route>
             <Route path="/records">
-              <Records />
+              <Records userID={this.state.userID}/>
             </Route>
             <Route path="/dashboard">
               <Dashboard userID={this.state.userID}/>

@@ -1,53 +1,79 @@
 import React from "react";
 import SimpleList from "../../components/SimpleList";
+import {db} from "../../firebase/firebase";
 
-let recordsArray;
-let localExists = localStorage.getItem("localAttendance");
-if (localExists) {
-  recordsArray = JSON.parse(localExists);
-} else {
-  recordsArray = [];
-}
+// let recordsArray;
+// recordsArray = []
+// let localExists = localStorage.getItem("localAttendance");
+// if (localExists) {
+//   recordsArray = JSON.parse(localExists);
+// } else {
+//   recordsArray = [];
+// }
 
-let initialState = JSON.parse(localExists);;
+//let initialState = JSON.parse(localExists);;
 
 class Records extends React.Component {
   constructor() {
     super();
     this.state = {
-      myArray: recordsArray,
+      myArray: [],
       classSelection: undefined,
       dateSelection: undefined,
       edit: false,
     };
     this.baseState = this.state;
-    this.cancelSave = this.cancelSave.bind(this);
+    //this.cancelSave = this.cancelSave.bind(this);
     this.saveArray = this.saveArray.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleDateSelection = this.handleDateSelection.bind(this);
     this.handleClassSelection = this.handleClassSelection.bind(this);
   }
+  componentDidMount(){
+    if(this.props.userID !== null){
+      db.collection('users').doc(this.props.userID).get().then(doc => {
+        if(doc.data().attendance){
+          console.log(doc.data().attendance)
+          console.log(JSON.parse(localStorage.getItem("localAttendance")))
+          this.setState({
+            myArray: doc.data().attendance
+          })
+          console.log(this.state.myArray)
+        }
+        })
+      }
+  }
+  // cancelSave() {
+  //   console.log(this.state.myArray);
+  //   console.log(initialState);
+  //   this.setState({
+  //     myArray: initialState,
+  //     edit: false,
+  //     classSelection: undefined,
+  //   });
+  //   document.getElementById("selClass").value = "DEFAULT";
+  // }
 
-  cancelSave() {
-    console.log(this.state.myArray);
-    console.log(initialState);
-    this.setState({
-      myArray: initialState,
-      edit: false,
-      classSelection: undefined,
-    });
-    document.getElementById("selClass").value = "DEFAULT";
+  saveArray(docID) {
+    db.collection("users")
+      .doc(docID)
+      .set({
+        attendance: this.state.myArray,
+      }, { merge: true })
+      .then(() => {
+        this.setState({
+          edit: false,
+        });
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
+    // let updateLocal = JSON.stringify(this.state.myArray);
+    // localStorage.setItem("localAttendance", updateLocal);
+    // window.location.reload();
   }
 
-  saveArray() {
-    this.setState({
-      edit: false,
-    });
-    let updateLocal = JSON.stringify(this.state.myArray);
-    localStorage.setItem("localAttendance", updateLocal);
-    window.location.reload();
-  }
   handleEdit(boxName, studentIndex, text) {
     if (this.state.edit === true) {
       this.handleChange(boxName, studentIndex, text);
@@ -121,7 +147,7 @@ class Records extends React.Component {
     });
   }
   render() {
-    const dayList = recordsArray.map((day, index) => (
+    const dayList = this.state.myArray.map((day, index) => (
       <option key={"ds" + index} id={"ds" + index} value={index}>
         {day.date}
       </option>
@@ -201,7 +227,7 @@ class Records extends React.Component {
           <div className="col d-flex justify-content-center">
             <button
               className="mx-2 my-2 mybutton"
-              onClick={() => this.saveArray()}
+              onClick={() => this.saveArray(this.props.userID)}
             >
               Save Changes
             </button>

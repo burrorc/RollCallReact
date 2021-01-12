@@ -5,7 +5,7 @@ import SimpleList from "../../components/SimpleList";
 import AttendanceModal from "./AttendanceModal";
 import ToggleButtons from "./ToggleButtons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {db} from "../../firebase/firebase";
+import { db } from "../../firebase/firebase";
 import {
   faTimesCircle,
   faCheckCircle,
@@ -20,7 +20,6 @@ if (localExists) {
 } else {
   attendanceRecord = [];
 }
-
 
 // let myClassAttendance;
 // if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -46,8 +45,8 @@ class Classes extends React.Component {
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.cancelSave = this.cancelSave.bind(this);
     this.updateLocalStorage = this.updateLocalStorage.bind(this);
-    this.updateUserDb = this.updateUserDb.bind(this);
   }
+
   componentDidMount(){
     if(this.props.userID !== null){
       db.collection('users').doc(this.props.userID).get().then(doc => {
@@ -166,75 +165,11 @@ class Classes extends React.Component {
       this.setState({ showModal: true, classSelection: item });
     }
   }
-  // updateUserDb(docID) {
-  //   db.collection("users")
-  //     .doc(docID)
-  //     .set({
-  //       attendance: this.state.myAttendance,
-  //     }, { merge: true })
-  //     .then(() => {
-  //       this.setState({
-  //         edits: false,
-  //         hasBeenEdited: true,
-  //       });
-  //     })
-  //     .catch(function (error) {
-  //       console.error("Error adding document: ", error);
-  //     });
-  // }
-  updateUserDb(docID) {
-    const newDate = new Date().toDateString();
-    let addIndex;
-    let attendanceRecord2 = this.state.myAttendance
-    const dateExists = attendanceRecord2.find(function (record, index) {
-      if (record.date === newDate) {
-        addIndex = index;
-        return true;
-      } else {
-        return false;
-      }
-    });
-    if (dateExists) {
-      if (attendanceRecord2[addIndex].attendance) {
-        attendanceRecord2[addIndex].attendance.push(
-          this.state.classAttendance[this.state.classSelection]
-        );
-      } else {
-        attendanceRecord2[addIndex].attendance = [];
-        attendanceRecord2[addIndex].attendance.push(
-          this.state.classAttendance[this.state.classSelection]
-        );
-      }
-      this.setState({ myAttendance: attendanceRecord2 });
-    } else {
-      attendanceRecord2.push({ date: newDate });
-      attendanceRecord2[attendanceRecord2.length - 1].attendance = [];
-      attendanceRecord2[attendanceRecord2.length - 1].attendance.push(
-        this.state.classAttendance[this.state.classSelection]
-      );
-      this.setState({ myAttendance: attendanceRecord2 });
-    }
-    db.collection("users")
-      .doc(docID)
-      .set({
-        attendance: this.state.myAttendance,
-      }, { merge: true })
-      .then(() => {
-        this.setState({
-          edits: false,
-          hasBeenEdited: true,
-        });
-      })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
-      });
-  }
 
   updateLocalStorage() {
     const newDate = new Date().toDateString();
     let addIndex;
-    let attendanceRecord2 = this.state.myAttendance
-    const dateExists = attendanceRecord2.find(function (record, index) {
+    const dateExists = attendanceRecord.find(function (record, index) {
       if (record.date === newDate) {
         addIndex = index;
         return true;
@@ -243,24 +178,24 @@ class Classes extends React.Component {
       }
     });
     if (dateExists) {
-      if (attendanceRecord2[addIndex].attendance) {
-        attendanceRecord2[addIndex].attendance.push(
+      if (attendanceRecord[addIndex].attendance) {
+        attendanceRecord[addIndex].attendance.push(
           this.state.classAttendance[this.state.classSelection]
         );
       } else {
-        attendanceRecord2[addIndex].attendance = [];
-        attendanceRecord2[addIndex].attendance.push(
+        attendanceRecord[addIndex].attendance = [];
+        attendanceRecord[addIndex].attendance.push(
           this.state.classAttendance[this.state.classSelection]
         );
       }
-      this.setState({ myAttendance: attendanceRecord2 });
+      this.setState({ myAttendance: attendanceRecord });
     } else {
-      attendanceRecord2.push({ date: newDate });
-      attendanceRecord2[attendanceRecord2.length - 1].attendance = [];
-      attendanceRecord2[attendanceRecord2.length - 1].attendance.push(
+      attendanceRecord.push({ date: newDate });
+      attendanceRecord[attendanceRecord.length - 1].attendance = [];
+      attendanceRecord[attendanceRecord.length - 1].attendance.push(
         this.state.classAttendance[this.state.classSelection]
       );
-      this.setState({ myAttendance: attendanceRecord2 });
+      this.setState({ myAttendance: attendanceRecord });
     }
     let toLocalAttendance = JSON.stringify(this.state.myAttendance);
     localStorage.setItem("localAttendance", toLocalAttendance);
@@ -268,7 +203,7 @@ class Classes extends React.Component {
 
   handleCloseModal() {
     this.setState({ showModal: false, classSelection: undefined });
-    this.updateUserDb(this.props.userID);
+    this.updateLocalStorage();
     window.location.reload();
   }
 
