@@ -237,19 +237,19 @@ input {
   flex: 0 0 90px;
 }
 /* Basic button styling */
-.saveChanges{
-    width: 100vw;
-    height: 50px;
-    position: fixed;
-    bottom: 55px;
-    z-index: 1;
-    background-color:#FEE181;
+.saveChanges {
+  width: 100vw;
+  height: 50px;
+  position: fixed;
+  bottom: 55px;
+  z-index: 1;
+  background-color: #fee181;
 }
 .pulsingButton {
   display: inline-block;
   position: relative;
   text-align: center;
-  margin-top:9px;
+  margin-top: 9px;
   box-shadow: 0 0 0 0 green;
   border-radius: 18px;
   border: solid 2px transparent;
@@ -271,7 +271,7 @@ input {
   -moz-animation: none;
   -ms-animation: none;
   animation: none;
-  color:$primaryColor;
+  color: $primaryColor;
   background-color: $secondaryColor;
   border-color: $primaryColor;
 }
@@ -308,6 +308,17 @@ input {
 
 @media (min-width: 768px) {
   .navbar-expand-lg .navbar-collapse {
-      height: auto !important;
+    height: auto !important;
   }
+}
+
+.loggedOutLinks {
+  color: white;
+  font-weight: bold;
+  width: 105px;
+  text-align: left;
+}
+
+.loggedOutLinks:focus{
+  outline: none;
 }

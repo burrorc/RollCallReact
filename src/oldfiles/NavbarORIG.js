@@ -5,8 +5,8 @@ import Attendance from "../pages/Attendance/Attendance";
 import Records from "../pages/Records/Records";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import logo from './rollCall.png'
-import Signup from './Signup'
-import Login from './Login'
+import Signup from '../components/Signup'
+import Login from '../components/Login'
 
 class Navbar extends React.Component {
   constructor(props) {

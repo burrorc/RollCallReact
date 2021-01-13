@@ -1,11 +1,11 @@
 import React from "react";
-import ClassButtons from "./ClassButtons";
+import ClassButtons from "../pages/Attendance/ClassButtons";
 import ReactModal from "react-modal";
-import SimpleList from "../../components/SimpleList";
-import AttendanceModal from "./AttendanceModal";
-import ToggleButtons from "./ToggleButtons";
+import SimpleList from "../components/SimpleList";
+import AttendanceModal from "../pages/Attendance/AttendanceModal";
+import ToggleButtons from "../pages/Attendance/ToggleButtons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {db} from "../../firebase/firebase";
+import { db } from "../firebase/firebase";
 import {
   faTimesCircle,
   faCheckCircle,
@@ -13,14 +13,13 @@ import {
   faVideoSlash,
 } from "@fortawesome/free-solid-svg-icons";
 
-// let attendanceRecord;
-// let localExists = localStorage.getItem("localAttendance");
-// if (localExists) {
-//   attendanceRecord = JSON.parse(localExists);
-// } else {
-//   attendanceRecord = [];
-// }
-
+let attendanceRecord;
+let localExists = localStorage.getItem("localAttendance");
+if (localExists) {
+  attendanceRecord = JSON.parse(localExists);
+} else {
+  attendanceRecord = [];
+}
 
 // let myClassAttendance;
 // if (JSON.parse(localStorage.getItem("localClassList"))) {
@@ -38,27 +37,22 @@ class Classes extends React.Component {
       classSelection: undefined,
       toggleP: false,
       toggleC: false,
-      attendanceRecord: [],
+      myAttendance: attendanceRecord,
     };
     this.togglePresent = this.togglePresent.bind(this);
     this.toggleCamera = this.toggleCamera.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.cancelSave = this.cancelSave.bind(this);
-    //this.updateLocalStorage = this.updateLocalStorage.bind(this);
-    this.updateUserDb = this.updateUserDb.bind(this);
+    this.updateLocalStorage = this.updateLocalStorage.bind(this);
   }
+
   componentDidMount(){
     if(this.props.userID !== null){
       db.collection('users').doc(this.props.userID).get().then(doc => {
         if(doc.data().classList){
           this.setState({
             classAttendance: doc.data().classList
-          })
-        }
-        if(doc.data().attendance){
-          this.setState({
-            attendanceRecord: doc.data().attendance
           })
         }
         })
@@ -87,16 +81,16 @@ class Classes extends React.Component {
 
   toggleCamera() {
     this.setState((prevState) => {
-      const newToggleC = !prevState.toggleC;
-      const updatedClassAttendanceC = prevState.classAttendance.map((item) => {
+      const newToggle = !prevState.toggleC;
+      const updatedClassAttendance2 = prevState.classAttendance.map((item) => {
         if (item.students === undefined) {
           return item;
         } else {
           item.students.map((student) => {
-            if (student.camera === newToggleC) {
+            if (student.camera === newToggle) {
               return student;
             } else {
-              student.camera = newToggleC;
+              student.camera = newToggle;
               if(student.camera===true){
                 student.present=true;
               }
@@ -108,24 +102,24 @@ class Classes extends React.Component {
       });
       return {
         ...prevState,
-        classAttendance: updatedClassAttendanceC,
-        toggleC: newToggleC,
+        classAttendance: updatedClassAttendance2,
+        toggleC: newToggle,
       };
     });
   }
 
   togglePresent() {
     this.setState((prevState) => {
-      const newToggleP = !prevState.toggleP;
-      const updatedClassAttendanceP = prevState.classAttendance.map((item) => {
+      const newToggle = !prevState.toggleP;
+      const updatedClassAttendance2 = prevState.classAttendance.map((item) => {
         if (item.students === undefined) {
           return item;
         } else {
           item.students.map((student) => {
-            if (student.present === newToggleP) {
+            if (student.present === newToggle) {
               return student;
             } else {
-              student.present = newToggleP;
+              student.present = newToggle;
               if(student.present===false){
                 student.late=false;
                 student.camera=false;
@@ -138,8 +132,8 @@ class Classes extends React.Component {
       });
       return {
         ...prevState,
-        classAttendance: updatedClassAttendanceP,
-        toggleP: newToggleP,
+        classAttendance: updatedClassAttendance2,
+        toggleP: newToggle,
       };
     });
   }
@@ -147,8 +141,7 @@ class Classes extends React.Component {
   handleOpenModal(item) {
     const newDate = new Date().toDateString();
     let addIndex;
-    let todaysAttendance = this.state.attendanceRecord
-    const dateExists = todaysAttendance.find(function (record, index) {
+    const dateExists = attendanceRecord.find(function (record, index) {
       if (record.date === newDate) {
         addIndex = index;
         return true;
@@ -157,7 +150,7 @@ class Classes extends React.Component {
       }
     });
     if (dateExists) {
-      const recordExists = todaysAttendance[addIndex].attendance.find(
+      const recordExists = attendanceRecord[addIndex].attendance.find(
         ({ subject }) => subject === this.state.classAttendance[item].subject
       );
       if (recordExists !== undefined) {
@@ -172,27 +165,11 @@ class Classes extends React.Component {
       this.setState({ showModal: true, classSelection: item });
     }
   }
-  // updateUserDb(docID) {
-  //   db.collection("users")
-  //     .doc(docID)
-  //     .set({
-  //       attendance: this.state.myAttendance,
-  //     }, { merge: true })
-  //     .then(() => {
-  //       this.setState({
-  //         edits: false,
-  //         hasBeenEdited: true,
-  //       });
-  //     })
-  //     .catch(function (error) {
-  //       console.error("Error adding document: ", error);
-  //     });
-  // }
-  updateUserDb(docID) {
+
+  updateLocalStorage() {
     const newDate = new Date().toDateString();
     let addIndex;
-    let newAttendance = this.state.attendanceRecord
-    const dateExists = newAttendance.find(function (record, index) {
+    const dateExists = attendanceRecord.find(function (record, index) {
       if (record.date === newDate) {
         addIndex = index;
         return true;
@@ -201,84 +178,38 @@ class Classes extends React.Component {
       }
     });
     if (dateExists) {
-      if (newAttendance[addIndex].attendance) {
-        newAttendance[addIndex].attendance.push(
+      if (attendanceRecord[addIndex].attendance) {
+        attendanceRecord[addIndex].attendance.push(
           this.state.classAttendance[this.state.classSelection]
         );
       } else {
-        newAttendance[addIndex].attendance = [];
-        newAttendance[addIndex].attendance.push(
+        attendanceRecord[addIndex].attendance = [];
+        attendanceRecord[addIndex].attendance.push(
           this.state.classAttendance[this.state.classSelection]
         );
       }
-      this.setState({ attendanceRecord: newAttendance });
+      this.setState({ myAttendance: attendanceRecord });
     } else {
-      newAttendance.push({ date: newDate });
-      newAttendance[newAttendance.length - 1].attendance = [];
-      newAttendance[newAttendance.length - 1].attendance.push(
+      attendanceRecord.push({ date: newDate });
+      attendanceRecord[attendanceRecord.length - 1].attendance = [];
+      attendanceRecord[attendanceRecord.length - 1].attendance.push(
         this.state.classAttendance[this.state.classSelection]
       );
-      this.setState({ attendanceRecord: newAttendance });
+      this.setState({ myAttendance: attendanceRecord });
     }
-    db.collection("users")
-      .doc(docID)
-      .set({
-        attendance: this.state.attendanceRecord,
-      }, { merge: true })
-      .then(() => {
-        this.setState({
-          edits: false,
-        });
-      })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
-      });
+    let toLocalAttendance = JSON.stringify(this.state.myAttendance);
+    localStorage.setItem("localAttendance", toLocalAttendance);
   }
-
-  // updateLocalStorage() {
-  //   const newDate = new Date().toDateString();
-  //   let addIndex;
-  //   let attendanceRecord2 = this.state.myAttendance
-  //   const dateExists = attendanceRecord2.find(function (record, index) {
-  //     if (record.date === newDate) {
-  //       addIndex = index;
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   });
-  //   if (dateExists) {
-  //     if (attendanceRecord2[addIndex].attendance) {
-  //       attendanceRecord2[addIndex].attendance.push(
-  //         this.state.classAttendance[this.state.classSelection]
-  //       );
-  //     } else {
-  //       attendanceRecord2[addIndex].attendance = [];
-  //       attendanceRecord2[addIndex].attendance.push(
-  //         this.state.classAttendance[this.state.classSelection]
-  //       );
-  //     }
-  //     this.setState({ myAttendance: attendanceRecord2 });
-  //   } else {
-  //     attendanceRecord2.push({ date: newDate });
-  //     attendanceRecord2[attendanceRecord2.length - 1].attendance = [];
-  //     attendanceRecord2[attendanceRecord2.length - 1].attendance.push(
-  //       this.state.classAttendance[this.state.classSelection]
-  //     );
-  //     this.setState({ myAttendance: attendanceRecord2 });
-  //   }
-  //   let toLocalAttendance = JSON.stringify(this.state.myAttendance);
-  //   localStorage.setItem("localAttendance", toLocalAttendance);
-  // }
 
   handleCloseModal() {
     this.setState({ showModal: false, classSelection: undefined });
-    this.updateUserDb(this.props.userID);
+    this.updateLocalStorage();
+    window.location.reload();
   }
 
   handleChange(boxName, studentIndex, text) {
     this.setState((prevState) => {
-      const markAttendance = prevState.classAttendance.map((item) => {
+      const updatedClassAttendance = prevState.classAttendance.map((item) => {
         if (item.students === undefined) {
           return item;
         } else {
@@ -313,7 +244,7 @@ class Classes extends React.Component {
         }
       });
       return {
-        classAttendance: markAttendance,
+        classAttendance: updatedClassAttendance,
       };
     });
     console.log(this.state.classAttendance);

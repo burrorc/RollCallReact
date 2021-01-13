@@ -354,6 +354,7 @@ class Attendance extends React.Component {
         </div>
       );
     }
+
     let displayButtons;
     if (this.state.classAttendance.length === 0) {
       displayButtons = (

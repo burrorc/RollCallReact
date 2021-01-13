@@ -23,9 +23,6 @@ import {
   signOut,
 } from "../firebase/auth";
 
-// let classList= JSON.parse(localStorage.getItem("localClassList"));
-// let attendance= JSON.parse(localStorage.getItem("localAttendance"));
-
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
@@ -45,8 +42,6 @@ class Navbar extends React.Component {
       showLogin: "none",
       myClasses: [],
     };
-    this.openSignup = this.openSignup.bind(this);
-    this.openLogin = this.openLogin.bind(this);
     this.switchModal = this.switchModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
@@ -55,59 +50,33 @@ class Navbar extends React.Component {
     this.facebookLogin = this.facebookLogin.bind(this);
     this.signOut = this.signOut.bind(this);
     this.resetForm = this.resetForm.bind(this);
-    this.checkUser = this.checkUser.bind(this);
-    this.getUserData = this.getUserData.bind(this);
     this.checkUserDb = this.checkUserDb.bind(this);
-    // this.sendFirestore = this.sendFirestore.bind(this);
   }
 
-  getUserData(){
-    //establishes initial info FINE, look elsewhere
-    db.collection("users")
-        .doc(this.state.userID)
-        .get()
-        .then((doc => {
-          if (doc.data().classList) {
-            this.setState({
-              userClassList: doc.data().classList,
-            });
-          }
-          if (doc.data().attendance) {
-            this.setState({
-              userAttendanceRecord: doc.data().attendance,
-            });
-          } 
-        }));
-  }
-
+//gets and assigns user data from firebase
   checkUserDb (user){
       db.collection("users")
         .doc(user)
         .onSnapshot((snapshot) => {
-          console.log("found snapshot");
-          console.log(snapshot.data().classList);
           if (snapshot.data().classList) {
             this.setState({
               userClassList: snapshot.data().classList,
             });
-            console.log(this.state.userClassList)
           }
           if (snapshot.data().attendance) {
             this.setState({
               userAttendanceRecord: snapshot.data().attendance,
             });
-            console.log(this.state.userAttendanceRecord)
           }
         });
 }
 
+//initiates auth listener and gets user data
   componentDidMount() {
-    console.log(localStorage.getItem('rollCallUserID'))
     // this.setState({
-    //   userID: localStorage.getItem('rollCallUserID')
+    //   userID: localStorage.getItem("rollCallUserID")
     // })
     auth().onAuthStateChanged((user) => {
-      //registers state change FINE, look elsewhere
       if (user) {
         this.setState({
           authenticated: true,
@@ -120,12 +89,11 @@ class Navbar extends React.Component {
           loading: false,
         });
       }
-      console.log('auth'+this.state.userName+this.state.userID)
     });
   }
   
+//resets user cred in state to null
   signOut() {
-    //resets user creds to null FINE, look elsewhere
     signOut()
       .then(() => this.setState({
         userName: null,
@@ -133,11 +101,11 @@ class Navbar extends React.Component {
         userClassList:[],
         userAttendanceRecord:[],
       }),
-      console.log('signing out'),
-      localStorage.removeItem('rollCallUserID'),
+      //localStorage.removeItem('rollCallUserID'),
       )
   }
 
+//clear form
   resetForm() {
     this.setState({
       email: "",
@@ -146,15 +114,26 @@ class Navbar extends React.Component {
       error: "",
     });
   }
+
+//displays field value as typed
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value,
     });
   }
 
-  facebookLogin() {
+//facebook for login with check for new/old user
+  facebookLogin(newUser) {
     signInWithFacebook()
       .then((cred) => {
+        if (newUser) {
+          db.collection("users").doc(cred.user.uid).set(
+            {
+              userName: cred.user.email,
+            },
+            { merge: true }
+          );
+        }
         db.collection("users").doc(cred.user.uid).set({
           userName: cred.user.email,
         });
@@ -163,17 +142,15 @@ class Navbar extends React.Component {
           userID: cred.user.uid,
           showSignup: "none",
         });
-        console.log(this.state.userName);
       })
-      .then (this.getUserData)
       .then(() => document.getElementById("closeSignup").click())
       .then(() => document.getElementById("closeLogin").click())
-
       .catch((error) => {
         this.setState({ error: error.message });
       });
   }
 
+//google for login with check for new/old user  
   googleLogin(newUser) {
     signInWithGoogle()
       .then((cred) => {
@@ -190,11 +167,8 @@ class Navbar extends React.Component {
           userID: cred.user.uid,
           showSignup: "none",
         });
-        localStorage.setItem('rollCallUserID', this.state.userID)
+        //localStorage.setItem('rollCallUserID', this.state.userID)
       })
-
-      // this receives cred and updates state FINE, look elsewhere
-      //.then (this.getUserData)
       .then(() => document.getElementById("closeSignup").click())
       .then(() => document.getElementById("closeLogin").click())
       .catch((error) => {
@@ -202,6 +176,7 @@ class Navbar extends React.Component {
       });
   }
 
+//email sign up
   handleSignUp(event) {
     event.preventDefault();
     this.setState({ error: "" });
@@ -223,19 +198,14 @@ class Navbar extends React.Component {
             showSignup: "none",
           });
         })
-        .then(() => {
-          console.log(this.state.userName);
-        })
-
         .then(() => document.getElementById("closeSignup").click())
-
         .catch((error) => {
-          console.log(error);
           this.setState({ error: error.message });
         });
     }
   }
 
+//email login
   handleLogin(event) {
     event.preventDefault();
     this.setState({ error: "" });
@@ -246,49 +216,14 @@ class Navbar extends React.Component {
           userID: cred.user.uid,
           showLogin: "none",
         });
-        console.log(this.state.user);
       })
-      .then (this.getUserData)
       .then(() => document.getElementById("closeLogin").click())
-
       .catch((error) => {
         this.setState({ error: error.message });
       });
   }
- 
-  checkUser() {
-    let activeUser = auth().currentUser;
-    if (activeUser != null) {
-      console.log("name " + activeUser.email);
-      console.log("id " + activeUser.uid);
-      this.setState({
-        userName: activeUser.email,
-        userID: activeUser.uid,
-      });
-    } else {
-      console.log("no active");
-    }
-  }
 
-  // componentDidMount() {
-
-  //   auth().onAuthStateChanged((user) => {
-  //     if (user) {
-  //       console.log(auth().currentUser.uid);
-  //       this.setState({
-  //         userName: user.email,
-  //         authenticated: true,
-  //         loading: false,
-  //       });
-  //     } else {
-  //       this.setState({
-  //         authenticated: false,
-  //         loading: false,
-  //       });
-  //     }
-  //   });
-  // }
-
+//swap between signup and login
   switchModal(modal) {
     if (modal === "signup") {
       document.getElementById("closeSignup").click();
@@ -303,16 +238,6 @@ class Navbar extends React.Component {
     }
   }
 
-  openSignup() {
-    this.setState({
-      showSignup: "block",
-    });
-  }
-  openLogin() {
-    this.setState({
-      showLogin: "block",
-    });
-  }
   render() {
     let displayLinks;
     if (this.state.authenticated) {
@@ -364,30 +289,19 @@ class Navbar extends React.Component {
         <div className="navbar-nav ml-auto">
           <button
             type="button"
-            className="btn btn-link loggedOutLinks nav-item nav-link navbar-right "
+            className="btn btn-link nav-item nav-link navbar-right loggedOutLinks shadow-none"
             data-toggle="modal"
             data-target="#modal-signup"
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              width: 105,
-              textAlign: "left",
-            }}
-            onClick={() => this.openSignup()}
+            style={{color: "white"}}
           >
             <i className="fa fa-user-plus" aria-hidden="true"></i> Sign Up
           </button>
           <button
             type="button"
-            className="btn btn-link loggedOutLinks nav-item nav-link navbar-right "
+            className="btn btn-link nav-item nav-link navbar-right loggedOutLinks shadow-none"
             data-toggle="modal"
             data-target="#modal-login"
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              width: 105,
-              textAlign: "left",
-            }}
+            style={{color: "white"}}
           >
             <i className="fa fa-user-circle-o" aria-hidden="true"></i> Login
           </button>
@@ -426,7 +340,7 @@ class Navbar extends React.Component {
           />
           <nav className="navbar navbar-expand-lg navbar-dark myNav">
             <Link to="/" className="navbar-brand align-bottom">
-              <img src={logo} alt="logo" style={{ height: 40 }} />
+              <img src={logo} alt="logo" style={{ height: 30 }} />
               <span className="align-middle" id="logoTitle">
                 {" "}
                 ROLL CALL

@@ -145,7 +145,7 @@ function Signup(props) {
                   paddingLeft: 3,
                   backgroundColor: "#3B5998",
                 }}
-                onClick={props.facebookLogin}
+                onClick={()=>props.facebookLogin('newuser')}
                 type="button"
                 className="btn btn-primary btn-lg pr-0 py-0 align-text-bottom"
               >
