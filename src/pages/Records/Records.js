@@ -31,6 +31,7 @@ class Records extends React.Component {
     this.handleClassSelection = this.handleClassSelection.bind(this);
   }
   componentDidMount(){
+    console.log(this.state.myArray)
     if(this.props.userID !== null){
       db.collection('users').doc(this.props.userID).get().then(doc => {
         if(doc.data().attendance){

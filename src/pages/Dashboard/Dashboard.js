@@ -242,11 +242,11 @@ class Dashboard extends React.Component {
         })
       }
   }
-  componentWillUnmount() {
-    if (this.state.hasBeenEdited) {
-      window.location.reload();
-    }
-  }
+  // componentWillUnmount() {
+  //   if (this.state.hasBeenEdited) {
+  //     window.location.reload();
+  //   }
+  // }
 
   render() {
     console.log('sample'+this.state.sample)

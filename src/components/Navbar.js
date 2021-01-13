@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Home from "../pages/Home/Home";
-import Attendance from "../pages/Attendance/AttendanceGOOD";
+import Attendance from "../pages/Attendance/Attendance";
 import Records from "../pages/Records/Records";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import logo from "./rollCall.png";
@@ -11,16 +11,18 @@ import { auth } from "../firebase/firebase";
 import {db} from "../firebase/firebase";
 import { signup, login, signInWithGoogle, signInWithFacebook, signOut} from "../firebase/auth";
 
-let classList= JSON.parse(localStorage.getItem("localClassList"));
-let attendance= JSON.parse(localStorage.getItem("localAttendance"));
+// let classList= JSON.parse(localStorage.getItem("localClassList"));
+// let attendance= JSON.parse(localStorage.getItem("localAttendance"));
 
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       error: null,
-      userName: null,
-      userID: null,
+      userName: localStorage.getItem('userName'),
+      userID: localStorage.getItem('userID'),
+      userClassList: [],
+      userAttendanceRecord:[],
       email: "",
       password: "",
       passwordConfirm: "",
@@ -44,7 +46,60 @@ class Navbar extends React.Component {
     this.checkUser = this.checkUser.bind(this);
     // this.sendFirestore = this.sendFirestore.bind(this);
   }
-  
+  componentDidMount() {
+    auth().onAuthStateChanged((user) => {
+      if (user) {
+        localStorage.setItem("userID", user.uid);
+        localStorage.setItem("userName", user.email);
+        this.setState({
+          userName: user.email,
+          userID: user.uid,
+          authenticated: true,
+          loading: false,
+        });
+      } else {
+        this.setState({
+          authenticated: false,
+          loading: false,
+        });
+      }
+    });
+    if(this.state.userID !== null){
+      db.collection('users').doc(this.state.userID).onSnapshot((snapshot)=>{
+        console.log(snapshot.data().classList)
+        if(snapshot.data().classList){
+        this.setState({
+          userClassList: snapshot.data().classList
+        })
+      }
+      if(snapshot.data().attendance){
+        this.setState({
+          userAttendanceRecord: snapshot.data().attendance
+        })
+      }
+      })
+    }
+    // onSnapshot((snapshot) => {
+    //   const data = snapshot.docs.map((doc) => ({
+    //     id: doc.id,
+    //     ...doc.data(),
+    //   }));
+   
+    // if(this.state.userID !== null){
+    //   db.collection('users').doc(this.state.userID).get().then(doc => {
+    //     if(doc.data().classList){
+    //       this.setState({
+    //         userClassList: doc.data().classList
+    //       })
+    //     }
+    //     if(doc.data().attendance){
+    //       this.setState({
+    //         userAttendanceRecord: doc.data().attendance
+    //       })
+    //     }
+    //     })
+    //   }
+  }
   // sendFirestore(){
   //   db.collection("users").add({
   //     user: this.state.user,
@@ -189,8 +244,8 @@ class Navbar extends React.Component {
   checkUser(){
     let activeUser=auth().currentUser
     if (activeUser != null){
-     console.log('nmae'+activeUser.email)
-     console.log('id'+activeUser.uid)
+     console.log('name '+activeUser.email)
+     console.log('id '+activeUser.uid)
      this.setState({
        userName: activeUser.email,
        userID: activeUser.uid,
@@ -198,26 +253,27 @@ class Navbar extends React.Component {
     }else{
       console.log('no active')
     }
+    
   }
 
-  componentDidMount() {
+  // componentDidMount() {
     
-    auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log(auth().currentUser.uid);
-        this.setState({
-          userName: user.email,
-          authenticated: true,
-          loading: false,
-        });
-      } else {
-        this.setState({
-          authenticated: false,
-          loading: false,
-        });
-      }
-    });
-  }
+  //   auth().onAuthStateChanged((user) => {
+  //     if (user) {
+  //       console.log(auth().currentUser.uid);
+  //       this.setState({
+  //         userName: user.email,
+  //         authenticated: true,
+  //         loading: false,
+  //       });
+  //     } else {
+  //       this.setState({
+  //         authenticated: false,
+  //         loading: false,
+  //       });
+  //     }
+  //   });
+  // }
 
   switchModal(modal) {
     if (modal === "signup") {
@@ -372,7 +428,7 @@ class Navbar extends React.Component {
               <Home />
             </Route>
             <Route path="/attendance">
-              <Attendance userID={this.state.userID}/>
+              <Attendance userID={this.state.userID} userClassList={this.state.userClassList} userAttendanceRecord={this.state.userAttendanceRecord}/>
             </Route>
             <Route path="/records">
               <Records userID={this.state.userID}/>

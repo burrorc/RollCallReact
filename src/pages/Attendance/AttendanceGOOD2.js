@@ -33,12 +33,12 @@ class Classes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      classAttendance: this.props.userClassList,
+      classAttendance: [],
       showModal: false,
       classSelection: undefined,
       toggleP: false,
       toggleC: false,
-      attendanceRecord: this.props.userAttendanceRecord,
+      attendanceRecord: [],
     };
     this.togglePresent = this.togglePresent.bind(this);
     this.toggleCamera = this.toggleCamera.bind(this);
@@ -48,22 +48,22 @@ class Classes extends React.Component {
     //this.updateLocalStorage = this.updateLocalStorage.bind(this);
     this.updateUserDb = this.updateUserDb.bind(this);
   }
-  // componentDidMount(){
-  //   if(this.props.userID !== null){
-  //     db.collection('users').doc(this.props.userID).get().then(doc => {
-  //       if(doc.data().classList){
-  //         this.setState({
-  //           classAttendance: doc.data().classList
-  //         })
-  //       }
-  //       if(doc.data().attendance){
-  //         this.setState({
-  //           attendanceRecord: doc.data().attendance
-  //         })
-  //       }
-  //       })
-  //     }
-  // }
+  componentDidMount(){
+    if(this.props.userID !== null){
+      db.collection('users').doc(this.props.userID).get().then(doc => {
+        if(doc.data().classList){
+          this.setState({
+            classAttendance: doc.data().classList
+          })
+        }
+        if(doc.data().attendance){
+          this.setState({
+            attendanceRecord: doc.data().attendance
+          })
+        }
+        })
+      }
+  }
 
   cancelSave() {
     this.setState((prevState) => {
