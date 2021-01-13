@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       showModal: false,
-      myClasses:[],
+      myClasses: this.props.userClassList,
       myStudents: studentsArray,
       itemEditSelection: "",
       itemEditId: "",
@@ -194,11 +194,12 @@ class Dashboard extends React.Component {
       });
       document.getElementById("addStudentFirstName").value = "";
       document.getElementById("addStudentLastName").value = "";
+      this.openEdits();
     } else {
       alert("Please enter the student's full name");
     }
     e.preventDefault();
-    this.openEdits();
+    
   }
 
   addClass(e) {
@@ -221,9 +222,12 @@ class Dashboard extends React.Component {
         };
       });
       document.getElementById("addClassInput").value = "";
+      this.openEdits();
+    }else{
+      alert("Please enter a class name")
     }
     e.preventDefault();
-    this.openEdits();
+   
   }
 
   handleClassSelection(subject) {
@@ -231,17 +235,19 @@ class Dashboard extends React.Component {
       classSelection: subject - 1,
     });
   }
-  componentDidMount(){
-    if(this.props.userID !== null){
-      db.collection('users').doc(this.props.userID).get().then(doc => {
-        if(doc.data().classList){
-          this.setState({
-            myClasses: doc.data().classList
-          })
-        }
-        })
-      }
-  }
+
+  // componentDidMount(){
+  //   if(this.props.userID !== null){
+  //     db.collection('users').doc(this.props.userID).get().then(doc => {
+  //       if(doc.data().classList){
+  //         this.setState({
+  //           myClasses: doc.data().classList
+  //         })
+  //       }
+  //       })
+  //     }
+  // }
+  
   // componentWillUnmount() {
   //   if (this.state.hasBeenEdited) {
   //     window.location.reload();
@@ -249,17 +255,6 @@ class Dashboard extends React.Component {
   // }
 
   render() {
-    console.log('sample'+this.state.sample)
-    if(this.props.userID !== null){
-    db.collection('users').doc(this.props.userID).get().then(doc => {
-      if(doc.data().classList){
-        console.log('classlist exists')
-      }else{
-        console.log('classlist does not exists')
-      }
-      })
-    }
-    console.log(this.props.userName);
     let displayEditBtn;
     if (this.state.edits === false) {
       displayEditBtn = { display: "none" };
@@ -474,6 +469,7 @@ class Dashboard extends React.Component {
 
     return (
       <div>
+        
         <Prompt
           when={this.state.edits}
           message="Do you want to leave without saving your changes?"

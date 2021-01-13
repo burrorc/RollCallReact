@@ -1,5 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Attendance from "../pages/Attendance/Attendance";
 import Records from "../pages/Records/Records";
@@ -8,8 +14,14 @@ import logo from "./rollCall.png";
 import Signup from "./Signup";
 import Login from "./Login";
 import { auth } from "../firebase/firebase";
-import {db} from "../firebase/firebase";
-import { signup, login, signInWithGoogle, signInWithFacebook, signOut} from "../firebase/auth";
+import { db } from "../firebase/firebase";
+import {
+  signup,
+  login,
+  signInWithGoogle,
+  signInWithFacebook,
+  signOut,
+} from "../firebase/auth";
 
 // let classList= JSON.parse(localStorage.getItem("localClassList"));
 // let attendance= JSON.parse(localStorage.getItem("localAttendance"));
@@ -19,10 +31,10 @@ class Navbar extends React.Component {
     super(props);
     this.state = {
       error: null,
-      userName: localStorage.getItem('userName'),
-      userID: localStorage.getItem('userID'),
+      userName: null,
+      userID: null,
       userClassList: [],
-      userAttendanceRecord:[],
+      userAttendanceRecord: [],
       email: "",
       password: "",
       passwordConfirm: "",
@@ -44,89 +56,95 @@ class Navbar extends React.Component {
     this.signOut = this.signOut.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.checkUser = this.checkUser.bind(this);
+    this.getUserData = this.getUserData.bind(this);
+    this.checkUserDb = this.checkUserDb.bind(this);
     // this.sendFirestore = this.sendFirestore.bind(this);
   }
+
+  getUserData(){
+    //establishes initial info FINE, look elsewhere
+    db.collection("users")
+        .doc(this.state.userID)
+        .get()
+        .then((doc => {
+          if (doc.data().classList) {
+            this.setState({
+              userClassList: doc.data().classList,
+            });
+          }
+          if (doc.data().attendance) {
+            this.setState({
+              userAttendanceRecord: doc.data().attendance,
+            });
+          } 
+        }));
+  }
+
+  checkUserDb (user){
+      db.collection("users")
+        .doc(user)
+        .onSnapshot((snapshot) => {
+          console.log("found snapshot");
+          console.log(snapshot.data().classList);
+          if (snapshot.data().classList) {
+            this.setState({
+              userClassList: snapshot.data().classList,
+            });
+            console.log(this.state.userClassList)
+          }
+          if (snapshot.data().attendance) {
+            this.setState({
+              userAttendanceRecord: snapshot.data().attendance,
+            });
+            console.log(this.state.userAttendanceRecord)
+          }
+        });
+}
+
   componentDidMount() {
+    console.log(localStorage.getItem('rollCallUserID'))
+    // this.setState({
+    //   userID: localStorage.getItem('rollCallUserID')
+    // })
     auth().onAuthStateChanged((user) => {
+      //registers state change FINE, look elsewhere
       if (user) {
-        localStorage.setItem("userID", user.uid);
-        localStorage.setItem("userName", user.email);
         this.setState({
-          userName: user.email,
-          userID: user.uid,
           authenticated: true,
           loading: false,
         });
+        this.checkUserDb(this.state.userID);
       } else {
         this.setState({
           authenticated: false,
           loading: false,
         });
       }
+      console.log('auth'+this.state.userName+this.state.userID)
     });
-    if(this.state.userID !== null){
-      db.collection('users').doc(this.state.userID).onSnapshot((snapshot)=>{
-        console.log(snapshot.data().classList)
-        if(snapshot.data().classList){
-        this.setState({
-          userClassList: snapshot.data().classList
-        })
-      }
-      if(snapshot.data().attendance){
-        this.setState({
-          userAttendanceRecord: snapshot.data().attendance
-        })
-      }
-      })
-    }
-    // onSnapshot((snapshot) => {
-    //   const data = snapshot.docs.map((doc) => ({
-    //     id: doc.id,
-    //     ...doc.data(),
-    //   }));
-   
-    // if(this.state.userID !== null){
-    //   db.collection('users').doc(this.state.userID).get().then(doc => {
-    //     if(doc.data().classList){
-    //       this.setState({
-    //         userClassList: doc.data().classList
-    //       })
-    //     }
-    //     if(doc.data().attendance){
-    //       this.setState({
-    //         userAttendanceRecord: doc.data().attendance
-    //       })
-    //     }
-    //     })
-    //   }
   }
-  // sendFirestore(){
-  //   db.collection("users").add({
-  //     user: this.state.user,
-  //     classList: classList,
-  //     attendance: attendance,
-
-  // })
-  // .then(function(docRef) {
-  //     console.log("Document written with ID: ", docRef.id);
-  // })
-  // .catch(function(error) {
-  //     console.error("Error adding document: ", error);
-  // });
-  // };
-
-  signOut(){
+  
+  signOut() {
+    //resets user creds to null FINE, look elsewhere
     signOut()
-    .then (()=>console.log('signed out'))
+      .then(() => this.setState({
+        userName: null,
+        userID: null,
+        userClassList:[],
+        userAttendanceRecord:[],
+      }),
+      console.log('signing out'),
+      localStorage.removeItem('rollCallUserID'),
+      )
   }
 
-  resetForm(){
+  resetForm() {
     this.setState({
       email: "",
       password: "",
       passwordConfirm: "",
-      error:"",
-    })
+      error: "",
+    });
   }
   handleChange(event) {
     this.setState({
@@ -134,21 +152,22 @@ class Navbar extends React.Component {
     });
   }
 
-  facebookLogin(){
+  facebookLogin() {
     signInWithFacebook()
-    .then((cred)=>{
-      db.collection('users').doc(cred.user.uid).set({
-        userName: cred.user.email
-      });
-      this.setState({
-        userName: cred.user.email,
-        userID: cred.user.uid,
-        showSignup: "none",
-      });
-      console.log(this.state.userName)
-    })
-    .then(() => document.getElementById("closeSignup").click())
-    .then(() => document.getElementById("closeLogin").click())
+      .then((cred) => {
+        db.collection("users").doc(cred.user.uid).set({
+          userName: cred.user.email,
+        });
+        this.setState({
+          userName: cred.user.email,
+          userID: cred.user.uid,
+          showSignup: "none",
+        });
+        console.log(this.state.userName);
+      })
+      .then (this.getUserData)
+      .then(() => document.getElementById("closeSignup").click())
+      .then(() => document.getElementById("closeLogin").click())
 
       .catch((error) => {
         this.setState({ error: error.message });
@@ -158,24 +177,29 @@ class Navbar extends React.Component {
   googleLogin(newUser) {
     signInWithGoogle()
       .then((cred) => {
-        if(newUser){
-        db.collection('users').doc(cred.user.uid).set({
-          userName: cred.user.email
-        }, { merge: true });
-      }
-      console.log('olduser')
+        if (newUser) {
+          db.collection("users").doc(cred.user.uid).set(
+            {
+              userName: cred.user.email,
+            },
+            { merge: true }
+          );
+        }
         this.setState({
           userName: cred.user.email,
           userID: cred.user.uid,
           showSignup: "none",
         });
+        localStorage.setItem('rollCallUserID', this.state.userID)
       })
-      .then(()=>console.log(this.state.userID))
+
+      // this receives cred and updates state FINE, look elsewhere
+      //.then (this.getUserData)
       .then(() => document.getElementById("closeSignup").click())
       .then(() => document.getElementById("closeLogin").click())
       .catch((error) => {
         this.setState({ error: error.message });
-      })
+      });
   }
 
   handleSignUp(event) {
@@ -187,29 +211,28 @@ class Navbar extends React.Component {
         password: "",
         passwordConfirm: "",
       });
-    }else{
-    signup(this.state.email, this.state.password)
-      .then((cred)=> {
-        db.collection('users').doc(cred.user.uid).set({
-          userName: cred.user.email
-        });
-        this.setState({
-          userName: cred.user.email,
-          userID: cred.user.uid,
-          showSignup: "none",
-        });
-      })
-      .then(()=>{
-        
-        console.log(this.state.userName)
-      })
+    } else {
+      signup(this.state.email, this.state.password)
+        .then((cred) => {
+          db.collection("users").doc(cred.user.uid).set({
+            userName: cred.user.email,
+          });
+          this.setState({
+            userName: cred.user.email,
+            userID: cred.user.uid,
+            showSignup: "none",
+          });
+        })
+        .then(() => {
+          console.log(this.state.userName);
+        })
 
-      .then(() => document.getElementById("closeSignup").click())
+        .then(() => document.getElementById("closeSignup").click())
 
-      .catch((error) => {
-        console.log(error);
-        this.setState({ error: error.message });
-      });
+        .catch((error) => {
+          console.log(error);
+          this.setState({ error: error.message });
+        });
     }
   }
 
@@ -223,41 +246,32 @@ class Navbar extends React.Component {
           userID: cred.user.uid,
           showLogin: "none",
         });
-        console.log(this.state.user)
+        console.log(this.state.user);
       })
+      .then (this.getUserData)
       .then(() => document.getElementById("closeLogin").click())
 
       .catch((error) => {
         this.setState({ error: error.message });
       });
-    
   }
-  // async handleSubmit(event) {
-  //   event.preventDefault();
-  //   this.setState({ error: "" });
-  //   try {
-  //     await signup(this.state.email, this.state.password);
-  //   } catch (error) {
-  //     this.setState({ error: error.message });
-  //   }
-  // }
-  checkUser(){
-    let activeUser=auth().currentUser
-    if (activeUser != null){
-     console.log('name '+activeUser.email)
-     console.log('id '+activeUser.uid)
-     this.setState({
-       userName: activeUser.email,
-       userID: activeUser.uid,
-     })
-    }else{
-      console.log('no active')
+ 
+  checkUser() {
+    let activeUser = auth().currentUser;
+    if (activeUser != null) {
+      console.log("name " + activeUser.email);
+      console.log("id " + activeUser.uid);
+      this.setState({
+        userName: activeUser.email,
+        userID: activeUser.uid,
+      });
+    } else {
+      console.log("no active");
     }
-    
   }
 
   // componentDidMount() {
-    
+
   //   auth().onAuthStateChanged((user) => {
   //     if (user) {
   //       console.log(auth().currentUser.uid);
@@ -300,12 +314,10 @@ class Navbar extends React.Component {
     });
   }
   render() {
-    
     let displayLinks;
     if (this.state.authenticated) {
       displayLinks = (
         <div className="navbar-nav ml-auto">
-          <span>{this.state.userID}</span>
           <Link
             data-toggle="collapse"
             data-target="#navbarNavAltMarkup"
@@ -333,12 +345,18 @@ class Navbar extends React.Component {
           <button
             type="button"
             className="btn btn-link loggedInLinks nav-item nav-link mybuttonAlt"
-            style={{ lineHeight:' 22px', color: "#036937", fontWeight: "bold", width:118, textAlign:'center' }}
-            onClick={()=>this.signOut()}
+            style={{
+              lineHeight: " 22px",
+              color: "#036937",
+              fontWeight: "bold",
+              width: 118,
+              textAlign: "center",
+            }}
+            onClick={() => this.signOut()}
           >
-            <i className="fa fa-sign-out"></i><span> SIGN OUT</span>
+            <i className="fa fa-sign-out"></i>
+            <span> SIGN OUT</span>
           </button>
-          
         </div>
       );
     } else {
@@ -349,7 +367,12 @@ class Navbar extends React.Component {
             className="btn btn-link loggedOutLinks nav-item nav-link navbar-right "
             data-toggle="modal"
             data-target="#modal-signup"
-            style={{ color: "white", fontWeight: "bold", width:105,textAlign:'left' }}
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              width: 105,
+              textAlign: "left",
+            }}
             onClick={() => this.openSignup()}
           >
             <i className="fa fa-user-plus" aria-hidden="true"></i> Sign Up
@@ -359,14 +382,19 @@ class Navbar extends React.Component {
             className="btn btn-link loggedOutLinks nav-item nav-link navbar-right "
             data-toggle="modal"
             data-target="#modal-login"
-            style={{ color: "white", fontWeight: "bold", width:105, textAlign:'left' }}
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              width: 105,
+              textAlign: "left",
+            }}
           >
             <i className="fa fa-user-circle-o" aria-hidden="true"></i> Login
           </button>
         </div>
       );
     }
-
+   
     return (
       <Router>
         <div>
@@ -404,7 +432,6 @@ class Navbar extends React.Component {
                 ROLL CALL
               </span>
             </Link>
-            <button onClick={this.checkUser}>Firestore</button>
             <button
               className="navbar-toggler"
               type="button"
@@ -424,17 +451,21 @@ class Navbar extends React.Component {
             </div>
           </nav>
           <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
+            <Route exact path="/" component={Home}/>
+              {/* <Home />
+            </Route> */}
             <Route path="/attendance">
-              <Attendance userID={this.state.userID} userClassList={this.state.userClassList} userAttendanceRecord={this.state.userAttendanceRecord}/>
+              <Attendance
+                userID={this.state.userID}
+                userClassList={this.state.userClassList}
+                userAttendanceRecord={this.state.userAttendanceRecord}
+              />
             </Route>
             <Route path="/records">
-              <Records userID={this.state.userID}/>
+              <Records userID={this.state.userID} userAttendanceRecord={this.state.userAttendanceRecord}/>
             </Route>
             <Route path="/dashboard">
-              <Dashboard userID={this.state.userID}/>
+              <Dashboard userID={this.state.userID} userClassList={this.state.userClassList}/>
             </Route>
           </Switch>
         </div>

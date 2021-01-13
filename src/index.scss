@@ -243,7 +243,7 @@ input {
     position: fixed;
     bottom: 55px;
     z-index: 1;
-    background-color: #FFF3CD;
+    background-color:#FEE181;
 }
 .pulsingButton {
   display: inline-block;
@@ -274,6 +274,10 @@ input {
   color:$primaryColor;
   background-color: $secondaryColor;
   border-color: $primaryColor;
+}
+
+.pulsingButton:focus {
+  outline: none;
 }
 
 /* Animation */

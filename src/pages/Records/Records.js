@@ -14,10 +14,10 @@ import {db} from "../../firebase/firebase";
 //let initialState = JSON.parse(localExists);;
 
 class Records extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      myArray: [],
+      attendanceRecord: this.props.userAttendanceRecord,
       classSelection: undefined,
       dateSelection: undefined,
       edit: false,
@@ -30,21 +30,21 @@ class Records extends React.Component {
     this.handleDateSelection = this.handleDateSelection.bind(this);
     this.handleClassSelection = this.handleClassSelection.bind(this);
   }
-  componentDidMount(){
-    console.log(this.state.myArray)
-    if(this.props.userID !== null){
-      db.collection('users').doc(this.props.userID).get().then(doc => {
-        if(doc.data().attendance){
-          console.log(doc.data().attendance)
-          console.log(JSON.parse(localStorage.getItem("localAttendance")))
-          this.setState({
-            myArray: doc.data().attendance
-          })
-          console.log(this.state.myArray)
-        }
-        })
-      }
-  }
+  // componentDidMount(){
+  //   console.log(this.state.myArray)
+  //   if(this.props.userID !== null){
+  //     db.collection('users').doc(this.props.userID).get().then(doc => {
+  //       if(doc.data().attendance){
+  //         console.log(doc.data().attendance)
+  //         console.log(JSON.parse(localStorage.getItem("localAttendance")))
+  //         this.setState({
+  //           myArray: doc.data().attendance
+  //         })
+  //         console.log(this.state.myArray)
+  //       }
+  //       })
+  //     }
+  // }
   // cancelSave() {
   //   console.log(this.state.myArray);
   //   console.log(initialState);
@@ -60,7 +60,7 @@ class Records extends React.Component {
     db.collection("users")
       .doc(docID)
       .set({
-        attendance: this.state.myArray,
+        attendance: this.state.attendanceRecord,
       }, { merge: true })
       .then(() => {
         this.setState({
@@ -90,7 +90,7 @@ class Records extends React.Component {
   }
   handleChange(boxName, studentIndex, text) {
     this.setState((prevState) => {
-      const updatedArray = prevState.myArray.map((day, index) => {
+      const updatedArray = prevState.attendanceRecord.map((day, index) => {
         if (index !== prevState.dateSelection) {
           return day;
         } else {
@@ -129,10 +129,10 @@ class Records extends React.Component {
       });
 
       return {
-        myArray: updatedArray,
+        attendanceRecord: updatedArray,
       };
     });
-    console.log(this.state.myArray);
+    console.log(this.state.attendanceRecord);
   }
 
   handleDateSelection(date) {
@@ -148,7 +148,7 @@ class Records extends React.Component {
     });
   }
   render() {
-    const dayList = this.state.myArray.map((day, index) => (
+    const dayList = this.state.attendanceRecord.map((day, index) => (
       <option key={"ds" + index} id={"ds" + index} value={index}>
         {day.date}
       </option>
@@ -156,7 +156,7 @@ class Records extends React.Component {
 
     let classList;
     if (this.state.dateSelection !== undefined) {
-      classList = this.state.myArray[this.state.dateSelection].attendance.map(
+      classList = this.state.attendanceRecord[this.state.dateSelection].attendance.map(
         (day, index) => (
           <option key={"cs" + index} id={"cs" + index} value={index}>
             {day.subject}
@@ -168,7 +168,7 @@ class Records extends React.Component {
     let displayClass;
     let displayStudents;
 
-    if (this.state.myArray.length === 0) {
+    if (this.state.attendanceRecord.length === 0) {
       displayClass = (
         <h5 className="text-center textC">You have no attendance records</h5>
       );
@@ -182,7 +182,7 @@ class Records extends React.Component {
       );
     } else {
       if (
-        this.state.myArray[this.state.dateSelection].attendance[
+        this.state.attendanceRecord[this.state.dateSelection].attendance[
           this.state.classSelection
         ].students === undefined
       ) {
@@ -192,7 +192,7 @@ class Records extends React.Component {
           </h5>
         );
       } else {
-        displayStudents = this.state.myArray[
+        displayStudents = this.state.attendanceRecord[
           this.state.dateSelection
         ].attendance[
           this.state.classSelection
@@ -217,7 +217,7 @@ class Records extends React.Component {
       this.state.edit === false ||
       this.state.dateSelection === undefined ||
       this.state.classSelection === undefined ||
-      this.state.myArray[this.state.dateSelection].attendance[
+      this.state.attendanceRecord[this.state.dateSelection].attendance[
         this.state.classSelection
       ].students === undefined
     ) {

@@ -29,7 +29,7 @@ import {
 //   myClassAttendance = [];
 // }
 
-class Classes extends React.Component {
+class Attendance extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,6 +48,7 @@ class Classes extends React.Component {
     //this.updateLocalStorage = this.updateLocalStorage.bind(this);
     this.updateUserDb = this.updateUserDb.bind(this);
   }
+ 
   // componentDidMount(){
   //   if(this.props.userID !== null){
   //     db.collection('users').doc(this.props.userID).get().then(doc => {
@@ -320,6 +321,10 @@ class Classes extends React.Component {
   }
 
   render() {
+    console.log('mounted');
+    console.log(this.state.classAttendance);
+    console.log(this.state.attendanceRecord);
+
     let saveAttendance;
     let ToggleButtonP;
     if (this.state.toggleP === false) {
@@ -443,4 +448,4 @@ class Classes extends React.Component {
 }
 
 ReactModal.setAppElement("body");
-export default Classes;
+export default Attendance;

@@ -68,7 +68,7 @@ function Login(props) {
                 </div>
                 <input
                   id="login-password"
-                  type="text"
+                  type="password"
                   className="form-control"
                   name="password"
                   placeholder="Password"
