@@ -1,19 +1,39 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
 
 const PublicRoute = ({
-    component: Component,
-  	authenticated,
-    ...rest
-}) => (
-    <Route {...rest} component={(props)=> 
-            authenticated ? (
-                <Redirect to="/attendance" />
-            ):
-                <Component {...props} />
-            
-    } />
-)
+  component: Component,
+  path,
+  authenticated,
+  color,
+//   ...rest
+}) => {
+  return (
+    <Route
+    //   {...rest}
+      path={path}
+      render={(props) =>
+        authenticated ? (
+          <Redirect to={"/attendance"} />
+        ) : (
+          <Component
+          color={color} 
+          authenticated={authenticated} 
+          {...props} 
+          />
+        )
+      }
+    />
+  );
+};
+
+// component={(props)=>
+//         authenticated ? (
+//             <Redirect to="/attendance" />
+//         ):
+//             <Component {...props} />
+
+// } />
 
 // const PublicRoute = ({component: Component, authenticated, ...rest}) => {
 //     return (

@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Home() {
+function Home(props) {
     return(
   <div>
-    <h1>HOME</h1>
+    <h1 style={{color: props.color}}>HOME</h1>
   </div>
     )
 }

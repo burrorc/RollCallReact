@@ -1,9 +1,10 @@
 import React from 'react'
 
-function SignIn() {
+function SignIn(props) {
     return(
   <div>
-    <h1>Sign In</h1>
+    <h1 style={{color: props.color}}>Sign In</h1>
+    <h3>{props.authenticated}</h3>
   </div>
     )
 }
