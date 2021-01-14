@@ -3,8 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  Redirect,
+  Link
 } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Attendance from "../pages/Attendance/Attendance";
@@ -338,7 +337,7 @@ class Navbar extends React.Component {
             facebookLogin={this.facebookLogin}
             resetForm={this.resetForm}
           />
-          <nav className="navbar navbar-expand-lg navbar-dark myNav">
+          <nav className="navbar navbar-expand-lg navbar-dark fixed-top myNav">
             <Link to="/" className="navbar-brand align-bottom">
               <img src={logo} alt="logo" style={{ height: 30 }} />
               <span className="align-middle" id="logoTitle">
