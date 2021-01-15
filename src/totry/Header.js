@@ -1,5 +1,6 @@
 import React from 'react'
-import {Switch , Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
+import logo from "./rollCall.png";
 
 function Header(props){
 
@@ -76,12 +77,13 @@ if(props.isLoggedIn){
         <div>
            <nav className="navbar navbar-expand-lg navbar-dark fixed-top myNav">
             <Link to="/" className="navbar-brand align-bottom">
-              {/* <img src={logo} alt="logo" style={{ height: 30 }} /> */}
+              <img src={logo} alt="logo" style={{ height: 30 }} />
               <span className="align-middle" id="logoTitle">
                 {" "}
                 ROLL CALL
               </span>
             </Link>
+            <button onClick={()=>props.changeLogIn()}>Login/Logout</button>
             <button
               className="navbar-toggler"
               type="button"

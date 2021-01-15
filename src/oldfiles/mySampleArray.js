@@ -17,6 +17,7 @@ const mySampleArray = [
   },
   {
     subject: "Math",
+    students:[],
 }
 ];
 
