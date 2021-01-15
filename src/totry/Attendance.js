@@ -239,9 +239,7 @@ class Attendance extends React.Component {
   }
 
   render() {
-    console.log('mounted');
-    console.log(this.state.classAttendance);
-    console.log(this.state.attendanceRecord);
+    console.log(this.props)
 
     let saveAttendance;
     let ToggleButtonP;

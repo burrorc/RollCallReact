@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import logo from "./rollCall.png";
 
+
 function Header(props){
 
 let displayLinks;
@@ -42,7 +43,7 @@ if(props.isLoggedIn){
               width: 118,
               textAlign: "center",
             }}
-            //onClick={() => this.signOut()}
+            onClick={() => props.signOut()}
           >
             <i className="fa fa-sign-out"></i>
             <span> SIGN OUT</span>
