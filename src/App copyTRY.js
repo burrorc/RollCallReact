@@ -1,13 +1,6 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
-import Home from "./totry/Home";
-import Attendance from "./totry/Attendance";
-import Dashboard from "./totry/Dashboard";
-import Records from "./totry/Records";
-import PrivateRoute from "./totry/PrivateRoute";
-import PublicRoute from "./totry/PublicRoute";
 import Header from "./totry/Header";
-//import Main from "./totry/Main";
+import Main from "./totry/Main";
 import Footer from "./totry/Footer";
 import Signup from "./totry/Signup";
 import Login from "./totry/Login";
@@ -22,7 +15,6 @@ import {
 } from "./firebase/auth";
 
 class App extends React.Component {
-  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +27,6 @@ class App extends React.Component {
       email: "",
       password: "",
       passwordConfirm: "",
-      // classSelection: undefined,
     };
     this.changeLogIn = this.changeLogIn.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -46,17 +37,10 @@ class App extends React.Component {
     this.facebookLogin = this.facebookLogin.bind(this);
     this.signOut = this.signOut.bind(this);
     this.checkUserDb = this.checkUserDb.bind(this);
-    //this.handleClassSelection = this.handleClassSelection.bind(this);
-  }
-
-  handleClassSelection(subject) {
-    this.setState({
-      classSelection: subject - 1,
-    });
   }
 
   //gets and assigns user data from firebase
-  checkUserDb(user) {
+  checkUserDb (user){
     db.collection("users")
       .doc(user)
       .onSnapshot((snapshot) => {
@@ -71,11 +55,10 @@ class App extends React.Component {
           });
         }
       });
-  }
+}
 
   //initiates auth listener and gets user data
   componentDidMount() {
-    this._isMounted = true
     // this.setState({
     //   userID: localStorage.getItem("rollCallUserID")
     // })
@@ -93,10 +76,6 @@ class App extends React.Component {
         });
       }
     });
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
   //displays field value as typed
@@ -241,60 +220,6 @@ class App extends React.Component {
     });
   }
   render() {
-    let home;
-    if(this.state.isLoggedIn){
-      home=(
-        <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            />
-      )
-    }else{
-      home=(
-        <Home />
-      )
-    }
-    let attendance;
-    if(this.state.isLoggedIn){
-      attendance=(
-        <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            />
-      )
-    }else{
-      attendance=(
-        <Home />
-      )
-    }
-    let records;
-    if(this.state.isLoggedIn){
-      records=(
-        <Records
-              userID={this.state.userID}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            />
-      )
-    }else{
-      records=(
-        <Home />
-      )
-    }
-    let dashboard;
-    if(this.state.isLoggedIn){
-      dashboard=(
-        <Dashboard
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-            />
-      )
-    }else{
-      dashboard=(
-        <Home />
-      )
-    }
     return (
       <div>
         <Signup
@@ -328,70 +253,11 @@ class App extends React.Component {
           signOut={this.signOut}
           changeLogIn={this.changeLogIn}
         />
-        <Switch>
-          {/* <PublicRoute
-            component={Home}
-            isLoggedIn={this.state.isLoggedIn}
-            path="/"
-            exact
-          /> */}
-          <Route path="/" exact>
-            {home}
-            {/* <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            /> */}
-          </Route>
-          <Route path="/attendance">
-            {attendance}
-            {/* <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            /> */}
-          </Route>
-          <Route path="/records">
-            {records}
-            {/* <Records
-              userID={this.state.userID}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            /> */}
-          </Route>
-          <Route path="/dashboard">
-            {dashboard}
-            {/* <Dashboard
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-            /> */}
-          </Route>
-          {/* <PrivateRoute
-            component={Attendance}
-            isLoggedIn={this.state.isLoggedIn}
-            userID={this.state.userID}
-            userClassList={this.state.userClassList}
-            userAttendanceRecord={this.state.userAttendanceRecord}
-            path="/attendance"
-            exact
-          />
-          <PrivateRoute
-            component={Records}
-            isLoggedIn={this.state.isLoggedIn}
-            userID={this.state.userID}
-            userAttendanceRecord={this.state.userAttendanceRecord}
-            path="/records"
-            exact
-          />
-          <PrivateRoute
-            component={Dashboard}
-            isLoggedIn={this.state.isLoggedIn}
-            userID={this.state.userID}
-            userClassList={this.state.userClassList}
-            classSelection={this.state.classSelection}
-            path="/dashboard"
-            exact
-          /> */}
-        </Switch>
+        <Main
+          isLoggedIn={this.state.isLoggedIn}
+          userID={this.state.userID}
+          userClassList={this.state.userClassList}
+        />
         <Footer />
       </div>
     );

@@ -5,29 +5,21 @@ import StudentsSection from "./StudentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Prompt } from "react-router";
-import { db } from "../../firebase/firebase";
+import { db } from "../firebase/firebase";
 import _ from "lodash";
-
-// let myClassList;
-
-// if (JSON.parse(localStorage.getItem("localClassList"))) {
-//   myClassList = JSON.parse(localStorage.getItem("localClassList"));
-// } else {
-//   myClassList = [];
-// }
-
-const studentsArray = [];
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    this._isMounted = false
     this.state = {
       showModal: false,
       myClasses: this.props.userClassList,
-      myStudents: studentsArray,
+      //myClasses: [],
+      myStudents: [],
       itemEditSelection: "",
       itemEditId: "",
-      classSelection: undefined,
+      //classSelection: this.props.classSelection,
       previousSelection: "0",
       edits: false,
       hasBeenEdited: false,
@@ -37,14 +29,21 @@ class Dashboard extends React.Component {
     this.removeClass = this.removeClass.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.editItem = this.editItem.bind(this);
-    this.handleClassSelection = this.handleClassSelection.bind(this);
+    //this.handleClassSelection = this.handleClassSelection.bind(this);
     this.addStudent = this.addStudent.bind(this);
-    this.updateLocalStorage = this.updateLocalStorage.bind(this);
     this.openEdits = this.openEdits.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
     this.updateUserDb = this.updateUserDb.bind(this);
   }
+
+  // componentDidMount(){
+  //   this._isMounted = true;
+  // }
+
+  // componentWillUnmount() {
+  //   this._isMounted = false;
+  // }
 
   updateUserDb(docID) {
     db.collection("users")
@@ -74,14 +73,6 @@ class Dashboard extends React.Component {
       edits: false,
     });
   }
-  updateLocalStorage() {
-    const toLocalClassList = JSON.stringify(this.state.myClasses);
-    window.localStorage.setItem("localClassList", toLocalClassList);
-    this.closeEdits();
-    this.setState({
-      hasBeenEdited: true,
-    });
-  }
 
   editItem() {
     if (this.state.itemEditSelection === "classes") {
@@ -94,8 +85,8 @@ class Dashboard extends React.Component {
       let editFirst = _.upperFirst(document.getElementById("editFirst").value);
       let editLast = _.upperFirst(document.getElementById("editLast").value);
       let newArray = [...this.state.myClasses];
-      newArray[this.state.classSelection].students[this.state.itemEditId] = {
-        ...newArray[this.state.classSelection].students[this.state.itemEditId],
+      newArray[this.props.classSelection].students[this.state.itemEditId] = {
+        ...newArray[this.props.classSelection].students[this.state.itemEditId],
         firstName: editFirst,
         lastName: editLast,
       };
@@ -140,7 +131,7 @@ class Dashboard extends React.Component {
   removeStudent(id) {
     this.setState((prevState) => {
       const updatedClass = prevState.myClasses.map((subject, index) => {
-        if (index !== this.state.classSelection) {
+        if (index !== this.props.classSelection) {
           return subject;
         }
         const updatedStudents = subject.students.filter((student, index) => {
@@ -171,9 +162,9 @@ class Dashboard extends React.Component {
     );
     if (newStudentFirst !== "" && newStudentLast !== "") {
       let newArray = [...this.state.myClasses];
-      let studentIndex = newArray[this.state.classSelection].students.length;
-      newArray[this.state.classSelection].students[studentIndex] = {
-        ...newArray[this.state.classSelection].students[studentIndex],
+      let studentIndex = newArray[this.props.classSelection].students.length;
+      newArray[this.props.classSelection].students[studentIndex] = {
+        ...newArray[this.props.classSelection].students[studentIndex],
         firstName: newStudentFirst,
         lastName: newStudentLast,
         present: false,
@@ -182,13 +173,13 @@ class Dashboard extends React.Component {
         comments: "",
       };
       let orderedArray = _.orderBy(
-        newArray[this.state.classSelection].students,
+        newArray[this.props.classSelection].students,
         ["lastName"],
         ["asc"]
       );
       console.log(orderedArray);
       let reorderedArray = [...newArray];
-      reorderedArray[this.state.classSelection].students = orderedArray;
+      reorderedArray[this.props.classSelection].students = orderedArray;
       this.setState({
         myClasses: reorderedArray,
       });
@@ -230,33 +221,16 @@ class Dashboard extends React.Component {
    
   }
 
-  handleClassSelection(subject) {
-    this.setState({
-      classSelection: subject - 1,
-    });
-  }
-
-  // componentDidMount(){
-  //   if(this.props.userID !== null){
-  //     db.collection('users').doc(this.props.userID).get().then(doc => {
-  //       if(doc.data().classList){
-  //         this.setState({
-  //           myClasses: doc.data().classList
-  //         })
-  //       }
-  //       })
-  //     }
-  // }
-  
-  // componentWillUnmount() {
-  //   if (this.state.hasBeenEdited) {
-  //     window.location.reload();
-  //   }
+  // handleClassSelection(subject) {
+  //   this.setState({
+  //     classSelection: subject - 1,
+  //   });
   // }
 
   render() {
     console.log('countme')
-    console.log(this.state.classSelection)
+    console.log(this._isMounted)
+    console.log(this.props.classSelection)
     let displayEditBtn;
     if (this.state.edits === false) {
       displayEditBtn = { display: "none" };
@@ -266,7 +240,7 @@ class Dashboard extends React.Component {
 
     let addStudentInputs;
     if (
-      this.state.classSelection === undefined ||
+      this.props.classSelection === undefined ||
       this.state.myClasses.length === 0
     ) {
       addStudentInputs = <span></span>;
@@ -328,10 +302,10 @@ class Dashboard extends React.Component {
           You have no classes listed
         </li>
       );
-    } else if (this.state.classSelection === undefined) {
+    } else if (this.props.classSelection === undefined) {
       displayStudents = <span></span>;
     } else if (
-      this.state.myClasses[this.state.classSelection].students.length === 0
+      this.state.myClasses[this.props.classSelection].students.length === 0
     ) {
       displayStudents = (
         <li
@@ -346,7 +320,7 @@ class Dashboard extends React.Component {
       );
     } else {
       displayStudents = this.state.myClasses[
-        this.state.classSelection
+        this.props.classSelection
       ].students.map((student, index) => (
         <li id={"sl" + index} key={"sl" + index} className="textC">
           <div className="d-flex">
@@ -416,13 +390,13 @@ class Dashboard extends React.Component {
     ) {
       editValue = this.state.myClasses[this.state.itemEditId].subject;
     } else if (
-      this.state.myClasses[this.state.classSelection] !== undefined &&
+      this.state.myClasses[this.props.classSelection] !== undefined &&
       this.state.itemEditSelection === "students" &&
-      this.state.myClasses[this.state.classSelection].students[
+      this.state.myClasses[this.props.classSelection].students[
         this.state.itemEditId
       ]
     ) {
-      editValue = this.state.myClasses[this.state.classSelection].students[
+      editValue = this.state.myClasses[this.props.classSelection].students[
         this.state.itemEditId
       ];
     } else {
@@ -501,20 +475,6 @@ class Dashboard extends React.Component {
           <h1 id="clickTitle2" className="text-center mt-3 textC">
             Dashboard
           </h1>
-          {/* <div
-            className="text-center align-items-center saveChanges"
-            
-          >
-            <button className="pulsingButton">Save Changes</button>
-            <button
-              style={displayEditBtn}
-              id="saveChanges"
-              className="mybutton"
-              onClick={() => this.createUserDb(this.props.userName)}
-            >
-              Save Changes
-            </button>
-          </div> */}
           <div className="row justify-content-around">
             <ClassesSection
               refVal={(a) => (this._inputElement = a)}
@@ -529,34 +489,19 @@ class Dashboard extends React.Component {
               addStudent={this.addStudent}
               classList={classList}
               handleClassSelection={() =>
-                this.handleClassSelection(
+                this.props.handleClassSelection(
                   document.getElementById("selClass").selectedIndex
                 )
               }
             />
           </div>
           <div className="text-center" style={{ height: 30 }}>
-            {/* <button
-              style={displayEditBtn}
-              id="saveChanges"
-              className="mybutton my-3"
-              onClick={this.updateLocalStorage}
-            >
-              Save Changes
-            </button> */}
           </div>
         </div>
         <div
           className="text-center align-items-center saveChanges"
           style={displayEditBtn}
         >
-          {/* <button
-            className="pulsingButton"
-            id="saveChanges"
-            onClick={() => console.log(this.props.userID)}
-          >
-            Save Changes
-          </button> */}
           <button
             className="pulsingButton"
             id="saveChanges"

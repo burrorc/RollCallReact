@@ -5,16 +5,18 @@ import StudentsSection from "./StudentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Prompt } from "react-router";
-//import { db } from "../../firebase/firebase";
+import { db } from "../firebase/firebase";
 import _ from "lodash";
 
 class Dashboard extends React.Component {
+ // _isMounted=false;
   constructor(props) {
     super(props);
+    this._isMounted = false
     this.state = {
       showModal: false,
-      //myClasses: this.props.userClassList,
-      myClasses: [],
+      myClasses: this.props.userClassList,
+      //myClasses: [],
       myStudents: [],
       itemEditSelection: "",
       itemEditId: "",
@@ -33,25 +35,33 @@ class Dashboard extends React.Component {
     this.openEdits = this.openEdits.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
-    //this.updateUserDb = this.updateUserDb.bind(this);
+    this.updateUserDb = this.updateUserDb.bind(this);
   }
 
-  // updateUserDb(docID) {
-  //   db.collection("users")
-  //     .doc(docID)
-  //     .set({
-  //       classList: this.state.myClasses,
-  //     }, { merge: true })
-  //     .then(() => {
-  //       this.setState({
-  //         edits: false,
-  //         hasBeenEdited: true,
-  //       });
-  //     })
-  //     .catch(function (error) {
-  //       console.error("Error adding document: ", error);
-  //     });
+  // componentDidMount(){
+  //   this._isMounted = true;
   // }
+
+  // componentWillUnmount() {
+  //   this._isMounted = false;
+  // }
+
+  updateUserDb(docID) {
+    db.collection("users")
+      .doc(docID)
+      .set({
+        classList: this.state.myClasses,
+      }, { merge: true })
+      .then(() => {
+        this.setState({
+          edits: false,
+          hasBeenEdited: true,
+        });
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
+  }
 
   openEdits() {
     this.setState({
@@ -219,6 +229,9 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    console.log('countme')
+    console.log(this._isMounted)
+    console.log(this.state.classSelection)
     let displayEditBtn;
     if (this.state.edits === false) {
       displayEditBtn = { display: "none" };
@@ -493,7 +506,7 @@ class Dashboard extends React.Component {
           <button
             className="pulsingButton"
             id="saveChanges"
-            //onClick={() => this.updateUserDb(this.props.userID)}
+            onClick={() => this.updateUserDb(this.props.userID)}
           >
             Save Changes
           </button>

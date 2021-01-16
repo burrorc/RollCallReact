@@ -1,12 +1,14 @@
-import React from 'react'
+import React from "react";
 
-function Home(props) {
-    console.log(props)
-    return(
-  <div>
-     <h1>Home</h1>
-  </div>
-    )
+function Home() {
+  return (
+      <div style={{height: "100%",position:"fixed"}}>
+    <div
+      className="jumbotron"
+    >
+     </div> 
+    </div>
+  );
 }
 
-export default Home
+export default Home;

@@ -2,7 +2,7 @@ import React from "react";
 import {Switch} from "react-router-dom";
 import Home from "./Home";
 import Attendance from "./Attendance";
-import Dashboard from "./Dashboard.js";
+import Dashboard from "./Dashboard";
 import Records from "./Records";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
@@ -40,6 +40,8 @@ class Main extends React.Component {
           <PrivateRoute
             component={Dashboard}
             isLoggedIn={this.props.isLoggedIn}
+            userID={this.props.userID}
+            userClassList={this.props.userClassList}
             path="/dashboard"
             exact
           />
