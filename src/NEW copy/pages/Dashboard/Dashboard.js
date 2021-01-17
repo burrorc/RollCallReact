@@ -9,7 +9,7 @@ import { db } from "../../../firebase/firebase";
 import _ from "lodash";
 
 class Dashboard extends React.Component {
- _isMounted=false;
+ // _isMounted=false;
   constructor(props) {
     super(props);
     this._isMounted = false
@@ -38,13 +38,13 @@ class Dashboard extends React.Component {
     this.updateUserDb = this.updateUserDb.bind(this);
   }
 
-  componentDidMount(){
-    this._isMounted = true;
-  }
+  // componentDidMount(){
+  //   this._isMounted = true;
+  // }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
+  // componentWillUnmount() {
+  //   this._isMounted = false;
+  // }
 
   updateUserDb(docID) {
     db.collection("users")
@@ -53,12 +53,10 @@ class Dashboard extends React.Component {
         classList: this.state.myClasses,
       }, { merge: true })
       .then(() => {
-        if(this._isMounted){
         this.setState({
           edits: false,
           hasBeenEdited: true,
         });
-      }
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
@@ -111,10 +109,9 @@ class Dashboard extends React.Component {
     this.setState({ showModal: false });
   }
 
-  handleCloseModal(e) {
+  handleCloseModal() {
     this.editItem();
     this.setState({ showModal: false });
-    e.preventDefault();
   }
 
   removeClass(id) {
@@ -158,7 +155,6 @@ class Dashboard extends React.Component {
   }
 
   addStudent(e) {
-    document.getElementById("addStudentFirstName").focus();
     let newStudentFirst = _.upperFirst(
       document.getElementById("addStudentFirstName").value
     );
@@ -194,7 +190,6 @@ class Dashboard extends React.Component {
     } else {
       alert("Please enter the student's full name");
     }
-    
     e.preventDefault();
     
   }
@@ -468,7 +463,6 @@ class Dashboard extends React.Component {
                   Submit
                 </button>
                 <button
-                type="button"
                   className="mybuttonCancel my-2 mx-1"
                   onClick={this.cancelEdit}
                 >

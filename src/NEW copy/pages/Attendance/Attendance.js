@@ -30,7 +30,6 @@ import {
 // }
 
 class Attendance extends React.Component {
-  _isMounted = false
   constructor(props) {
     super(props);
     this.state = {
@@ -50,16 +49,24 @@ class Attendance extends React.Component {
     this.updateUserDb = this.updateUserDb.bind(this);
   }
  
-  componentDidMount(){
-    this._isMounted = true
-  }
-  
-  componentWillUnmount(){
-    this._isMounted = false
-  }
+  // componentDidMount(){
+  //   if(this.props.userID !== null){
+  //     db.collection('users').doc(this.props.userID).get().then(doc => {
+  //       if(doc.data().classList){
+  //         this.setState({
+  //           classAttendance: doc.data().classList
+  //         })
+  //       }
+  //       if(doc.data().attendance){
+  //         this.setState({
+  //           attendanceRecord: doc.data().attendance
+  //         })
+  //       }
+  //       })
+  //     }
+  // }
 
   cancelSave() {
-    if(this._isMounted){
     this.setState((prevState) => {
       prevState.classAttendance[this.state.classSelection].students.map(
         (student) => {
@@ -78,10 +85,8 @@ class Attendance extends React.Component {
       toggleC: false,
     });
   }
-  }
 
   toggleCamera() {
-    
     this.setState((prevState) => {
       const newToggleC = !prevState.toggleC;
       const updatedClassAttendanceC = prevState.classAttendance.map((item) => {
@@ -108,11 +113,9 @@ class Attendance extends React.Component {
         toggleC: newToggleC,
       };
     });
-  
   }
 
   togglePresent() {
-   
     this.setState((prevState) => {
       const newToggleP = !prevState.toggleP;
       const updatedClassAttendanceP = prevState.classAttendance.map((item) => {
@@ -140,8 +143,7 @@ class Attendance extends React.Component {
         toggleP: newToggleP,
       };
     });
-  
-}
+  }
 
   handleOpenModal(item) {
     const newDate = new Date().toDateString();
@@ -165,14 +167,10 @@ class Attendance extends React.Component {
         );
         document.getElementById("clickTitle").click();
       } else {
-        
         this.setState({ showModal: true, classSelection: item });
-        
       }
     } else {
-     
       this.setState({ showModal: true, classSelection: item });
-      
     }
   }
   // updateUserDb(docID) {
@@ -214,30 +212,24 @@ class Attendance extends React.Component {
           this.state.classAttendance[this.state.classSelection]
         );
       }
-      
       this.setState({ attendanceRecord: newAttendance });
-     
     } else {
       newAttendance.push({ date: newDate });
       newAttendance[newAttendance.length - 1].attendance = [];
       newAttendance[newAttendance.length - 1].attendance.push(
         this.state.classAttendance[this.state.classSelection]
       );
-     
       this.setState({ attendanceRecord: newAttendance });
-   
-  }
+    }
     db.collection("users")
       .doc(docID)
       .set({
         attendance: this.state.attendanceRecord,
       }, { merge: true })
       .then(() => {
-        if(this._isMounted){
         this.setState({
           edits: false,
         });
-      }
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
@@ -281,14 +273,11 @@ class Attendance extends React.Component {
   // }
 
   handleCloseModal() {
-    
     this.setState({ showModal: false, classSelection: undefined });
     this.updateUserDb(this.props.userID);
-    
   }
 
   handleChange(boxName, studentIndex, text) {
-    
     this.setState((prevState) => {
       const markAttendance = prevState.classAttendance.map((item) => {
         if (item.students === undefined) {
@@ -328,7 +317,6 @@ class Attendance extends React.Component {
         classAttendance: markAttendance,
       };
     });
-  
     console.log(this.state.classAttendance);
   }
 

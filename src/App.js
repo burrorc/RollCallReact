@@ -74,14 +74,7 @@ class App extends React.Component {
   
   //initiates auth listener and gets user data
   componentDidMount() {
-    // const user = auth().currentUser
-    // if(user != null){
-    //   this.setState({
-    //     userID: user.uid,
-    //     userName: user.email
-    //   })
-      console.log('cu '+auth().currentUser)
-    //}
+    this._isMounted = true
     this._isMounted = true
     auth().onAuthStateChanged((user) => {
       if (user) {
