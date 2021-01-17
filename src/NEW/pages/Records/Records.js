@@ -1,6 +1,6 @@
 import React from "react";
-import SimpleList from "./SimpleList";
-import {db} from "../firebase/firebase";
+import SimpleList from "../../components/SimpleList";
+import {db} from "../../../firebase/firebase";
 
 // let recordsArray;
 // recordsArray = []
@@ -248,7 +248,7 @@ class Records extends React.Component {
     return (
       <div className="container-fluid">
         <h1
-          className="text-center mt-3 textC"
+          className="text-center mt-5 mb-4 textC"
         >
           Records
         </h1>

@@ -1,11 +1,11 @@
 import React from "react";
 import ClassButtons from "./ClassButtons";
 import ReactModal from "react-modal";
-import SimpleList from "./SimpleList";
+import SimpleList from "../../components/SimpleList";
 import AttendanceModal from "./AttendanceModal";
 import ToggleButtons from "./ToggleButtons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {db} from "../firebase/firebase";
+import {db} from "../../../firebase/firebase";
 import {
   faTimesCircle,
   faCheckCircle,
@@ -417,7 +417,7 @@ class Attendance extends React.Component {
       <div className="container">
         <h1
           id="clickTitle"
-          className="text-center mt-3 textC"
+          className="text-center mt-5 mb-3 textC"
         >
           Attendance
         </h1>

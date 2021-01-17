@@ -5,26 +5,19 @@ import StudentsSection from "./StudentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Prompt } from "react-router";
-import { db } from "../../firebase/firebase";
+import { db } from "../../../firebase/firebase";
 import _ from "lodash";
 
-// let myClassList;
-
-// if (JSON.parse(localStorage.getItem("localClassList"))) {
-//   myClassList = JSON.parse(localStorage.getItem("localClassList"));
-// } else {
-//   myClassList = [];
-// }
-
-const studentsArray = [];
-
 class Dashboard extends React.Component {
+ // _isMounted=false;
   constructor(props) {
     super(props);
+    this._isMounted = false
     this.state = {
       showModal: false,
       myClasses: this.props.userClassList,
-      myStudents: studentsArray,
+      //myClasses: [],
+      myStudents: [],
       itemEditSelection: "",
       itemEditId: "",
       classSelection: undefined,
@@ -39,12 +32,19 @@ class Dashboard extends React.Component {
     this.editItem = this.editItem.bind(this);
     this.handleClassSelection = this.handleClassSelection.bind(this);
     this.addStudent = this.addStudent.bind(this);
-    this.updateLocalStorage = this.updateLocalStorage.bind(this);
     this.openEdits = this.openEdits.bind(this);
     this.closeEdits = this.closeEdits.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
     this.updateUserDb = this.updateUserDb.bind(this);
   }
+
+  // componentDidMount(){
+  //   this._isMounted = true;
+  // }
+
+  // componentWillUnmount() {
+  //   this._isMounted = false;
+  // }
 
   updateUserDb(docID) {
     db.collection("users")
@@ -72,14 +72,6 @@ class Dashboard extends React.Component {
   closeEdits() {
     this.setState({
       edits: false,
-    });
-  }
-  updateLocalStorage() {
-    const toLocalClassList = JSON.stringify(this.state.myClasses);
-    window.localStorage.setItem("localClassList", toLocalClassList);
-    this.closeEdits();
-    this.setState({
-      hasBeenEdited: true,
     });
   }
 
@@ -236,26 +228,9 @@ class Dashboard extends React.Component {
     });
   }
 
-  // componentDidMount(){
-  //   if(this.props.userID !== null){
-  //     db.collection('users').doc(this.props.userID).get().then(doc => {
-  //       if(doc.data().classList){
-  //         this.setState({
-  //           myClasses: doc.data().classList
-  //         })
-  //       }
-  //       })
-  //     }
-  // }
-  
-  // componentWillUnmount() {
-  //   if (this.state.hasBeenEdited) {
-  //     window.location.reload();
-  //   }
-  // }
-
   render() {
     console.log('countme')
+    console.log(this._isMounted)
     console.log(this.state.classSelection)
     let displayEditBtn;
     if (this.state.edits === false) {
@@ -498,23 +473,9 @@ class Dashboard extends React.Component {
           </ReactModal>
         </div>
         <div className="container-fluid">
-          <h1 id="clickTitle2" className="text-center mt-3 textC">
+          <h1 id="clickTitle2" className="text-center mt-5 mb-3 textC">
             Dashboard
           </h1>
-          {/* <div
-            className="text-center align-items-center saveChanges"
-            
-          >
-            <button className="pulsingButton">Save Changes</button>
-            <button
-              style={displayEditBtn}
-              id="saveChanges"
-              className="mybutton"
-              onClick={() => this.createUserDb(this.props.userName)}
-            >
-              Save Changes
-            </button>
-          </div> */}
           <div className="row justify-content-around">
             <ClassesSection
               refVal={(a) => (this._inputElement = a)}
@@ -536,27 +497,12 @@ class Dashboard extends React.Component {
             />
           </div>
           <div className="text-center" style={{ height: 30 }}>
-            {/* <button
-              style={displayEditBtn}
-              id="saveChanges"
-              className="mybutton my-3"
-              onClick={this.updateLocalStorage}
-            >
-              Save Changes
-            </button> */}
           </div>
         </div>
         <div
           className="text-center align-items-center saveChanges"
           style={displayEditBtn}
         >
-          {/* <button
-            className="pulsingButton"
-            id="saveChanges"
-            onClick={() => console.log(this.props.userID)}
-          >
-            Save Changes
-          </button> */}
           <button
             className="pulsingButton"
             id="saveChanges"

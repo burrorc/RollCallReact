@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "./ORIG/components/Navbar";
+import Footer from "./ORIG/components/Footer";
 
 function App() {
   return (

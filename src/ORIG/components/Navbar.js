@@ -12,15 +12,15 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import logo from "./rollCall.png";
 import Signup from "./Signup";
 import Login from "./Login";
-import { auth } from "../firebase/firebase";
-import { db } from "../firebase/firebase";
+import { auth } from "../../firebase/firebase";
+import { db } from "../../firebase/firebase";
 import {
   signup,
   login,
   signInWithGoogle,
   signInWithFacebook,
   signOut,
-} from "../firebase/auth";
+} from "../../firebase/auth";
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -238,6 +238,76 @@ class Navbar extends React.Component {
   }
 
   render() {
+    let displayLinks;
+    if (this.state.authenticated) {
+      displayLinks = (
+        <div className="navbar-nav ml-auto">
+          <Link
+            data-toggle="collapse"
+            data-target="#navbarNavAltMarkup"
+            to="/attendance"
+            className="loggedInLinks nav-item nav-link"
+          >
+            <span className="textI">ATTENDANCE</span>
+          </Link>
+          <Link
+            data-toggle="collapse"
+            data-target="#navbarNavAltMarkup"
+            to="/records"
+            className="loggedInLinks nav-item nav-link"
+          >
+            <span className="textI">RECORDS</span>
+          </Link>
+          <Link
+            data-toggle="collapse"
+            data-target="#navbarNavAltMarkup"
+            to="/dashboard"
+            className="loggedInLinks nav-item nav-link"
+          >
+            <span className="textI">DASHBOARD</span>
+          </Link>
+          <button
+            type="button"
+            className="btn btn-link loggedInLinks nav-item nav-link mybuttonAlt"
+            style={{
+              lineHeight: " 22px",
+              color: "#036937",
+              fontWeight: "bold",
+              width: 118,
+              textAlign: "center",
+            }}
+            onClick={() => this.signOut()}
+          >
+            <i className="fa fa-sign-out"></i>
+            <span> SIGN OUT</span>
+          </button>
+        </div>
+      );
+    } else {
+      displayLinks = (
+        <div className="navbar-nav ml-auto">
+          <button
+            type="button"
+            className="btn btn-link nav-item nav-link navbar-right loggedOutLinks shadow-none"
+            data-toggle="modal"
+            data-target="#modal-signup"
+            style={{color: "white"}}
+          >
+            <i className="fa fa-user-plus" aria-hidden="true"></i> Sign Up
+          </button>
+          <button
+            type="button"
+            className="btn btn-link nav-item nav-link navbar-right loggedOutLinks shadow-none"
+            data-toggle="modal"
+            data-target="#modal-login"
+            style={{color: "white"}}
+          >
+            <i className="fa fa-user-circle-o" aria-hidden="true"></i> Login
+          </button>
+        </div>
+      );
+    }
+   
     return (
       <Router>
         <div>

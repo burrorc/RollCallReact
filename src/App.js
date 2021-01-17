@@ -1,16 +1,15 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import Home from "./totry/Home";
-import Attendance from "./totry/Attendance";
-import Dashboard from "./totry/Dashboard";
-import Records from "./totry/Records";
-import PrivateRoute from "./totry/PrivateRoute";
-import PublicRoute from "./totry/PublicRoute";
-import Header from "./totry/Header";
-//import Main from "./totry/Main";
-import Footer from "./totry/Footer";
-import Signup from "./totry/Signup";
-import Login from "./totry/Login";
+import Home from "./NEW/pages/Home/Home";
+import Attendance from "./NEW/pages/Attendance/Attendance";
+import Dashboard from "./NEW/pages/Dashboard/Dashboard";
+import Records from "./NEW/pages/Records/Records";
+import PrivateRoute from "./NEW/components/PrivateRoute";
+import PublicRoute from "./NEW/components/PublicRoute";
+import Header from "./NEW/components/Header";
+import Footer from "./NEW/components/Footer";
+import Signup from "./NEW/components/Signup";
+import Login from "./NEW/components/Login";
 import { auth } from "./firebase/firebase";
 import { db } from "./firebase/firebase";
 import {
@@ -35,7 +34,6 @@ class App extends React.Component {
       email: "",
       password: "",
       passwordConfirm: "",
-      // classSelection: undefined,
     };
     this.changeLogIn = this.changeLogIn.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -46,8 +44,9 @@ class App extends React.Component {
     this.facebookLogin = this.facebookLogin.bind(this);
     this.signOut = this.signOut.bind(this);
     this.checkUserDb = this.checkUserDb.bind(this);
-    //this.handleClassSelection = this.handleClassSelection.bind(this);
   }
+
+
 
   handleClassSelection(subject) {
     this.setState({
@@ -72,18 +71,25 @@ class App extends React.Component {
         }
       });
   }
-
+  
   //initiates auth listener and gets user data
   componentDidMount() {
+    // const user = auth().currentUser
+    // if(user != null){
+    //   this.setState({
+    //     userID: user.uid,
+    //     userName: user.email
+    //   })
+      console.log('cu '+auth().currentUser)
+    //}
     this._isMounted = true
-    // this.setState({
-    //   userID: localStorage.getItem("rollCallUserID")
-    // })
     auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
           isLoggedIn: true,
           loading: false,
+          userID: user.uid,
+          userName: user.email,
         });
         this.checkUserDb(this.state.userID);
       } else {
@@ -180,7 +186,6 @@ class App extends React.Component {
           userID: cred.user.uid,
           showSignup: "none",
         });
-        //localStorage.setItem('rollCallUserID', this.state.userID)
       })
       .then(() => document.getElementById("closeSignup").click())
       .then(() => document.getElementById("closeLogin").click())
@@ -229,8 +234,7 @@ class App extends React.Component {
           userClassList: [],
           userAttendanceRecord: [],
         })
-      //localStorage.removeItem('rollCallUserID'),
-    );
+    )
   }
 
   changeLogIn() {
@@ -241,65 +245,10 @@ class App extends React.Component {
     });
   }
   render() {
-    let home;
-    if(this.state.isLoggedIn){
-      home=(
-        <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            />
-      )
-    }else{
-      home=(
-        <Home />
-      )
-    }
-    let attendance;
-    if(this.state.isLoggedIn){
-      attendance=(
-        <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            />
-      )
-    }else{
-      attendance=(
-        <Home />
-      )
-    }
-    let records;
-    if(this.state.isLoggedIn){
-      records=(
-        <Records
-              userID={this.state.userID}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            />
-      )
-    }else{
-      records=(
-        <Home />
-      )
-    }
-    let dashboard;
-    if(this.state.isLoggedIn){
-      dashboard=(
-        <Dashboard
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-            />
-      )
-    }else{
-      dashboard=(
-        <Home />
-      )
-    }
+    //console.log('cu '+auth().currentUser.uid)
     return (
       <div>
         <Signup
-          // showSignup={this.state.showSignup}
-          // switchModal={this.switchModal}
           handleSignUp={this.handleSignUp}
           handleChange={this.handleChange}
           email={this.state.email}
@@ -311,8 +260,6 @@ class App extends React.Component {
           resetForm={this.resetForm}
         />
         <Login
-          // showLogin={this.state.showLogin}
-          // switchModal={this.switchModal}
           handleLogin={this.handleLogin}
           handleChange={this.handleChange}
           email={this.state.email}
@@ -329,43 +276,13 @@ class App extends React.Component {
           changeLogIn={this.changeLogIn}
         />
         <Switch>
-          {/* <PublicRoute
+          <PublicRoute
             component={Home}
             isLoggedIn={this.state.isLoggedIn}
             path="/"
             exact
-          /> */}
-          <Route path="/" exact>
-            {home}
-            {/* <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            /> */}
-          </Route>
-          <Route path="/attendance">
-            {attendance}
-            {/* <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            /> */}
-          </Route>
-          <Route path="/records">
-            {records}
-            {/* <Records
-              userID={this.state.userID}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            /> */}
-          </Route>
-          <Route path="/dashboard">
-            {dashboard}
-            {/* <Dashboard
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-            /> */}
-          </Route>
-          {/* <PrivateRoute
+          />
+          <PrivateRoute
             component={Attendance}
             isLoggedIn={this.state.isLoggedIn}
             userID={this.state.userID}
@@ -390,7 +307,29 @@ class App extends React.Component {
             classSelection={this.state.classSelection}
             path="/dashboard"
             exact
-          /> */}
+          />
+          {/* <Route path="/" exact>
+            <Home/>
+          </Route>
+          <Route path="/attendance">
+            <Attendance
+              userID={this.state.userID}
+              userClassList={this.state.userClassList}
+              userAttendanceRecord={this.state.userAttendanceRecord}
+            />
+          </Route>
+          <Route path="/records">
+            <Records
+              userID={this.state.userID}
+              userAttendanceRecord={this.state.userAttendanceRecord}
+            />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard
+              userID={this.state.userID}
+              userClassList={this.state.userClassList}
+            />
+          </Route> */}
         </Switch>
         <Footer />
       </div>
