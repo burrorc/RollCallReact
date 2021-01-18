@@ -15,9 +15,7 @@ class Dashboard extends React.Component {
     this._isMounted = false
     this.state = {
       showModal: false,
-      myClasses: this.props.userClassList,
-      //myClasses: [],
-      myStudents: [],
+      classList: this.props.userClassList,
       itemEditSelection: "",
       itemEditId: "",
       classSelection: undefined,
@@ -50,7 +48,7 @@ class Dashboard extends React.Component {
     db.collection("users")
       .doc(docID)
       .set({
-        classList: this.state.myClasses,
+        classList: this.state.classList,
       }, { merge: true })
       .then(() => {
         if(this._isMounted){
@@ -79,22 +77,22 @@ class Dashboard extends React.Component {
 
   editItem() {
     if (this.state.itemEditSelection === "classes") {
-      let myClasses = [...this.state.myClasses];
-      myClasses[this.state.itemEditId].subject = document.getElementById(
+      let classList = [...this.state.classList];
+      classList[this.state.itemEditId].subject = document.getElementById(
         "editThis"
       ).value;
-      this.setState({ myClasses });
+      this.setState({ classList });
     } else if (this.state.itemEditSelection === "students") {
       let editFirst = _.upperFirst(document.getElementById("editFirst").value);
       let editLast = _.upperFirst(document.getElementById("editLast").value);
-      let newArray = [...this.state.myClasses];
+      let newArray = [...this.state.classList];
       newArray[this.state.classSelection].students[this.state.itemEditId] = {
         ...newArray[this.state.classSelection].students[this.state.itemEditId],
         firstName: editFirst,
         lastName: editLast,
       };
       this.setState({
-        myClasses: newArray,
+        classList: newArray,
       });
     }
     this.openEdits();
@@ -118,15 +116,15 @@ class Dashboard extends React.Component {
   }
 
   removeClass(id) {
-    const newClassList = this.state.myClasses.filter((subject, index) => {
+    const newClassList = this.state.classList.filter((subject, index) => {
       if (index !== id) {
         return subject;
       } else {
         return false;
       }
     });
-    this.setState({ myClasses: newClassList });
-    if (this.state.myClasses.length === 0) {
+    this.setState({ classList: newClassList });
+    if (this.state.classList.length === 0) {
       this.setState({ itemEditSelection: "" });
     }
     this.openEdits();
@@ -134,7 +132,7 @@ class Dashboard extends React.Component {
 
   removeStudent(id) {
     this.setState((prevState) => {
-      const updatedClass = prevState.myClasses.map((subject, index) => {
+      const updatedClass = prevState.classList.map((subject, index) => {
         if (index !== this.state.classSelection) {
           return subject;
         }
@@ -151,7 +149,7 @@ class Dashboard extends React.Component {
         };
       });
       return {
-        myClasses: updatedClass,
+        classList: updatedClass,
       };
     });
     this.openEdits();
@@ -166,7 +164,7 @@ class Dashboard extends React.Component {
       document.getElementById("addStudentLastName").value
     );
     if (newStudentFirst !== "" && newStudentLast !== "") {
-      let newArray = [...this.state.myClasses];
+      let newArray = [...this.state.classList];
       let studentIndex = newArray[this.state.classSelection].students.length;
       newArray[this.state.classSelection].students[studentIndex] = {
         ...newArray[this.state.classSelection].students[studentIndex],
@@ -182,11 +180,10 @@ class Dashboard extends React.Component {
         ["lastName"],
         ["asc"]
       );
-      console.log(orderedArray);
       let reorderedArray = [...newArray];
       reorderedArray[this.state.classSelection].students = orderedArray;
       this.setState({
-        myClasses: reorderedArray,
+        classList: reorderedArray,
       });
       document.getElementById("addStudentFirstName").value = "";
       document.getElementById("addStudentLastName").value = "";
@@ -203,10 +200,10 @@ class Dashboard extends React.Component {
     let newClass = document.getElementById("addClassInput").value;
     if (newClass !== "") {
       this.setState({
-        myClasses: [...this.state.myClasses, { subject: newClass }],
+        classList: [...this.state.classList, { subject: newClass }],
       });
       this.setState((prevState) => {
-        const addStudentsObject = prevState.myClasses.map((subject) => {
+        const addStudentsObject = prevState.classList.map((subject) => {
           if (subject.students) {
             return subject;
           } else {
@@ -215,7 +212,7 @@ class Dashboard extends React.Component {
           }
         });
         return {
-          myClasses: addStudentsObject,
+          classList: addStudentsObject,
         };
       });
       document.getElementById("addClassInput").value = "";
@@ -234,9 +231,6 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    console.log('countme')
-    console.log(this._isMounted)
-    console.log(this.state.classSelection)
     let displayEditBtn;
     if (this.state.edits === false) {
       displayEditBtn = { display: "none" };
@@ -247,7 +241,7 @@ class Dashboard extends React.Component {
     let addStudentInputs;
     if (
       this.state.classSelection === undefined ||
-      this.state.myClasses.length === 0
+      this.state.classList.length === 0
     ) {
       addStudentInputs = <span></span>;
     } else {
@@ -296,7 +290,7 @@ class Dashboard extends React.Component {
     }
 
     let displayStudents;
-    if (this.state.myClasses.length === 0) {
+    if (this.state.classList.length === 0) {
       displayStudents = (
         <li
           style={{
@@ -311,7 +305,7 @@ class Dashboard extends React.Component {
     } else if (this.state.classSelection === undefined) {
       displayStudents = <span></span>;
     } else if (
-      this.state.myClasses[this.state.classSelection].students.length === 0
+      this.state.classList[this.state.classSelection].students.length === 0
     ) {
       displayStudents = (
         <li
@@ -325,7 +319,7 @@ class Dashboard extends React.Component {
         </li>
       );
     } else {
-      displayStudents = this.state.myClasses[
+      displayStudents = this.state.classList[
         this.state.classSelection
       ].students.map((student, index) => (
         <li id={"sl" + index} key={"sl" + index} className="textC">
@@ -353,7 +347,7 @@ class Dashboard extends React.Component {
     }
 
     let displayClasses;
-    if (this.state.myClasses.length === 0) {
+    if (this.state.classList.length === 0) {
       displayClasses = (
         <li
           style={{
@@ -366,7 +360,7 @@ class Dashboard extends React.Component {
         </li>
       );
     } else {
-      displayClasses = this.state.myClasses.map((subject, index) => (
+      displayClasses = this.state.classList.map((subject, index) => (
         <li id={"cl" + index} key={"cl" + index} className="textC">
           <div className="d-flex">
             <div className="col-8">{subject.subject}</div>
@@ -392,17 +386,17 @@ class Dashboard extends React.Component {
     let editValue;
     if (
       this.state.itemEditSelection === "classes" &&
-      this.state.myClasses[this.state.itemEditId]
+      this.state.classList[this.state.itemEditId]
     ) {
-      editValue = this.state.myClasses[this.state.itemEditId].subject;
+      editValue = this.state.classList[this.state.itemEditId].subject;
     } else if (
-      this.state.myClasses[this.state.classSelection] !== undefined &&
+      this.state.classList[this.state.classSelection] !== undefined &&
       this.state.itemEditSelection === "students" &&
-      this.state.myClasses[this.state.classSelection].students[
+      this.state.classList[this.state.classSelection].students[
         this.state.itemEditId
       ]
     ) {
-      editValue = this.state.myClasses[this.state.classSelection].students[
+      editValue = this.state.classList[this.state.classSelection].students[
         this.state.itemEditId
       ];
     } else {
@@ -439,10 +433,10 @@ class Dashboard extends React.Component {
     }
 
     let classList;
-    if (this.state.myClasses.length === 0) {
+    if (this.state.classList.length === 0) {
       classList = <option></option>;
     } else {
-      classList = this.state.myClasses.map((subject, index) => (
+      classList = this.state.classList.map((subject, index) => (
         <option key={"cs" + index} id={"cs" + index} value={index}>
           {subject.subject}
         </option>

@@ -13,22 +13,6 @@ import {
   faVideoSlash,
 } from "@fortawesome/free-solid-svg-icons";
 
-// let attendanceRecord;
-// let localExists = localStorage.getItem("localAttendance");
-// if (localExists) {
-//   attendanceRecord = JSON.parse(localExists);
-// } else {
-//   attendanceRecord = [];
-// }
-
-
-// let myClassAttendance;
-// if (JSON.parse(localStorage.getItem("localClassList"))) {
-//   myClassAttendance = JSON.parse(localStorage.getItem("localClassList"));
-// } else {
-//   myClassAttendance = [];
-// }
-
 class Attendance extends React.Component {
   _isMounted = false
   constructor(props) {
@@ -46,7 +30,6 @@ class Attendance extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.cancelSave = this.cancelSave.bind(this);
-    //this.updateLocalStorage = this.updateLocalStorage.bind(this);
     this.updateUserDb = this.updateUserDb.bind(this);
   }
  
@@ -175,22 +158,7 @@ class Attendance extends React.Component {
       
     }
   }
-  // updateUserDb(docID) {
-  //   db.collection("users")
-  //     .doc(docID)
-  //     .set({
-  //       attendance: this.state.myAttendance,
-  //     }, { merge: true })
-  //     .then(() => {
-  //       this.setState({
-  //         edits: false,
-  //         hasBeenEdited: true,
-  //       });
-  //     })
-  //     .catch(function (error) {
-  //       console.error("Error adding document: ", error);
-  //     });
-  // }
+  
   updateUserDb(docID) {
     const newDate = new Date().toDateString();
     let addIndex;
@@ -244,42 +212,6 @@ class Attendance extends React.Component {
       });
   }
 
-  // updateLocalStorage() {
-  //   const newDate = new Date().toDateString();
-  //   let addIndex;
-  //   let attendanceRecord2 = this.state.myAttendance
-  //   const dateExists = attendanceRecord2.find(function (record, index) {
-  //     if (record.date === newDate) {
-  //       addIndex = index;
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   });
-  //   if (dateExists) {
-  //     if (attendanceRecord2[addIndex].attendance) {
-  //       attendanceRecord2[addIndex].attendance.push(
-  //         this.state.classAttendance[this.state.classSelection]
-  //       );
-  //     } else {
-  //       attendanceRecord2[addIndex].attendance = [];
-  //       attendanceRecord2[addIndex].attendance.push(
-  //         this.state.classAttendance[this.state.classSelection]
-  //       );
-  //     }
-  //     this.setState({ myAttendance: attendanceRecord2 });
-  //   } else {
-  //     attendanceRecord2.push({ date: newDate });
-  //     attendanceRecord2[attendanceRecord2.length - 1].attendance = [];
-  //     attendanceRecord2[attendanceRecord2.length - 1].attendance.push(
-  //       this.state.classAttendance[this.state.classSelection]
-  //     );
-  //     this.setState({ myAttendance: attendanceRecord2 });
-  //   }
-  //   let toLocalAttendance = JSON.stringify(this.state.myAttendance);
-  //   localStorage.setItem("localAttendance", toLocalAttendance);
-  // }
-
   handleCloseModal() {
     
     this.setState({ showModal: false, classSelection: undefined });
@@ -328,14 +260,9 @@ class Attendance extends React.Component {
         classAttendance: markAttendance,
       };
     });
-  
-    console.log(this.state.classAttendance);
   }
 
   render() {
-    console.log('mounted');
-    console.log(this.state.classAttendance);
-    console.log(this.state.attendanceRecord);
 
     let saveAttendance;
     let ToggleButtonP;

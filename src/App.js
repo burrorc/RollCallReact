@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import Home from "./NEW/pages/Home/Home";
 import Attendance from "./NEW/pages/Attendance/Attendance";
 import Dashboard from "./NEW/pages/Dashboard/Dashboard";
@@ -45,8 +45,6 @@ class App extends React.Component {
     this.signOut = this.signOut.bind(this);
     this.checkUserDb = this.checkUserDb.bind(this);
   }
-
-
 
   handleClassSelection(subject) {
     this.setState({
@@ -201,9 +199,6 @@ class App extends React.Component {
             { merge: true }
           );
         }
-        db.collection("users").doc(cred.user.uid).set({
-          userName: cred.user.email,
-        });
         this.setState({
           userName: cred.user.email,
           userID: cred.user.uid,
@@ -238,7 +233,6 @@ class App extends React.Component {
     });
   }
   render() {
-    //console.log('cu '+auth().currentUser.uid)
     return (
       <div>
         <Signup
@@ -301,28 +295,7 @@ class App extends React.Component {
             path="/dashboard"
             exact
           />
-          {/* <Route path="/" exact>
-            <Home/>
-          </Route>
-          <Route path="/attendance">
-            <Attendance
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            />
-          </Route>
-          <Route path="/records">
-            <Records
-              userID={this.state.userID}
-              userAttendanceRecord={this.state.userAttendanceRecord}
-            />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard
-              userID={this.state.userID}
-              userClassList={this.state.userClassList}
-            />
-          </Route> */}
+        
         </Switch>
         <Footer />
       </div>
