@@ -84,7 +84,6 @@ if(props.isLoggedIn){
                 ROLL CALL
               </span>
             </Link>
-            <button onClick={()=>props.changeLogIn()}>Login/Logout</button>
             <button
               className="navbar-toggler"
               type="button"

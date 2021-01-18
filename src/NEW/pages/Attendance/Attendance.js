@@ -426,7 +426,7 @@ class Attendance extends React.Component {
     }
 
     return (
-      <div className="container">
+      <div className="container" style={{marginBottom:50}}>
         <h1
           id="clickTitle"
           className="text-center mt-5 mb-3 textC"
