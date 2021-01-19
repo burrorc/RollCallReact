@@ -19,10 +19,8 @@ class Dashboard extends React.Component {
       itemEditSelection: "",
       itemEditId: "",
       classSelection: undefined,
-      previousSelection: "0",
       edits: false,
       hasBeenEdited: false,
-      sample: props.sample,
     };
     this.addClass = this.addClass.bind(this);
     this.removeClass = this.removeClass.bind(this);
@@ -290,7 +288,9 @@ class Dashboard extends React.Component {
     }
 
     let displayStudents;
-    if (this.state.classList.length === 0) {
+    if (this.state.classSelection === undefined) {
+      displayStudents = <span></span>;
+    } else if (this.state.classList.length === 0) {
       displayStudents = (
         <li
           style={{
@@ -302,8 +302,6 @@ class Dashboard extends React.Component {
           You have no classes listed
         </li>
       );
-    } else if (this.state.classSelection === undefined) {
-      displayStudents = <span></span>;
     } else if (
       this.state.classList[this.state.classSelection].students.length === 0
     ) {
@@ -347,7 +345,9 @@ class Dashboard extends React.Component {
     }
 
     let displayClasses;
-    if (this.state.classList.length === 0) {
+    if(this.state.classList===undefined){
+      displayClasses = <span></span>
+    }else if (this.state.classList.length === 0) {
       displayClasses = (
         <li
           style={{
@@ -384,7 +384,10 @@ class Dashboard extends React.Component {
     }
 
     let editValue;
-    if (
+    if(this.state.classList === undefined){
+      editValue = "";
+    }
+    else if (
       this.state.itemEditSelection === "classes" &&
       this.state.classList[this.state.itemEditId]
     ) {
@@ -433,7 +436,10 @@ class Dashboard extends React.Component {
     }
 
     let classList;
-    if (this.state.classList.length === 0) {
+    if(this.state.classList===undefined){
+      classList = <option></option>;
+    }
+    else if (this.state.classList.length === 0) {
       classList = <option></option>;
     } else {
       classList = this.state.classList.map((subject, index) => (
@@ -484,7 +490,6 @@ class Dashboard extends React.Component {
             />
             <StudentsSection
               addStudentInputs={addStudentInputs}
-              previousSelection={this.state.previousSelection}
               refVal={(a) => (this._inputElement = a)}
               displayStudents={displayStudents}
               addStudent={this.addStudent}
