@@ -3,6 +3,7 @@ import SimpleList from "../../components/SimpleList";
 import {db} from "../../../firebase/firebase";
 
 class Records extends React.Component {
+  _isMounted=false;
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +19,13 @@ class Records extends React.Component {
     this.handleDateSelection = this.handleDateSelection.bind(this);
     this.handleClassSelection = this.handleClassSelection.bind(this);
   }
- 
+  componentDidMount(){
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
   saveArray(docID) {
     db.collection("users")
       .doc(docID)
@@ -26,9 +33,11 @@ class Records extends React.Component {
         attendance: this.state.attendanceRecord,
       }, { merge: true })
       .then(() => {
+        if(this._isMounted){
         this.setState({
           edit: false,
         });
+      }
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);

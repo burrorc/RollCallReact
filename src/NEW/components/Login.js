@@ -1,6 +1,6 @@
 import React from "react";
 import google from "./googleSignin.svg";
-import facebook from "./facebookSignin.png";
+//import facebook from "./facebookSignin.png";
 function Login(props) {
   return (
     <div
@@ -114,7 +114,7 @@ function Login(props) {
                   Login With Google
                 </span>
               </button>
-              <button
+              {/* <button
                 style={{
                   width: 300,
                   paddingLeft: 3,
@@ -132,7 +132,7 @@ function Login(props) {
                 <span style={{ lineHeight: "46px", verticalAlign: "bottom" }}>
                   Login With Facebook
                 </span>
-              </button>
+              </button> */}
             </div>
           </form>
           <div className="text-center">

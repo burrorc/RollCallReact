@@ -18,10 +18,10 @@ export function googleLogin() {
   return auth().signInWithPopup(provider);
 }
 
-export function signInWithFacebook(){
-  const provider = new auth.FacebookAuthProvider();
-  return auth().signInWithRedirect(provider);
-}
+// export function signInWithFacebook(){
+//   const provider = new auth.FacebookAuthProvider();
+//   return auth().signInWithRedirect(provider);
+// }
 
 export function signOut(){
   return auth().signOut();

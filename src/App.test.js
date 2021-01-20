@@ -49,11 +49,10 @@ describe("rendering components", () => {
   });
 });
 
-describe("checking state", () => {
+describe("checking initial state", () => {
   //const componentInstance = wrapper.instance();
   it("begins logged out", () => {
     const wrapper = shallow(<App />);
-    const instance = wrapper.instance();
     expect(wrapper.state('isLoggedIn')).toBe(false);
   });
   it("registers login change", () => {
@@ -61,7 +60,6 @@ describe("checking state", () => {
     const instance = wrapper.instance();
     instance.changeLogIn();
     expect(wrapper.state('isLoggedIn')).toBe(true);
-
   });
   
 });

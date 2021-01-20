@@ -40,16 +40,3 @@ describe("checking state", () => {
   });
 });
 
-describe("adding classes and students", () => {
-  //const componentInstance = wrapper.instance();
-  it("adds class", () => {
-    //mount(<ClassesSection />);
-    window.alert = jest.fn()
-    const wrapper = mount(<ClassesSection />);
-    const elem = wrapper.find('form');
-   expect(elem.length).toBe(1)
-    //elem.simulate('submit')
-    //expect(window.alert).toHaveBeenCalledWith("Please enter a class name")
-  });
-  
-});

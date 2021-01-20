@@ -16,7 +16,7 @@ import {
   signup,
   login,
   signInWithGoogle,
-  signInWithFacebook,
+  //signInWithFacebook,
   signOut,
 } from "./firebase/auth";
 
@@ -41,7 +41,7 @@ class App extends React.Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.googleLogin = this.googleLogin.bind(this);
-    this.facebookLogin = this.facebookLogin.bind(this);
+    //this.facebookLogin = this.facebookLogin.bind(this);
     this.signOut = this.signOut.bind(this);
     this.checkUserDb = this.checkUserDb.bind(this);
   }
@@ -188,29 +188,29 @@ class App extends React.Component {
   }
 
   //facebook for login with check for new/old user
-  facebookLogin(newUser) {
-    signInWithFacebook()
-      .then((cred) => {
-        if (newUser) {
-          db.collection("users").doc(cred.user.uid).set(
-            {
-              userName: cred.user.email,
-            },
-            { merge: true }
-          );
-        }
-        this.setState({
-          userName: cred.user.email,
-          userID: cred.user.uid,
-          showSignup: "none",
-        });
-      })
-      .then(() => document.getElementById("closeSignup").click())
-      .then(() => document.getElementById("closeLogin").click())
-      .catch((error) => {
-        this.setState({ error: error.message });
-      });
-  }
+  // facebookLogin(newUser) {
+  //   signInWithFacebook()
+  //     .then((cred) => {
+  //       if (newUser) {
+  //         db.collection("users").doc(cred.user.uid).set(
+  //           {
+  //             userName: cred.user.email,
+  //           },
+  //           { merge: true }
+  //         );
+  //       }
+  //       this.setState({
+  //         userName: cred.user.email,
+  //         userID: cred.user.uid,
+  //         showSignup: "none",
+  //       });
+  //     })
+  //     .then(() => document.getElementById("closeSignup").click())
+  //     .then(() => document.getElementById("closeLogin").click())
+  //     .catch((error) => {
+  //       this.setState({ error: error.message });
+  //     });
+  // }
 
   //resets user cred in state to null
   signOut() {
