@@ -2,7 +2,7 @@ import React from "react";
 
 function StudentsSection(props) {
   return (
-    <div className="col-11 col-md-7 dashboard mt-3">
+    <div className="col-11 col-md-7 dashboard mt-3 px-0">
       <h3 className="text-center textC" style={{marginTop: 10}}>Students</h3>
 
       <div className="d-flex justify-content-center">
@@ -26,7 +26,7 @@ function StudentsSection(props) {
       {props.addStudentInputs}
 
       <div className="d-flex justify-content-center mt-2">
-        <ol style={{ width: "75%" }}>{props.displayStudents}</ol>
+        <ol className='studentList pl-3'>{props.displayStudents}</ol>
       </div>
     </div>
   );

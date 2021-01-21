@@ -321,8 +321,8 @@ class Dashboard extends React.Component {
         this.state.classSelection
       ].students.map((student, index) => (
         <li id={"sl" + index} key={"sl" + index} className="textC">
-          <div className="d-flex">
-            <div className="col-10 col-md-9">
+          <div className="d-flex justify-content-between">
+            <div className="col-8">
               {student.firstName + "  " + student.lastName}
             </div>
             <div className="col edits">
@@ -362,7 +362,7 @@ class Dashboard extends React.Component {
     } else {
       displayClasses = this.state.classList.map((subject, index) => (
         <li id={"cl" + index} key={"cl" + index} className="textC">
-          <div className="d-flex">
+          <div className="d-flex justify-content-between">
             <div className="col-8">{subject.subject}</div>
             <div className="col edits">
               <button className="editRemove">

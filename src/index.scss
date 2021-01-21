@@ -218,8 +218,9 @@ input {
   outline: none;
 }
 .edits {
-  -ms-flex: 0 0 90px;
-  flex: 0 0 90px;
+  -ms-flex: 0 0 57px;
+  flex: 0 0 57px;
+  padding:0px;
 }
 
 .addStudent {
@@ -342,4 +343,24 @@ input {
 
 .loggedOutLinks:focus{
   outline: none;
+}
+
+.classList{
+  width: 280px;
+}
+
+.studentList{
+  width: 90%;
+}
+
+@media (min-width: 525px) {
+  .studentList {
+    width: 435px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .studentList {
+    width: 595px;
+  }
 }
