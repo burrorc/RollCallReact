@@ -180,8 +180,6 @@ class App extends React.Component {
       })
       .then(() => document.getElementById("closeSignup").click())
       .then(() => document.getElementById("closeLogin").click())
-      .then(() => console.log(this.state.userID))
-      .then(() => console.log(this.state.userName))
       .catch((error) => {
         this.setState({ error: error.message });
       });
