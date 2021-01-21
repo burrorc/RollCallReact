@@ -4,12 +4,8 @@ import Dashboard from "./Dashboard";
 import ClassesSection from "./ClassesSection";
 import StudentsSection from "./StudentsSection";
 
-const mockState = {
-  classList: [],
-};
 
 describe("rendering components", () => {
-  // shallow(<Dashboard userClassList={[]} />).setState({classLIst: mockState.classList})
   it("renders Dashboard component without crashing", () => {
     shallow(<Dashboard />);
   });
@@ -22,7 +18,6 @@ describe("rendering components", () => {
 });
 
 describe("checking state", () => {
-  //const componentInstance = wrapper.instance();
   it("starts blank", () => {
     const wrapper = shallow(<Dashboard />);
     const instance = wrapper.instance();
@@ -31,12 +26,31 @@ describe("checking state", () => {
     expect(instance.state.itemEditId).toBe("");
     expect(instance.state.classSelection).toBe(undefined);
   });
-  it("edits closed", () => {
-    const wrapper = shallow(<Dashboard />);
-    const instance = wrapper.instance();
-    expect(instance.state.showModal).toBe(false);
-    expect(instance.state.edits).toBe(false);
-    expect(instance.state.hasBeenEdited).toBe(false);
-  });
+  
 });
 
+describe("changing edit state", () => {
+  const wrapper = shallow(<Dashboard />);
+  const instance = wrapper.instance();
+  
+  it("opens edits", () => {
+    instance.openEdits();
+    expect(instance.state.edits).toBe(true);
+  });
+  it("closes edits", () => {
+    instance.closeEdits();
+    expect(instance.state.edits).toBe(false);
+  });
+  
+});
+
+describe("closes modal for edits", () => {
+  const wrapper = shallow(<Dashboard />);
+  const instance = wrapper.instance();
+  instance.state.showModal = true
+  it("closes modal", () => {
+    instance.cancelEdit();
+    expect(instance.state.showModal).toBe(false);
+  });
+  
+});
