@@ -479,7 +479,7 @@ class Dashboard extends React.Component {
           </ReactModal>
         </div>
         <div className="container-fluid">
-          <h1 id="clickTitle2" className="text-center mt-5 mb-3 textC">
+          <h1 id="clickTitle2" className="text-center mt-4 mb-0 mt-md-5 mb-md-3 textC">
             Dashboard
           </h1>
           <div className="row justify-content-around">

@@ -356,7 +356,7 @@ class Attendance extends React.Component {
       <div className="container" style={{marginBottom:50}}>
         <h1
           id="clickTitle"
-          className="text-center mt-5 mb-3 textC"
+          className="text-center mt-4 mb-0 mt-md-5 mb-md-3 textC"
         >
           Attendance
         </h1>

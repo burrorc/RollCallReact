@@ -214,7 +214,7 @@ class Records extends React.Component {
     return (
       <div className="container-fluid">
         <h1
-          className="text-center mt-5 mb-4 textC"
+          className="text-center mt-4 mb-0 mt-md-5 mb-md-4 textC"
         >
           Records
         </h1>

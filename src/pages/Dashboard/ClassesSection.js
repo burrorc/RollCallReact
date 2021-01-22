@@ -2,7 +2,7 @@ import React from "react";
 
 function ClassesSection(props) {
   return (
-    <div className="col-11 col-md-4 mt-3 dashboard px-0">
+    <div className="col-11 col-md-4 mt-1 mt-md-3 dashboard px-0">
       <h3 className="text-center textC" style={{marginTop: 10}}>Classes</h3>
       <div className="container-fluid d-flex justify-content-center">
         <form 

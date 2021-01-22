@@ -5,7 +5,7 @@ function ClassButtons(props) {
     <div className="align-middle">
       <button
         id={"ca" + props.classIndex}
-        className="my-3 mybutton"
+        className="my-1 my-md-3 mybutton"
         onClick={props.handleOpenModal}
         style={{ height: "100px", width:"400px" }}
       >
