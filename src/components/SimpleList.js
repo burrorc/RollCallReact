@@ -78,7 +78,7 @@ function SimpleList(props) {
           </div>
         </div>
         <div className="col col-md-5 pl-1 pt-2">
-          {props.student.lastName + ", " + props.student.firstName}
+          {props.student.firstName + " " + props.student.lastName}
         </div>
         <div className="col-12 col-md-5 pl-1 my-1">
           <input

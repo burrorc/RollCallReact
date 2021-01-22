@@ -5,7 +5,7 @@ import SimpleList from "../../components/SimpleList";
 import AttendanceModal from "./AttendanceModal";
 import ToggleButtons from "./ToggleButtons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {db} from "../../../firebase/firebase";
+import {db} from "../../firebase/firebase";
 import {
   faTimesCircle,
   faCheckCircle,

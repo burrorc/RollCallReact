@@ -1,6 +1,6 @@
 import React from "react";
 import SimpleList from "../../components/SimpleList";
-import {db} from "../../../firebase/firebase";
+import {db} from "../../firebase/firebase";
 
 class Records extends React.Component {
   _isMounted=false;

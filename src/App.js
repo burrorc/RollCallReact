@@ -1,15 +1,15 @@
 import React from "react";
 import { Switch } from "react-router-dom";
-import Home from "./NEW/pages/Home/Home";
-import Attendance from "./NEW/pages/Attendance/Attendance";
-import Dashboard from "./NEW/pages/Dashboard/Dashboard";
-import Records from "./NEW/pages/Records/Records";
-import PrivateRoute from "./NEW/components/PrivateRoute";
-import PublicRoute from "./NEW/components/PublicRoute";
-import Header from "./NEW/components/Header";
-import Footer from "./NEW/components/Footer";
-import Signup from "./NEW/components/Signup";
-import Login from "./NEW/components/Login";
+import Home from "./pages/Home/Home";
+import Attendance from "./pages/Attendance/Attendance";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Records from "./pages/Records/Records";
+import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
 import { auth } from "./firebase/firebase";
 import { db } from "./firebase/firebase";
 import {

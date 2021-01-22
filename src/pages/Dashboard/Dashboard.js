@@ -5,7 +5,7 @@ import StudentsSection from "./StudentsSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Prompt } from "react-router";
-import { db } from "../../../firebase/firebase";
+import { db } from "../../firebase/firebase";
 import _ from "lodash";
 
 class Dashboard extends React.Component {
@@ -175,7 +175,7 @@ class Dashboard extends React.Component {
       };
       let orderedArray = _.orderBy(
         newArray[this.state.classSelection].students,
-        ["lastName"],
+        ["firstName"],
         ["asc"]
       );
       let reorderedArray = [...newArray];

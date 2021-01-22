@@ -1,13 +1,13 @@
 import firebase from 'firebase';
-const firebaseConfig = {
-    apiKey: "AIzaSyBBeLhkUNpc7RsxExn_ODHfSRZ67JnWfJ0",
-    authDomain: "play-bcd04.firebaseapp.com",
-    projectId: "play-bcd04",
-    storageBucket: "play-bcd04.appspot.com",
-    messagingSenderId: "851275633519",
-    appId: "1:851275633519:web:364ebf2fa7b9ef96f68e9a"
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAmh1YFZARRHe4gKGMHsQYU1na1mSS0xCQ",
+    authDomain: "rollcallrb.firebaseapp.com",
+    projectId: "rollcallrb",
+    storageBucket: "rollcallrb.appspot.com",
+    messagingSenderId: "458287761938",
+    appId: "1:458287761938:web:44f5b75dbec0461790e6cb"
   };
-  
   firebase.initializeApp(firebaseConfig);
 
   export const auth = firebase.auth;
