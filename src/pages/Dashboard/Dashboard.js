@@ -175,7 +175,7 @@ class Dashboard extends React.Component {
       };
       let orderedArray = _.orderBy(
         newArray[this.state.classSelection].students,
-        ["firstName"],
+        ["lastName"],
         ["asc"]
       );
       let reorderedArray = [...newArray];
