@@ -5,7 +5,7 @@ Web App for keeping accurate attendance records
 This single page web app makes us of React components for rendering page view.  Login authentication and database storages is provided by Firebase.  This app was a lifesaver for me as my school's SMS attendance system was so unintuitive.
 
 ## Technologies
-* CSS
+* CSS/SASS
 * HTML
 * Javascript
 * React
