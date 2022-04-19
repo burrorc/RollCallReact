@@ -1,5 +1,5 @@
 # RollCallReact
-Web app for keeping accurate attendance records
+Web App for keeping accurate attendance records
 
 ## Description
 This single page web app makes us of React components for rendering page view.  Login authentication and database storages is provided by Firebase.  This app was a lifesaver for me as my school's SMS attendance system was so unintuitive.
