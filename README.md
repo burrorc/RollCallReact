@@ -9,6 +9,7 @@ This single page web app makes us of React components for rendering page view.  
 * HTML
 * Javascript
 * React
+* REST API
 * Firebase authentication
 * Firebase database
 
